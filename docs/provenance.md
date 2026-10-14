@@ -50,7 +50,7 @@ Current input fingerprints and split details are recorded per new local run. The
 
 ## Confirmed publication scope and remaining gaps
 
-Mohammad Albatayneh approved a new public `mobatayneh/toxic-comment-classification` repository, a working branch, and a pull request without merging. Publication has not been verified here. His individual authorship statement is recorded above; no repository-wide code license has been selected.
+The approved Public [repository](https://github.com/mobatayneh/toxic-comment-classification), [work branch](https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening), and [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) are published and verified. The PR remains open and unmerged. The first public snapshot's 63 path/mode/blob identities and root tree were checked against the local preparation snapshot. Remote commit IDs differ from the preserved local preparation history; no existing remote history was rewritten. Mohammad Albatayneh's individual authorship statement is recorded above; no repository-wide code license has been selected.
 
 - Select a repository-wide code license separately; publication approval does not select one.
 - Establish terms and preprocessing lineage if the FizzBuzz mirror is used or distributed.

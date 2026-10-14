@@ -1,6 +1,6 @@
 # Verification record
 
-Updated on 14 October 2026. This describes completed local checks. Public repository creation, a working branch, and a pull request without merging are approved; GitHub publication and remote CI have not yet been verified.
+Updated on 14 October 2026. The Public repository, [work branch](https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening), and [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) are published and verified. The pull request is open and unmerged; main retains its initial README. This record distinguishes the complete local CPU suite from the lighter GitHub core workflow and the still-unexecuted full Colab experiment.
 
 ## Software checks
 
@@ -30,11 +30,17 @@ python -m compileall -q src scripts
 python scripts/verify_repository.py
 ```
 
-Repository test discovery needs `requirements-dev.txt`, which includes the core and notebook/review dependencies. `requirements-core.txt` alone supports CPU training and its baseline smoke command. Optional neural checks are skipped unless explicitly enabled with their dependencies installed. The tests verify train-only vocabulary and independently calculated TF-IDF weights, held-out-only vocabulary exclusion, duplicate-group isolation, strict CSV policies, validation thresholds, AP definitions, frozen artifacts, one-attempt test evaluation, best-checkpoint export and unequal microbatch sample weighting. CI configuration parses locally. Its core job uses synthetic fixtures and the aggregate-results notebook; a manually enabled neural job installs official CPU PyTorch wheels and uses tiny synthetic data. **A GitHub Actions run has not been verified here.**
+Repository test discovery needs `requirements-dev.txt`, which includes the core and notebook/review dependencies. `requirements-core.txt` alone supports CPU training and its baseline smoke command. Optional neural checks are skipped unless explicitly enabled with their dependencies installed. The tests verify train-only vocabulary and independently calculated TF-IDF weights, held-out-only vocabulary exclusion, duplicate-group isolation, strict CSV policies, validation thresholds, AP definitions, frozen artifacts, one-attempt test evaluation, best-checkpoint export and unequal microbatch sample weighting. CI configuration parses locally. Its core job uses synthetic fixtures and the aggregate-results notebook; a manually enabled neural job installs official CPU PyTorch wheels and uses tiny synthetic data. **The GitHub core workflow has passed; the optional neural job remains local-only evidence.**
 
 The added Colab checks execute all eight visible source-writing cells in in-process IPython, verify exact embedded bytes and the manifest, and import the materialized project in a subprocess where all five optional neural modules and their distribution metadata are deliberately inaccessible. The CPU tests independently check interruption/resume model, optimizer, scheduler and RNG state, uneven accumulation math, patience and best-model restoration, identity mismatch rejection, atomic weights-only-safe checkpoints, read-only frozen restart, and aggregate/private ZIP boundaries. The reviewed runner, builder, notebook, requirements, tests, CI file and six core modules remained unchanged during the recorded suite.
 
 The retained console transcript is partial. Counts, duration, failure/skip lists and checked-file hashes come from the complete structured runner result; missing per-test console lines were not reconstructed. The machine-readable repository summary records this evidence limit.
+
+## GitHub publication checks
+
+The repaired source at remote commit `1391907f6945069b25831cf7f77b1a38116b4895` passed both [push CI](https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38525905392) and [PR CI](https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38525910900). The clean Python 3.12.15 runner discovered 43 tests, passed 31 core/review checks, and explicitly skipped the 12 optional CPU neural checks; core tests took 8.861 seconds. All eleven results-review code cells executed through a normal Jupyter kernel. The publication verifier passed for 63 files, 92 local links, two historical and two CPU evidence blocks, and three sanitized archive notebooks. The executed notebook was retained as the historical-evidence-review run artifact.
+
+The first push/PR runs failed only at notebook display because pandas Styler required undeclared Jinja2. Adding the locally tested `Jinja2==3.1.6` notebook dependency resolved that clean-environment failure. No model code, recorded metrics or figures changed, and no real training/test inference was repeated. Full Colab/Drive/CUDA execution remains unverified.
 
 ## Actual-data experiment
 

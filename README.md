@@ -18,6 +18,13 @@ The project is a research implementation, not a deployed moderation system. Outp
 
 Use Python 3.12. Commands below run from the repository root.
 
+The complete reviewed source is on [work/portfolio-hardening](https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening). [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) is open for review; main retains the initial README until the proposed changes are approved and merged.
+
+```bash
+git clone --branch work/portfolio-hardening https://github.com/mobatayneh/toxic-comment-classification.git
+cd toxic-comment-classification
+```
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
@@ -145,7 +152,7 @@ python scripts/render_real_results.py
 python scripts/run_results_notebook.py
 ```
 
-In this sandbox, local Jupyter kernel sockets are blocked. The committed review notebook was executed top-to-bottom with `python scripts/run_results_notebook.py --engine inprocess`, which captures rich outputs in a fresh IPython process. Its metadata records this mode; the Jupyter kernel protocol itself was not verified here.
+In this sandbox, local Jupyter kernel sockets are blocked. The committed review notebook was executed top-to-bottom with `python scripts/run_results_notebook.py --engine inprocess`, which captures rich outputs in a fresh IPython process. Its metadata records this mode. GitHub Actions additionally executed all eleven code cells through a normal Jupyter kernel and retained the executed notebook as a run artifact; see [validation](docs/validation.md) for the recorded run.
 
 Build the report PDF from its reviewed Markdown source:
 
@@ -154,7 +161,7 @@ python -m pip install -r requirements-report.txt
 python scripts/build_report_pdf.py
 ```
 
-Read [methodology](docs/methodology.md) for the metric protocol, [model card](docs/model_card.md) for intended use and limitations, [validation](docs/validation.md) for the completed local checks, [provenance](docs/provenance.md) for artifact lineage, and [data sources](docs/data_sources.md) for access and third-party terms. CI is prepared locally; no GitHub-hosted CI run or publication is claimed.
+Read [methodology](docs/methodology.md) for the metric protocol, [model card](docs/model_card.md) for intended use and limitations, [validation](docs/validation.md) for the completed local checks, [provenance](docs/provenance.md) for artifact lineage, and [data sources](docs/data_sources.md) for access and third-party terms. [GitHub core CI passed](https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38525910900): 31 checks passed, 12 optional CPU neural checks were explicitly skipped, and the results notebook/publication verifier completed successfully. All 43 checks, including those 12 optional checks, passed in the separate local CPU environment. Full Colab/CUDA training remains unverified.
 
 ## Authorship and third-party terms
 

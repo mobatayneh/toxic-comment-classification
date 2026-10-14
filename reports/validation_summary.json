@@ -36,12 +36,24 @@
   },
   "syntax_check": "python -m compileall -q src scripts passed",
   "publication": {
-    "remote_created": false,
-    "github_actions_executed": false,
+    "remote_created": true,
+    "github_actions_executed": true,
     "main_merged": false,
     "repository_creation_approved": true,
     "work_branch_and_pr_approved": true,
-    "blocker": "GitHub target request returns 404; available connector has no repository-creation operation. Browser fallback approval required."
+    "blocker": null,
+    "repository_url": "https://github.com/mobatayneh/toxic-comment-classification",
+    "work_branch": "work/portfolio-hardening",
+    "branch_url": "https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening",
+    "pull_request_url": "https://github.com/mobatayneh/toxic-comment-classification/pull/1",
+    "pull_request_state": "open_unmerged",
+    "main_commit": "8ac5bb8cc74c53f21df3ab9fc5f0963781bda6d3",
+    "first_public_snapshot_commit": "5fc5770d316568bc1bc133422e3c946c15f3a061",
+    "first_snapshot_local_source": "15c1c8d4d8ec69fd7aaf32d4c6856cdc515d7054",
+    "first_snapshot_tree": "308cb9c31a0e89260930902cefa6552d739cebd1",
+    "first_snapshot_file_identities_verified": 63,
+    "automatic_pr_opened_bot_comment_observed": true,
+    "manual_comments_or_review_requests_sent": false
   },
   "limits": [
     "Direct dependencies pinned; full transitive environment not locked.",
@@ -88,5 +100,25 @@
     "public_validation_and_test_json_equal_frozen_run": true,
     "recorded_real_model_training_repeated": false,
     "source_code_metrics_and_previous_figures_unchanged": true
+  },
+  "github_core_workflow": {
+    "tested_commit": "1391907f6945069b25831cf7f77b1a38116b4895",
+    "push_run_id": 38525905392,
+    "pull_request_run_id": 38525910900,
+    "push_conclusion": "success",
+    "pull_request_conclusion": "success",
+    "python": "3.12.15",
+    "discovered": 43,
+    "passed": 31,
+    "skipped_optional_neural": 12,
+    "failures": 0,
+    "unit_duration_seconds": 8.861,
+    "normal_jupyter_code_cells_executed": 11,
+    "jupyter_kernel_protocol_verified": true,
+    "publication_verifier": "passed",
+    "executed_notebook_artifact_id": 11876295718,
+    "initial_failure": "Missing Jinja2 for pandas Styler notebook displays",
+    "repair": "Jinja2==3.1.6 added to requirements-notebooks.txt",
+    "full_real_model_training_executed": false
   }
 }
