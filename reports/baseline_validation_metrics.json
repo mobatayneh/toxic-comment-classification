@@ -1,0 +1,306 @@
+{
+  "method": "tfidf_logistic_regression",
+  "metrics_at_0_5": {
+    "coverage": {
+      "f1_eligible_count": 6,
+      "f1_eligible_labels": [
+        "identity_hate",
+        "insult",
+        "obscene",
+        "severe_toxic",
+        "threat",
+        "toxic"
+      ],
+      "macro_averaging": "six-label macro scores require full coverage; separately named eligible-label diagnostics use their stated subset",
+      "ranking_eligible_count": 6,
+      "ranking_eligible_labels": [
+        "identity_hate",
+        "insult",
+        "obscene",
+        "severe_toxic",
+        "threat",
+        "toxic"
+      ],
+      "total_labels": 6
+    },
+    "macro_average_precision": 0.654918794258765,
+    "macro_average_precision_eligible_labels": 0.654918794258765,
+    "macro_f1": 0.6087058660887165,
+    "macro_f1_eligible_labels": 0.6087058660887165,
+    "macro_roc_auc": 0.9823206824528645,
+    "macro_roc_auc_eligible_labels": 0.9823206824528645,
+    "micro_average_precision": 0.82276756191533,
+    "micro_f1": 0.7257481091746136,
+    "per_label": {
+      "identity_hate": {
+        "average_precision": 0.42706938620208346,
+        "confusion": {
+          "false_negative": 72,
+          "false_positive": 302,
+          "true_negative": 23367,
+          "true_positive": 137
+        },
+        "f1": 0.4228395061728395,
+        "f1_status": "defined",
+        "negative_support": 23669,
+        "positive_support": 209,
+        "precision": 0.3120728929384966,
+        "predicted_positive": 439,
+        "ranking_status": "defined",
+        "recall": 0.6555023923444976,
+        "roc_auc": 0.9764964206305423,
+        "threshold": 0.5
+      },
+      "insult": {
+        "average_precision": 0.7877029794080175,
+        "confusion": {
+          "false_negative": 181,
+          "false_positive": 611,
+          "true_negative": 22088,
+          "true_positive": 998
+        },
+        "f1": 0.7159253945480631,
+        "f1_status": "defined",
+        "negative_support": 22699,
+        "positive_support": 1179,
+        "precision": 0.620261031696706,
+        "predicted_positive": 1609,
+        "ranking_status": "defined",
+        "recall": 0.8464800678541137,
+        "roc_auc": 0.9801797847039104,
+        "threshold": 0.5
+      },
+      "obscene": {
+        "average_precision": 0.8996600996901254,
+        "confusion": {
+          "false_negative": 151,
+          "false_positive": 353,
+          "true_negative": 22252,
+          "true_positive": 1122
+        },
+        "f1": 0.8165938864628821,
+        "f1_status": "defined",
+        "negative_support": 22605,
+        "positive_support": 1273,
+        "precision": 0.7606779661016949,
+        "predicted_positive": 1475,
+        "ranking_status": "defined",
+        "recall": 0.8813825608798115,
+        "roc_auc": 0.9888042065369032,
+        "threshold": 0.5
+      },
+      "severe_toxic": {
+        "average_precision": 0.4684307536270077,
+        "confusion": {
+          "false_negative": 44,
+          "false_positive": 366,
+          "true_negative": 23275,
+          "true_positive": 193
+        },
+        "f1": 0.4849246231155779,
+        "f1_status": "defined",
+        "negative_support": 23641,
+        "positive_support": 237,
+        "precision": 0.34525939177101966,
+        "predicted_positive": 559,
+        "ranking_status": "defined",
+        "recall": 0.8143459915611815,
+        "roc_auc": 0.9874911586232672,
+        "threshold": 0.5
+      },
+      "threat": {
+        "average_precision": 0.4719544116507054,
+        "confusion": {
+          "false_negative": 23,
+          "false_positive": 75,
+          "true_negative": 23741,
+          "true_positive": 39
+        },
+        "f1": 0.4431818181818182,
+        "f1_status": "defined",
+        "negative_support": 23816,
+        "positive_support": 62,
+        "precision": 0.34210526315789475,
+        "predicted_positive": 114,
+        "ranking_status": "defined",
+        "recall": 0.6290322580645161,
+        "roc_auc": 0.9878697026666812,
+        "threshold": 0.5
+      },
+      "toxic": {
+        "average_precision": 0.8746951349746512,
+        "confusion": {
+          "false_negative": 390,
+          "false_positive": 768,
+          "true_negative": 20795,
+          "true_positive": 1925
+        },
+        "f1": 0.7687699680511182,
+        "f1_status": "defined",
+        "negative_support": 21563,
+        "positive_support": 2315,
+        "precision": 0.7148161901225399,
+        "predicted_positive": 2693,
+        "ranking_status": "defined",
+        "recall": 0.8315334773218143,
+        "roc_auc": 0.973082821555883,
+        "threshold": 0.5
+      }
+    },
+    "primary_metric": "macro_average_precision",
+    "rows": 23878
+  },
+  "metrics_at_validation_thresholds": {
+    "coverage": {
+      "f1_eligible_count": 6,
+      "f1_eligible_labels": [
+        "identity_hate",
+        "insult",
+        "obscene",
+        "severe_toxic",
+        "threat",
+        "toxic"
+      ],
+      "macro_averaging": "six-label macro scores require full coverage; separately named eligible-label diagnostics use their stated subset",
+      "ranking_eligible_count": 6,
+      "ranking_eligible_labels": [
+        "identity_hate",
+        "insult",
+        "obscene",
+        "severe_toxic",
+        "threat",
+        "toxic"
+      ],
+      "total_labels": 6
+    },
+    "macro_average_precision": 0.654918794258765,
+    "macro_average_precision_eligible_labels": 0.654918794258765,
+    "macro_f1": 0.6414414755703549,
+    "macro_f1_eligible_labels": 0.6414414755703549,
+    "macro_roc_auc": 0.9823206824528645,
+    "macro_roc_auc_eligible_labels": 0.9823206824528645,
+    "micro_average_precision": 0.82276756191533,
+    "micro_f1": 0.7546441052050763,
+    "per_label": {
+      "identity_hate": {
+        "average_precision": 0.42706938620208346,
+        "confusion": {
+          "false_negative": 90,
+          "false_positive": 190,
+          "true_negative": 23479,
+          "true_positive": 119
+        },
+        "f1": 0.4594594594594595,
+        "f1_status": "defined",
+        "negative_support": 23669,
+        "positive_support": 209,
+        "precision": 0.3851132686084142,
+        "predicted_positive": 309,
+        "ranking_status": "defined",
+        "recall": 0.569377990430622,
+        "roc_auc": 0.9764964206305423,
+        "threshold": 0.7
+      },
+      "insult": {
+        "average_precision": 0.7877029794080175,
+        "confusion": {
+          "false_negative": 209,
+          "false_positive": 504,
+          "true_negative": 22195,
+          "true_positive": 970
+        },
+        "f1": 0.7312476441764041,
+        "f1_status": "defined",
+        "negative_support": 22699,
+        "positive_support": 1179,
+        "precision": 0.6580732700135685,
+        "predicted_positive": 1474,
+        "ranking_status": "defined",
+        "recall": 0.8227311280746396,
+        "roc_auc": 0.9801797847039104,
+        "threshold": 0.6
+      },
+      "obscene": {
+        "average_precision": 0.8996600996901254,
+        "confusion": {
+          "false_negative": 200,
+          "false_positive": 230,
+          "true_negative": 22375,
+          "true_positive": 1073
+        },
+        "f1": 0.8330745341614907,
+        "f1_status": "defined",
+        "negative_support": 22605,
+        "positive_support": 1273,
+        "precision": 0.8234842670759785,
+        "predicted_positive": 1303,
+        "ranking_status": "defined",
+        "recall": 0.842890809112333,
+        "roc_auc": 0.9888042065369032,
+        "threshold": 0.7
+      },
+      "severe_toxic": {
+        "average_precision": 0.4684307536270077,
+        "confusion": {
+          "false_negative": 69,
+          "false_positive": 216,
+          "true_negative": 23425,
+          "true_positive": 168
+        },
+        "f1": 0.5410628019323671,
+        "f1_status": "defined",
+        "negative_support": 23641,
+        "positive_support": 237,
+        "precision": 0.4375,
+        "predicted_positive": 384,
+        "ranking_status": "defined",
+        "recall": 0.7088607594936709,
+        "roc_auc": 0.9874911586232672,
+        "threshold": 0.8
+      },
+      "threat": {
+        "average_precision": 0.4719544116507054,
+        "confusion": {
+          "false_negative": 31,
+          "false_positive": 34,
+          "true_negative": 23782,
+          "true_positive": 31
+        },
+        "f1": 0.4881889763779528,
+        "f1_status": "defined",
+        "negative_support": 23816,
+        "positive_support": 62,
+        "precision": 0.47692307692307695,
+        "predicted_positive": 65,
+        "ranking_status": "defined",
+        "recall": 0.5,
+        "roc_auc": 0.9878697026666812,
+        "threshold": 0.85
+      },
+      "toxic": {
+        "average_precision": 0.8746951349746512,
+        "confusion": {
+          "false_negative": 573,
+          "false_positive": 322,
+          "true_negative": 21241,
+          "true_positive": 1742
+        },
+        "f1": 0.7956154373144554,
+        "f1_status": "defined",
+        "negative_support": 21563,
+        "positive_support": 2315,
+        "precision": 0.8439922480620154,
+        "predicted_positive": 2064,
+        "ranking_status": "defined",
+        "recall": 0.7524838012958963,
+        "roc_auc": 0.973082821555883,
+        "threshold": 0.75
+      }
+    },
+    "primary_metric": "macro_average_precision",
+    "rows": 23878
+  },
+  "selection_note": "Thresholds were selected using this validation partition; these metrics are selection diagnostics.",
+  "split": "validation",
+  "synthetic": false
+}

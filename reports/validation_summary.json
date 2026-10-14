@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-14",
+  "unit_and_integration_suite": {
+    "command": "TOXIC_RUN_NEURAL_TESTS=1 python -m unittest discover -s tests -v",
+    "passed": 43,
+    "skipped": 0,
+    "duration_seconds": 15.491686,
+    "groups": {
+      "data_and_metrics": 14,
+      "frozen_artifacts": 7,
+      "baseline": 2,
+      "neural": 4,
+      "colab_notebook": 2,
+      "colab_resume": 8,
+      "publication_verifier": 6
+    },
+    "evidence_mode": "Complete machine-readable suite result and checked source hashes; original final per-case console transcript is partial and retained with a separately labelled aggregate summary."
+  },
+  "real_data_baseline": {
+    "status": "developed_frozen_and_evaluated_once",
+    "verification_record": "reports/baseline_verification.json",
+    "full_eligible_rows": 159564,
+    "neural_full_data_rerun": false
+  },
+  "results_notebook": {
+    "file": "notebooks/01_results_review.ipynb",
+    "code_cells_executed": 11,
+    "mode": "fresh in-process IPython, top-to-bottom",
+    "jupyter_kernel_protocol_verified": false
+  },
+  "neural_notebook": {
+    "file": "notebooks/02_train_roberta.ipynb",
+    "code_cells_checked": 8,
+    "mode": "sequential in-process execution of exact default cells; publication outputs cleared",
+    "real_training_switches_default": false
+  },
+  "syntax_check": "python -m compileall -q src scripts passed",
+  "publication": {
+    "remote_created": false,
+    "github_actions_executed": false,
+    "main_merged": false,
+    "repository_creation_approved": true,
+    "work_branch_and_pr_approved": true,
+    "blocker": "GitHub target request returns 404; available connector has no repository-creation operation. Browser fallback approval required."
+  },
+  "limits": [
+    "Direct dependencies pinned; full transitive environment not locked.",
+    "New baseline is one exploratory internal split, not external confirmation or a controlled comparison with historical neural results.",
+    "Real challenge test has no labels.",
+    "Full eight-layer real-data neural training, calibration, subgroup fairness, confidence intervals and deployment latency are not established."
+  ],
+  "prior_base_suite": {
+    "command": "TOXIC_RUN_NEURAL_TESTS=1 python -m unittest discover -s tests -v",
+    "passed": 33,
+    "skipped": 0,
+    "duration_seconds": 7.922,
+    "groups": {
+      "data_and_metrics": 14,
+      "frozen_artifacts": 7,
+      "baseline": 2,
+      "neural": 4,
+      "publication_verifier": 6
+    }
+  },
+  "colab_notebook": {
+    "file": "notebooks/03_colab_full_training.ipynb",
+    "sha256": "2f60edc83f6d70a54b194e4e0fd0372782f820675c14584975a488ae245eba55",
+    "cells": 30,
+    "code_cells": 18,
+    "exact_embedded_files": 8,
+    "outputs_cleared": true,
+    "validation": "nbformat schema, exact source bytes/SHA manifest, compilation, visible writefile materialization and lazy imports without optional neural dependencies",
+    "resume_verification": "tiny CPU synthetic interruption after two updates versus continuous training; model/optimizer/scheduler/scaler/RNG state and exported predictions verified",
+    "google_colab_drive_and_gpu_execution_verified": false,
+    "full_real_data_neural_training_executed": false,
+    "internal_test_default": false
+  },
+  "corrections_in_this_stage": [
+    "Review bundles now preserve validation-only snapshots when a later test evaluation creates separately named bundles.",
+    "Colab guide/notebook label order corrected to the unchanged core mapping.",
+    "Torch preservation checks compare distribution metadata before/after installation, recording module CUDA build separately.",
+    "Pinned-package imports are checked for stale versions after installation; full training starts in a fresh subprocess.",
+    "Colab gradient test isolation corrected to avoid modifying the base SGD step instrumentation used by prior tests.",
+    "README test setup installs the development/notebook dependencies required by the new always-on checks."
+  ],
+  "resumption_integrity": {
+    "frozen_baseline_integrity": "passed",
+    "public_validation_and_test_json_equal_frozen_run": true,
+    "recorded_real_model_training_repeated": false,
+    "source_code_metrics_and_previous_figures_unchanged": true
+  }
+}

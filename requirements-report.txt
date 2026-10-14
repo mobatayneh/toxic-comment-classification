@@ -1,0 +1,2 @@
+# PDF authoring; chart generation uses requirements-notebooks.txt separately.
+reportlab==4.4.9

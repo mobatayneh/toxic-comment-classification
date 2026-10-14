@@ -1,0 +1,44 @@
+[
+  {
+    "file": "Toxic_Comment_Multi_Label_Classification(1).pdf",
+    "sha256": "a050ac14111cd2ceabbdc73ddcba3c70ea4f7aea2ce54800c1a3a603833f8484",
+    "bytes": 163296,
+    "publication": "original retained privately; sanitized derivative subject to approval"
+  },
+  {
+    "file": "Toxic_Comment_Multi_Label_Classification(2).pdf",
+    "sha256": "a050ac14111cd2ceabbdc73ddcba3c70ea4f7aea2ce54800c1a3a603833f8484",
+    "bytes": 163296,
+    "publication": "original retained privately; sanitized derivative subject to approval"
+  },
+  {
+    "file": "Untitled10.ipynb",
+    "sha256": "a090070703a768766d65ddfef4244da2af1c25fa9fc0f91064355e145934f798",
+    "bytes": 267394,
+    "publication": "original retained privately; sanitized derivative subject to approval"
+  },
+  {
+    "file": "modelXXXX(1).ipynb",
+    "sha256": "6a6377d348a71f03fcecf37b454d7565bddf8d191184b875f8c90b6cfb114776",
+    "bytes": 196387,
+    "publication": "original retained privately; sanitized derivative subject to approval"
+  },
+  {
+    "file": "model_FINAL_Report.ipynb",
+    "sha256": "d46c37b06c49d74f2137c23a798128a3cf1f6c21a2b05420effd82af1d9811d7",
+    "bytes": 250823,
+    "publication": "original retained privately; sanitized derivative subject to approval"
+  },
+  {
+    "file": "train_preprocessed.csv",
+    "sha256": "bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e",
+    "bytes": 68927616,
+    "publication": "private data input; excluded from GitHub"
+  },
+  {
+    "file": "test_preprocessed.csv",
+    "sha256": "756b53c5a4d35b7d77c6080fdb1b3efd335ccee36c52187c6b356185669b79d8",
+    "bytes": 57400645,
+    "publication": "private data input; excluded from GitHub"
+  }
+]

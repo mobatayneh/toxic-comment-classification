@@ -1,0 +1,53 @@
+{
+  "status": "real_full_eligible_cohort_baseline_completed",
+  "source_rows": 159571,
+  "excluded_empty_text_rows": 7,
+  "eligible_rows": 159564,
+  "counts": {
+    "train": 111731,
+    "validation": 23878,
+    "test": 23955
+  },
+  "normalized_group_overlap_count": 0,
+  "published_metrics_recomputed_from_saved_private_predictions": true,
+  "test_evaluation_attempts": 1,
+  "macro_metrics_at_frozen_validation_thresholds": {
+    "macro_average_precision": 0.6501947841473626,
+    "macro_roc_auc": 0.98114015450262,
+    "macro_f1": 0.6345797586846106,
+    "micro_f1": 0.7483005695388573
+  },
+  "thresholds": {
+    "identity_hate": 0.7,
+    "insult": 0.6,
+    "obscene": 0.7,
+    "severe_toxic": 0.8,
+    "threat": 0.85,
+    "toxic": 0.75
+  },
+  "neural_full_data_rerun": false,
+  "challenge_test_has_labels": false,
+  "note": "Scores follow a new exploratory internal split, and are not a controlled improvement over historical neural validation scores.",
+  "real_baseline_runtime": {
+    "stage": "develop",
+    "return_code": 0,
+    "wall_seconds": 47.10437246499998,
+    "peak_rss_kib": 6958132,
+    "user_cpu_seconds": 45.007376,
+    "system_cpu_seconds": 2.066615,
+    "eligible_source_rows": 159564,
+    "synthetic": false,
+    "thread_settings": {
+      "OMP_NUM_THREADS": 1,
+      "OPENBLAS_NUM_THREADS": 1,
+      "MKL_NUM_THREADS": 1
+    }
+  },
+  "real_baseline_evaluate_runtime": {
+    "stage": "evaluate",
+    "return_code": 0,
+    "wall_seconds": 7.132962115999931,
+    "peak_rss_kib": 4825520,
+    "synthetic": false
+  }
+}

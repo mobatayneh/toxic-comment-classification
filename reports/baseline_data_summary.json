@@ -1,0 +1,86 @@
+{
+  "conflict_policy": "keep",
+  "conflicting_label_groups": 93,
+  "duplicate_groups": 736,
+  "duplicate_source_id_groups": 0,
+  "duplicate_source_ids": 0,
+  "empty_text_policy": "drop",
+  "excluded_empty_text_rows": 7,
+  "excluded_nontrain_rows": 0,
+  "grouping": "NFKC, casefold, Unicode whitespace collapse; exact matches only",
+  "input_rows": 159571,
+  "label_order": [
+    "identity_hate",
+    "insult",
+    "obscene",
+    "severe_toxic",
+    "threat",
+    "toxic"
+  ],
+  "missing_source_ids": 0,
+  "near_duplicate_detection": false,
+  "normalized_text_groups": 158246,
+  "positive_counts": {
+    "identity_hate": 1405,
+    "insult": 7877,
+    "obscene": 8449,
+    "severe_toxic": 1595,
+    "threat": 478,
+    "toxic": 15294
+  },
+  "retained_rows": 159564,
+  "rows_in_duplicate_groups": 2054,
+  "source_format": "preprocessed_mirror_schema",
+  "source_id_column_present": true,
+  "source_provenance": "user_supplied_origin_unverified",
+  "splits": {
+    "partitions": {
+      "test": {
+        "groups": 23738,
+        "positive_counts": {
+          "identity_hate": 224,
+          "insult": 1196,
+          "obscene": 1290,
+          "severe_toxic": 261,
+          "threat": 67,
+          "toxic": 2299
+        },
+        "row_fraction": 0.15012784838685417,
+        "rows": 23955
+      },
+      "train": {
+        "groups": 110772,
+        "positive_counts": {
+          "identity_hate": 972,
+          "insult": 5502,
+          "obscene": 5886,
+          "severe_toxic": 1097,
+          "threat": 349,
+          "toxic": 10680
+        },
+        "row_fraction": 0.7002268682158883,
+        "rows": 111731
+      },
+      "validation": {
+        "groups": 23736,
+        "positive_counts": {
+          "identity_hate": 209,
+          "insult": 1179,
+          "obscene": 1273,
+          "severe_toxic": 237,
+          "threat": 62,
+          "toxic": 2315
+        },
+        "row_fraction": 0.14964528339725752,
+        "rows": 23878
+      }
+    },
+    "strategy": "seeded normalized exact-text group shuffle; not stratified",
+    "target_group_fractions": {
+      "test": 0.15,
+      "train": 0.7,
+      "validation": 0.15
+    }
+  },
+  "synthetic": false
+}
