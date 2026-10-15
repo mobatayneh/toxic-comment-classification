@@ -344,7 +344,7 @@
     "neural_job_condition": null,
     "neural_job_selected_checks": 21,
     "neural_job_skips_allowed": 0,
-    "status": "configured; live run verification recorded in PR checks and review document"
+    "status": "Both automatic jobs passed on the recorded source commit; later documentation-only and merge commits are checked separately in GitHub."
   },
   "baseline_read_only_reverification": {
     "recorded_source_and_artifacts_match": true,
@@ -375,5 +375,29 @@
     "Continue active runs using their original source and recorded runtime.",
     "Recovery only completes an intact, transaction-marked manifest missing its checksum; corrupt or truncated artifacts fail closed.",
     "Exact-text grouping does not establish near-duplicate, author or time independence."
-  ]
+  ],
+  "github_verification": {
+    "tested_commit": "cd3f6123c9b0da546d0a8e4af3fd63c7cc4d41d4",
+    "source_tree": "a3d1f3e2e2bb63f79474c5a0e1595817a717cbcf",
+    "push_run_id": 38687263527,
+    "pull_request_run_id": 38687267613,
+    "push_conclusion": "success",
+    "pull_request_conclusion": "success",
+    "core_job": {
+      "id": 116264872822,
+      "conclusion": "success",
+      "passed": 31,
+      "skipped_for_separate_neural_job": 19,
+      "normal_jupyter_notebook": "success",
+      "publication_verifier": "success"
+    },
+    "neural_job": {
+      "id": 116264873032,
+      "conclusion": "success",
+      "passed": 21,
+      "skipped": 0
+    },
+    "distinct_checks_across_jobs": 50,
+    "full_real_data_training": false
+  }
 }
