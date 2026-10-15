@@ -1,0 +1,403 @@
+{
+  "date": "2026-10-15",
+  "scope": "Follow-up source integrity review and offline tests; no new real-data training or test inference.",
+  "prior_remote_head": "b6819a5a2f6e6822b3d58bd0b7e314a623340ace",
+  "local_verification": {
+    "started_at_utc": "2026-10-15T05:27:30.001779+00:00",
+    "finished_at_utc": "2026-10-15T05:27:45.650058+00:00",
+    "command_equivalent": "TOXIC_RUN_NEURAL_TESTS=1 .venv/bin/python -m unittest discover -s tests -v",
+    "discovered": 50,
+    "tests_run": 50,
+    "passed": 50,
+    "failure_count": 0,
+    "error_count": 0,
+    "skip_count": 0,
+    "successful": true,
+    "tests": [
+      {
+        "id": "test_baseline_cli.BaselineInvariants.test_develop_and_evaluate_in_separate_processes_preserve_frozen_boundary",
+        "status": "passed",
+        "duration_seconds": 5.176004659
+      },
+      {
+        "id": "test_baseline_cli.BaselineInvariants.test_unlearnable_training_labels_require_explicit_coverage",
+        "status": "passed",
+        "duration_seconds": 0.0013423759999113827
+      },
+      {
+        "id": "test_colab_integrity.ColabCompletionIntegrity.test_changed_artifact_missing_transaction_and_test_boundary_fail_without_mutation",
+        "status": "passed",
+        "duration_seconds": 0.13086539100004302
+      },
+      {
+        "id": "test_colab_integrity.ColabCompletionIntegrity.test_changed_or_incomplete_checkpoint_cannot_complete_freeze",
+        "status": "passed",
+        "duration_seconds": 0.07585163699991426
+      },
+      {
+        "id": "test_colab_integrity.ColabCompletionIntegrity.test_missing_checksum_with_transaction_recovers_without_training_or_inference",
+        "status": "passed",
+        "duration_seconds": 0.6196494420000818
+      },
+      {
+        "id": "test_colab_integrity.ColabCompletionIntegrity.test_present_corrupt_checksum_is_never_repaired",
+        "status": "passed",
+        "duration_seconds": 0.017406404999974256
+      },
+      {
+        "id": "test_colab_integrity.ColabCompletionIntegrity.test_source_change_after_fresh_validation_stops_before_freeze",
+        "status": "passed",
+        "duration_seconds": 0.23091036800019538
+      },
+      {
+        "id": "test_colab_integrity.ColabCompletionIntegrity.test_source_change_after_training_stops_before_export",
+        "status": "passed",
+        "duration_seconds": 0.03607328299995061
+      },
+      {
+        "id": "test_colab_training.ColabNotebookInvariants.test_full_notebook_is_valid_clear_and_embeds_exact_repository_sources",
+        "status": "passed",
+        "duration_seconds": 0.12635669500014046
+      },
+      {
+        "id": "test_colab_training.ColabNotebookInvariants.test_visible_writefile_cells_materialize_importable_files_without_colab_services",
+        "status": "passed",
+        "duration_seconds": 1.2151800249998814
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_accumulation_uses_actual_sample_mean_for_unequal_batches_and_partial_group",
+        "status": "passed",
+        "duration_seconds": 0.0022654090000742144
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_atomic_latest_checkpoint_preserves_previous_bytes_on_failed_write_or_replace",
+        "status": "passed",
+        "duration_seconds": 0.0026484680001885863
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_changed_source_config_and_training_code_are_rejected_before_continuation",
+        "status": "passed",
+        "duration_seconds": 0.2868786460001047
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_development_uses_train_only_data_and_result_bundles_exclude_private_rows",
+        "status": "passed",
+        "duration_seconds": 0.1288287830000172
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_frozen_rerun_is_read_only_and_explicit_restart_refuses_existing_run",
+        "status": "passed",
+        "duration_seconds": 0.02257444600013514
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_python_numpy_torch_rng_roundtrip_is_weights_only_safe",
+        "status": "passed",
+        "duration_seconds": 0.005349564999960421
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_resumed_patience_restores_nonfinal_best_before_fresh_validation_and_thresholds",
+        "status": "passed",
+        "duration_seconds": 0.9029797949999647
+      },
+      {
+        "id": "test_colab_training.ColabResumeInvariants.test_two_update_mid_epoch_resume_matches_continuous_model_optimizer_scheduler_and_predictions",
+        "status": "passed",
+        "duration_seconds": 0.016815001999930246
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_alias_and_mirror_filter_exclude_unlabeled_rows_before_validation",
+        "status": "passed",
+        "duration_seconds": 0.009447971999861693
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_conflicting_duplicate_labels_require_explicit_policy",
+        "status": "passed",
+        "duration_seconds": 0.010379978999935702
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_disagreeing_alias_columns_and_missing_mirror_train_are_rejected",
+        "status": "passed",
+        "duration_seconds": 0.0025617670000883663
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_duplicate_headers_and_missing_text_column_are_rejected",
+        "status": "passed",
+        "duration_seconds": 0.0013269030000628845
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_explicit_empty_text_drop_preserves_row_accounting",
+        "status": "passed",
+        "duration_seconds": 0.00808461399992666
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_identifier_audit_rejects_different_text_even_with_keep_policy",
+        "status": "passed",
+        "duration_seconds": 0.012056449000056091
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_missing_text_or_required_column_is_rejected",
+        "status": "passed",
+        "duration_seconds": 0.003684582000005321
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_nonbinary_labels_are_rejected",
+        "status": "passed",
+        "duration_seconds": 0.010182450999991488
+      },
+      {
+        "id": "test_data_metrics.DatasetInvariants.test_normalized_duplicate_groups_never_cross_partitions",
+        "status": "passed",
+        "duration_seconds": 0.014616353000064919
+      },
+      {
+        "id": "test_data_metrics.MetricInvariants.test_average_precision_matches_hand_calculation_and_not_accuracy",
+        "status": "passed",
+        "duration_seconds": 0.015696434000119552
+      },
+      {
+        "id": "test_data_metrics.MetricInvariants.test_empty_positive_coverage_stays_undefined",
+        "status": "passed",
+        "duration_seconds": 0.00020207499983371235
+      },
+      {
+        "id": "test_data_metrics.MetricInvariants.test_nonfinite_scores_and_invalid_shapes_are_rejected",
+        "status": "passed",
+        "duration_seconds": 0.00036288799992689746
+      },
+      {
+        "id": "test_data_metrics.MetricInvariants.test_single_class_labels_do_not_fabricate_full_macro_ranking",
+        "status": "passed",
+        "duration_seconds": 0.010532319000049029
+      },
+      {
+        "id": "test_data_metrics.MetricInvariants.test_validation_thresholds_follow_known_f1_optima_and_degenerate_default",
+        "status": "passed",
+        "duration_seconds": 0.02610761999994793
+      },
+      {
+        "id": "test_frozen_artifacts.FrozenArtifactInvariants.test_completion_rechecks_integrity_after_inference_and_preserves_failed_claim",
+        "status": "passed",
+        "duration_seconds": 0.0063304350001089915
+      },
+      {
+        "id": "test_frozen_artifacts.FrozenArtifactInvariants.test_failed_attempt_cannot_be_repeated_and_inference_order_is_frozen",
+        "status": "passed",
+        "duration_seconds": 0.006754716999921584
+      },
+      {
+        "id": "test_frozen_artifacts.FrozenArtifactInvariants.test_frozen_artifacts_and_source_override_detect_byte_changes",
+        "status": "passed",
+        "duration_seconds": 0.010979774000134057
+      },
+      {
+        "id": "test_frozen_artifacts.FrozenArtifactInvariants.test_model_directory_rejects_added_or_missing_files",
+        "status": "passed",
+        "duration_seconds": 0.008902788000114015
+      },
+      {
+        "id": "test_frozen_artifacts.FrozenArtifactInvariants.test_new_run_and_frozen_files_cannot_be_overwritten",
+        "status": "passed",
+        "duration_seconds": 0.0032279429999562126
+      },
+      {
+        "id": "test_frozen_artifacts.FrozenArtifactInvariants.test_public_results_reject_row_fields_and_success_is_single_use",
+        "status": "passed",
+        "duration_seconds": 0.01876126000001932
+      },
+      {
+        "id": "test_frozen_artifacts.FrozenArtifactInvariants.test_source_code_identity_invalidates_evaluation_before_claim",
+        "status": "passed",
+        "duration_seconds": 0.004885654999952749
+      },
+      {
+        "id": "test_neural.NeuralInvariants.test_nonfinal_best_checkpoint_is_restored_before_export_and_reload",
+        "status": "passed",
+        "duration_seconds": 0.03109207400007108
+      },
+      {
+        "id": "test_neural.NeuralInvariants.test_source_code_change_during_training_prevents_freeze",
+        "status": "passed",
+        "duration_seconds": 0.22763068099993689
+      },
+      {
+        "id": "test_neural.NeuralInvariants.test_tiny_development_export_thresholds_and_single_test_are_consistent",
+        "status": "passed",
+        "duration_seconds": 0.5647411550000925
+      },
+      {
+        "id": "test_neural.NeuralInvariants.test_train_positive_weights_and_label_mapping_are_explicit",
+        "status": "passed",
+        "duration_seconds": 0.0006768420000753395
+      },
+      {
+        "id": "test_neural.NeuralInvariants.test_unequal_microbatches_and_final_partial_group_match_sample_mean_gradients",
+        "status": "passed",
+        "duration_seconds": 0.003719946000046548
+      },
+      {
+        "id": "test_repository_verifier.RepositoryVerifierInvariants.test_canonical_real_baseline_and_threshold_independent_ranking_are_checked",
+        "status": "passed",
+        "duration_seconds": 0.013258262999897852
+      },
+      {
+        "id": "test_repository_verifier.RepositoryVerifierInvariants.test_canonical_table_uses_validation_selection_and_last_epoch_separately",
+        "status": "passed",
+        "duration_seconds": 0.008755992000033075
+      },
+      {
+        "id": "test_repository_verifier.RepositoryVerifierInvariants.test_decimal_metric_precision_is_not_mistaken_for_a_row_identifier",
+        "status": "passed",
+        "duration_seconds": 0.005183554999803164
+      },
+      {
+        "id": "test_repository_verifier.RepositoryVerifierInvariants.test_ignored_local_inputs_stay_private_but_force_tracked_files_are_rejected",
+        "status": "passed",
+        "duration_seconds": 0.012439267999980075
+      },
+      {
+        "id": "test_repository_verifier.RepositoryVerifierInvariants.test_malformed_evidence_and_out_of_order_markers_are_rejected",
+        "status": "passed",
+        "duration_seconds": 0.007913834999953906
+      },
+      {
+        "id": "test_repository_verifier.RepositoryVerifierInvariants.test_stale_table_broken_link_and_archive_outputs_are_detected",
+        "status": "passed",
+        "duration_seconds": 0.008368072000166649
+      }
+    ]
+  },
+  "test_groups": {
+    "core_and_notebook": 31,
+    "neural_resume_integrity": 19,
+    "original_neural_checks_executed": 12,
+    "new_regression_checks": 7
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "dependencies": {
+    "torch": "2.8.0+cpu",
+    "transformers": "4.57.1",
+    "tokenizers": "0.22.2",
+    "safetensors": "0.8.0",
+    "huggingface-hub": "0.36.2",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0",
+    "joblib": "1.5.3",
+    "matplotlib": "3.10.8",
+    "nbformat": "5.10.4",
+    "nbclient": "0.10.2",
+    "ipykernel": "6.29.5",
+    "IPython": "9.17.1",
+    "Jinja2": "3.1.6"
+  },
+  "determinism_environment": {
+    "PYTHONHASHSEED": "42",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "TOXIC_RUN_NEURAL_TESTS": "1",
+    "TOKENIZERS_PARALLELISM": "false",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "HF_DATASETS_OFFLINE": "1"
+  },
+  "tested_source_sha256": {
+    ".github/workflows/ci.yml": "3280702bc6225bd0b4cc79dfc0ebbdb89bb868d645eef778b2481fe6e1175943",
+    "notebooks/03_colab_full_training.ipynb": "d0414658c3b5553ff576db58a1e84a80e559c58d81207fd80aa67207ecd3ef5a",
+    "pyproject.toml": "09ee91435c6bcbea3c8bb670fb0b9e577da2a3f8c7f2a8d2eddd8315f13e3da4",
+    "requirements-colab.txt": "211eceaed3373276e9a06c281d7288d1926ec567d528e82ae57f08e90cf1fcd2",
+    "requirements-core.txt": "9392d146f2d50709bd4ea3b79e55a416dd4a23c4cddd9c79d150eb212dac6ff8",
+    "requirements-dev.txt": "a1188d2ab5146427dc41c879ebcb098d016f90b1d679e1d7a8f267e45c7702ee",
+    "requirements-neural.txt": "d885d273de159d3fbcfc62d26210c512232b89de0e51de936a71b0536bce6d76",
+    "requirements-notebooks.txt": "7fb25874d3e4006765a6e9f15081b03b560db19664b85100c7b471ea58a8443e",
+    "requirements-report.txt": "1bfd860155d46312877ab0f8cc353f8e968f81b255d7f35e30c43d4cce3e7a2e",
+    "scripts/build_colab_notebook.py": "bd21dc2496fc2b4c72926101b8b95c6604235889a019f6b76a2fe153f96b23a7",
+    "scripts/build_report_pdf.py": "b819afaa4813e969ed5f1da008672de747733566d9251e12122a3a56aad540d7",
+    "scripts/check_neural_environment.py": "b917c00c11cb5ec250bd97767f31690c83b30314d87c8de512f683f873fc17a3",
+    "scripts/colab_train.py": "09c0afb5f4b2bca9431922cfda1b54eaadcb7f42d105fdd3be74e8d794eb746d",
+    "scripts/render_historical_results.py": "8ae8d14ab23387bb0606cd0c92e66a85bad57a9e3151e5ca424ec0ecf08ff996",
+    "scripts/render_real_results.py": "f7f4b109595a2528e96eb5dcdfc757ee29a5dd3b78c59acf8cebe7d8629835ca",
+    "scripts/run_results_notebook.py": "0d5081af6fdd025848e58809eebfae982e9fb1f1aa9d1b27d2639dd8309e5097",
+    "scripts/verify_repository.py": "a5548d0e0767b250fd324c4d2bf90ace53e33b8d99d06b130e0975c774812176",
+    "src/toxic_comments/__init__.py": "ed7fe61628007bb1ea08a66c9230e16697bc1cac0b2fe160ee5c4a372f13e5aa",
+    "src/toxic_comments/artifacts.py": "7a95604d6bb4113e664e8a6c443203018396c7a2a9a718be7746e0bc9d278221",
+    "src/toxic_comments/baseline.py": "b95ebdaf7a42aaeb97d13d0a2f1ccf0069407c193a6ad4a5929c4b1634b1facf",
+    "src/toxic_comments/data.py": "3258b13dbe200333174c39cb36085268ce7d70b8a8d7185cf01f150d664f460f",
+    "src/toxic_comments/metrics.py": "de4f9d130179c03354414ee5825bf6b52a6a88926f45596cc2070b9224b75b38",
+    "src/toxic_comments/neural.py": "d96fe7a1624d05bb32aac84e3279d8f1081b7e834248ba7fa7488c7fb850cac3",
+    "tests/__init__.py": "e0ec47eff5ed120c966938f58d9d963fd4c148647541265de6be195f1414eded",
+    "tests/test_baseline_cli.py": "e10ff41d38e4656e1af76cbadf5c245a7bf6c42f95a365e657922c238ca2d453",
+    "tests/test_colab_integrity.py": "6c406f0aa33e8a95e38401ae772de185ad909dea7b7ce2bafb554d135b0c5329",
+    "tests/test_colab_training.py": "a1a4eb3f23f355c50d5eb969bf78dd50324d9b57823a4391a84c1c2e34a7db2e",
+    "tests/test_data_metrics.py": "229368aea715cd0efbd8d27cc055673103631c07e97a32d6f3102f992ef7d153",
+    "tests/test_frozen_artifacts.py": "4c474d34c2b7ec606a0d6d5fa5a4238b6b09fa58b476df982754eb6a57b37b1d",
+    "tests/test_neural.py": "1b05d8ed67e1fd124d1624017e3cfb506bc73bf2a443e5eb03a37a9ee7ceaaf4",
+    "tests/test_repository_verifier.py": "74773dba370fd9af3a7e4ce3e5295db2058a01518f7478c8d4b6c1bf1e54bcac"
+  },
+  "github_configuration": {
+    "events": [
+      "push",
+      "pull_request",
+      "workflow_dispatch"
+    ],
+    "neural_job_condition": null,
+    "neural_job_selected_checks": 21,
+    "neural_job_skips_allowed": 0,
+    "status": "Both automatic jobs passed on the recorded source commit; later documentation-only and merge commits are checked separately in GitHub."
+  },
+  "baseline_read_only_reverification": {
+    "recorded_source_and_artifacts_match": true,
+    "split_indices_and_targets_match": true,
+    "duplicate_group_overlap": 0,
+    "validation_thresholds_recomputed_from_validation": true,
+    "saved_prediction_metrics_equal_published_metrics": true,
+    "real_training_or_test_inference_repeated": false,
+    "original_source_commit": "b6819a5a2f6e6822b3d58bd0b7e314a623340ace"
+  },
+  "challenge_test_reverification": {
+    "rows": 153164,
+    "nonblank_cells_per_label": {
+      "identity_hate": 0,
+      "insult": 0,
+      "obscene": 0,
+      "severe_toxic": 0,
+      "threat": 0,
+      "toxic": 0
+    },
+    "sha256": "756b53c5a4d35b7d77c6080fdb1b3efd335ccee36c52187c6b356185669b79d8",
+    "scoring_available": false
+  },
+  "original_active_colab_notebook_sha256": "2f60edc83f6d70a54b194e4e0fd0372782f820675c14584975a488ae245eba55",
+  "updated_colab_notebook_sha256": "d0414658c3b5553ff576db58a1e84a80e559c58d81207fd80aa67207ecd3ef5a",
+  "limits": [
+    "Full real-data Colab/CUDA execution remains unverified; user training is in progress.",
+    "Continue active runs using their original source and recorded runtime.",
+    "Recovery only completes an intact, transaction-marked manifest missing its checksum; corrupt or truncated artifacts fail closed.",
+    "Exact-text grouping does not establish near-duplicate, author or time independence."
+  ],
+  "github_verification": {
+    "tested_commit": "cd3f6123c9b0da546d0a8e4af3fd63c7cc4d41d4",
+    "source_tree": "a3d1f3e2e2bb63f79474c5a0e1595817a717cbcf",
+    "push_run_id": 38687263527,
+    "pull_request_run_id": 38687267613,
+    "push_conclusion": "success",
+    "pull_request_conclusion": "success",
+    "core_job": {
+      "id": 116264872822,
+      "conclusion": "success",
+      "passed": 31,
+      "skipped_for_separate_neural_job": 19,
+      "normal_jupyter_notebook": "success",
+      "publication_verifier": "success"
+    },
+    "neural_job": {
+      "id": 116264873032,
+      "conclusion": "success",
+      "passed": 21,
+      "skipped": 0
+    },
+    "distinct_checks_across_jobs": 50,
+    "full_real_data_training": false
+  }
+}

@@ -1,0 +1,3 @@
+# Core invariant tests use Python's unittest; notebook review dependencies follow.
+-r requirements-core.txt
+-r requirements-notebooks.txt

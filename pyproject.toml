@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools==84.0.0", "wheel==0.48.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "toxic-comment-classification"
+version = "0.1.0"
+description = "Reproducible six-label toxic-comment experiments with a CPU reference and optional custom RoBERTa"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "numpy==2.3.5",
+  "pandas==2.2.3",
+  "scipy==1.17.0",
+  "scikit-learn==1.8.0",
+  "joblib==1.5.3",
+]
+
+[project.scripts]
+toxic-comments-baseline = "toxic_comments.baseline:main"
+toxic-comments-neural = "toxic_comments.neural:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["toxic_comments*"]
+

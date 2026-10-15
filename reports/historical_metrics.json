@@ -1,0 +1,671 @@
+{
+  "schema_version": 1,
+  "status": "historical_notebook_outputs_only",
+  "fresh_training_executed": false,
+  "cell_index_convention": "zero-based notebook cells",
+  "metric_scope": "validation subset drawn from rows with set=train; no held-out test results",
+  "labels": [
+    "identity_hate",
+    "insult",
+    "obscene",
+    "severe_toxic",
+    "threat",
+    "toxic"
+  ],
+  "notebooks": [
+    {
+      "file": "Untitled10.ipynb",
+      "sha256": "a090070703a768766d65ddfef4244da2af1c25fa9fc0f91064355e145934f798",
+      "cell_count": 9,
+      "cell_types": {
+        "code": 9
+      },
+      "metrics": [
+        {
+          "epoch": 1,
+          "train_loss": 1.0842,
+          "validation_loss": 0.6579,
+          "validation_macro_roc_auc": 0.957,
+          "validation_macro_f1_at_threshold_0_5": 0.4369,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 23,
+          "output_index": 5
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.4316,
+          "validation_loss": 0.391,
+          "validation_macro_roc_auc": 0.9743,
+          "validation_macro_f1_at_threshold_0_5": 0.3886,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 23,
+          "output_index": 10
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.3214,
+          "validation_loss": 0.3514,
+          "validation_macro_roc_auc": 0.9781,
+          "validation_macro_f1_at_threshold_0_5": 0.3716,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 23,
+          "output_index": 15
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.2653,
+          "validation_loss": 0.3498,
+          "validation_macro_roc_auc": 0.9801,
+          "validation_macro_f1_at_threshold_0_5": 0.3818,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 23,
+          "output_index": 20
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.2259,
+          "validation_loss": 0.361,
+          "validation_macro_roc_auc": 0.9811,
+          "validation_macro_f1_at_threshold_0_5": 0.4221,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 23,
+          "output_index": 25
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.1984,
+          "validation_loss": 0.4412,
+          "validation_macro_roc_auc": 0.9808,
+          "validation_macro_f1_at_threshold_0_5": 0.4689,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 23,
+          "output_index": 30
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.1756,
+          "validation_loss": 0.4081,
+          "validation_macro_roc_auc": 0.981,
+          "validation_macro_f1_at_threshold_0_5": 0.4459,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 23,
+          "output_index": 35
+        }
+      ],
+      "per_label_report": null,
+      "warnings": [],
+      "cell_output_summary": [
+        {
+          "index": 0,
+          "execution_count": 1,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 1,
+          "execution_count": 2,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 2,
+          "execution_count": 3,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 3,
+          "execution_count": 20,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 4,
+          "execution_count": 21,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 5,
+          "execution_count": 22,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 6,
+          "execution_count": 23,
+          "outputs": 36,
+          "output_types": [
+            "display_data",
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 108
+        },
+        {
+          "index": 7,
+          "execution_count": 24,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 8,
+          "execution_count": 25,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        }
+      ],
+      "best_by_validation_loss": {
+        "epoch": 4,
+        "train_loss": 0.2653,
+        "validation_loss": 0.3498,
+        "validation_macro_roc_auc": 0.9801,
+        "validation_macro_f1_at_threshold_0_5": 0.3818,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 23,
+        "output_index": 20
+      },
+      "highest_recorded_validation_macro_roc_auc": {
+        "epoch": 5,
+        "train_loss": 0.2259,
+        "validation_loss": 0.361,
+        "validation_macro_roc_auc": 0.9811,
+        "validation_macro_f1_at_threshold_0_5": 0.4221,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 23,
+        "output_index": 25
+      },
+      "highest_recorded_validation_macro_f1_at_threshold_0_5": {
+        "epoch": 6,
+        "train_loss": 0.1984,
+        "validation_loss": 0.4412,
+        "validation_macro_roc_auc": 0.9808,
+        "validation_macro_f1_at_threshold_0_5": 0.4689,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 23,
+        "output_index": 30
+      },
+      "provenance_limitations": [
+        "Outputs preserved from uploads; no data or weights supplied for independent reproduction",
+        "Epoch metrics are rounded and concern repeatedly observed validation data",
+        "Saved final model, best-checkpoint inference, and last-epoch validation arrays are not synchronized",
+        "Execution counts jump from 3 to 20 between dataset split and tokenizer cells, indicating an edited/reused session"
+      ],
+      "training_config": {
+        "epochs_requested": 10,
+        "learning_rate": 3e-05,
+        "warmup_fraction": 0.15,
+        "epochs_recorded": 7,
+        "best_validation_loss_epoch": 4
+      }
+    },
+    {
+      "file": "modelXXXX(1).ipynb",
+      "sha256": "6a6377d348a71f03fcecf37b454d7565bddf8d191184b875f8c90b6cfb114776",
+      "cell_count": 9,
+      "cell_types": {
+        "code": 9
+      },
+      "metrics": [
+        {
+          "epoch": 1,
+          "train_loss": 0.7962,
+          "validation_loss": 0.3941,
+          "validation_macro_roc_auc": 0.972,
+          "validation_macro_f1_at_threshold_0_5": 0.3688,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 16,
+          "output_index": 5
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.3543,
+          "validation_loss": 0.3679,
+          "validation_macro_roc_auc": 0.9766,
+          "validation_macro_f1_at_threshold_0_5": 0.4357,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 16,
+          "output_index": 10
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.2803,
+          "validation_loss": 0.3482,
+          "validation_macro_roc_auc": 0.979,
+          "validation_macro_f1_at_threshold_0_5": 0.39,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 16,
+          "output_index": 15
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.2409,
+          "validation_loss": 0.3735,
+          "validation_macro_roc_auc": 0.9795,
+          "validation_macro_f1_at_threshold_0_5": 0.4306,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 16,
+          "output_index": 20
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.2197,
+          "validation_loss": 0.3824,
+          "validation_macro_roc_auc": 0.9792,
+          "validation_macro_f1_at_threshold_0_5": 0.4391,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 16,
+          "output_index": 25
+        }
+      ],
+      "per_label_report": null,
+      "warnings": [],
+      "cell_output_summary": [
+        {
+          "index": 0,
+          "execution_count": 10,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 1,
+          "execution_count": 11,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 2,
+          "execution_count": 12,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 3,
+          "execution_count": 13,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 4,
+          "execution_count": 14,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 5,
+          "execution_count": 15,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 6,
+          "execution_count": 16,
+          "outputs": 26,
+          "output_types": [
+            "display_data",
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 78
+        },
+        {
+          "index": 7,
+          "execution_count": 17,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 8,
+          "execution_count": 18,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        }
+      ],
+      "best_by_validation_loss": {
+        "epoch": 3,
+        "train_loss": 0.2803,
+        "validation_loss": 0.3482,
+        "validation_macro_roc_auc": 0.979,
+        "validation_macro_f1_at_threshold_0_5": 0.39,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 16,
+        "output_index": 15
+      },
+      "highest_recorded_validation_macro_roc_auc": {
+        "epoch": 4,
+        "train_loss": 0.2409,
+        "validation_loss": 0.3735,
+        "validation_macro_roc_auc": 0.9795,
+        "validation_macro_f1_at_threshold_0_5": 0.4306,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 16,
+        "output_index": 20
+      },
+      "highest_recorded_validation_macro_f1_at_threshold_0_5": {
+        "epoch": 5,
+        "train_loss": 0.2197,
+        "validation_loss": 0.3824,
+        "validation_macro_roc_auc": 0.9792,
+        "validation_macro_f1_at_threshold_0_5": 0.4391,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 16,
+        "output_index": 25
+      },
+      "provenance_limitations": [
+        "Outputs preserved from uploads; no data or weights supplied for independent reproduction",
+        "Epoch metrics are rounded and concern repeatedly observed validation data",
+        "Saved final model, best-checkpoint inference, and last-epoch validation arrays are not synchronized",
+        "All 5 rounded metric records exactly match the other 5-epoch notebook; not independent replicated evidence"
+      ],
+      "training_config": {
+        "epochs_requested": 5,
+        "learning_rate": 4e-05,
+        "warmup_fraction": 0.1,
+        "epochs_recorded": 5,
+        "best_validation_loss_epoch": 3
+      }
+    },
+    {
+      "file": "model_FINAL_Report.ipynb",
+      "sha256": "d46c37b06c49d74f2137c23a798128a3cf1f6c21a2b05420effd82af1d9811d7",
+      "cell_count": 11,
+      "cell_types": {
+        "code": 11
+      },
+      "metrics": [
+        {
+          "epoch": 1,
+          "train_loss": 0.7962,
+          "validation_loss": 0.3941,
+          "validation_macro_roc_auc": 0.972,
+          "validation_macro_f1_at_threshold_0_5": 0.3688,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 9,
+          "output_index": 5
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.3543,
+          "validation_loss": 0.3679,
+          "validation_macro_roc_auc": 0.9766,
+          "validation_macro_f1_at_threshold_0_5": 0.4357,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 9,
+          "output_index": 10
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.2803,
+          "validation_loss": 0.3482,
+          "validation_macro_roc_auc": 0.979,
+          "validation_macro_f1_at_threshold_0_5": 0.39,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 9,
+          "output_index": 15
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.2409,
+          "validation_loss": 0.3735,
+          "validation_macro_roc_auc": 0.9795,
+          "validation_macro_f1_at_threshold_0_5": 0.4306,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 9,
+          "output_index": 20
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.2197,
+          "validation_loss": 0.3824,
+          "validation_macro_roc_auc": 0.9792,
+          "validation_macro_f1_at_threshold_0_5": 0.4391,
+          "reported_decimal_places": 4,
+          "cell_index": 6,
+          "execution_count": 9,
+          "output_index": 25
+        }
+      ],
+      "per_label_report": {
+        "cell_index": 9,
+        "execution_count": null,
+        "output_index": 0,
+        "reported_decimal_places": 3,
+        "status": "stored_output_execution_count_null",
+        "uses_last_epoch_prediction_arrays_from_cell_6": true,
+        "metrics": {
+          "identity_hate": {
+            "precision": 0.124,
+            "recall": 0.911,
+            "f1": 0.218
+          },
+          "insult": {
+            "precision": 0.44,
+            "recall": 0.945,
+            "f1": 0.601
+          },
+          "obscene": {
+            "precision": 0.539,
+            "recall": 0.959,
+            "f1": 0.69
+          },
+          "severe_toxic": {
+            "precision": 0.203,
+            "recall": 0.975,
+            "f1": 0.336
+          },
+          "threat": {
+            "precision": 0.048,
+            "recall": 0.853,
+            "f1": 0.09
+          },
+          "toxic": {
+            "precision": 0.572,
+            "recall": 0.9,
+            "f1": 0.7
+          },
+          "Macro-Avg": {
+            "precision": 0.321,
+            "recall": 0.924,
+            "f1": 0.439
+          }
+        }
+      },
+      "warnings": [],
+      "cell_output_summary": [
+        {
+          "index": 0,
+          "execution_count": 3,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 1,
+          "execution_count": 4,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 2,
+          "execution_count": 5,
+          "outputs": 3,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 3,
+          "execution_count": 6,
+          "outputs": 6,
+          "output_types": [
+            "display_data",
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 4,
+          "execution_count": 7,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 5,
+          "execution_count": 8,
+          "outputs": 0,
+          "output_types": [],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 6,
+          "execution_count": 9,
+          "outputs": 26,
+          "output_types": [
+            "display_data",
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 20
+        },
+        {
+          "index": 7,
+          "execution_count": 10,
+          "outputs": 2,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 8,
+          "execution_count": 11,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 9,
+          "execution_count": null,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        },
+        {
+          "index": 10,
+          "execution_count": 13,
+          "outputs": 1,
+          "output_types": [
+            "stream"
+          ],
+          "worker_assertion_text_occurrences": 0
+        }
+      ],
+      "best_by_validation_loss": {
+        "epoch": 3,
+        "train_loss": 0.2803,
+        "validation_loss": 0.3482,
+        "validation_macro_roc_auc": 0.979,
+        "validation_macro_f1_at_threshold_0_5": 0.39,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 9,
+        "output_index": 15
+      },
+      "highest_recorded_validation_macro_roc_auc": {
+        "epoch": 4,
+        "train_loss": 0.2409,
+        "validation_loss": 0.3735,
+        "validation_macro_roc_auc": 0.9795,
+        "validation_macro_f1_at_threshold_0_5": 0.4306,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 9,
+        "output_index": 20
+      },
+      "highest_recorded_validation_macro_f1_at_threshold_0_5": {
+        "epoch": 5,
+        "train_loss": 0.2197,
+        "validation_loss": 0.3824,
+        "validation_macro_roc_auc": 0.9792,
+        "validation_macro_f1_at_threshold_0_5": 0.4391,
+        "reported_decimal_places": 4,
+        "cell_index": 6,
+        "execution_count": 9,
+        "output_index": 25
+      },
+      "provenance_limitations": [
+        "Outputs preserved from uploads; no data or weights supplied for independent reproduction",
+        "Epoch metrics are rounded and concern repeatedly observed validation data",
+        "Saved final model, best-checkpoint inference, and last-epoch validation arrays are not synchronized",
+        "All 5 rounded metric records exactly match the other 5-epoch notebook; not independent replicated evidence"
+      ],
+      "training_config": {
+        "epochs_requested": 5,
+        "learning_rate": 4e-05,
+        "warmup_fraction": 0.1,
+        "epochs_recorded": 5,
+        "best_validation_loss_epoch": 3
+      }
+    }
+  ]
+}

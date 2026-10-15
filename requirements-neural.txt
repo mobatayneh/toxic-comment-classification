@@ -1,0 +1,12 @@
+# Optional repaired original RoBERTa workflow; Python 3.12+.
+# Tested here: torch 2.8.0+cpu, transformers 4.57.1, and the versions below.
+# For CPU-only installation, install torch first using the official CPU index:
+# python -m pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+# Then: python -m pip install -r requirements-neural.txt
+# For CUDA, select an appropriate official PyTorch build explicitly.
+-r requirements-core.txt
+torch==2.8.0
+transformers==4.57.1
+tokenizers==0.22.2
+safetensors==0.8.0
+huggingface-hub==0.36.2

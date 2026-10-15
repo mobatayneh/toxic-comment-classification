@@ -1,0 +1,85 @@
+{
+  "status": "inspected_uploaded_real_data",
+  "train": {
+    "rows": 159571,
+    "columns": [
+      "comment_text",
+      "id",
+      "identity_hate",
+      "insult",
+      "obscene",
+      "set",
+      "severe_toxic",
+      "threat",
+      "toxic",
+      "toxicity"
+    ],
+    "set_counts": {
+      "train": 159571
+    },
+    "positive_counts": {
+      "identity_hate": 1405,
+      "insult": 7877,
+      "obscene": 8449,
+      "severe_toxic": 1595,
+      "threat": 478,
+      "toxic": 15294
+    },
+    "label_prevalence": {
+      "identity_hate": 0.00880485802558109,
+      "insult": 0.04936360616904074,
+      "obscene": 0.052948217407925,
+      "severe_toxic": 0.009995550569965721,
+      "threat": 0.002995531769557125,
+      "toxic": 0.09584448302009764
+    },
+    "normalized_empty_text_rows": 7,
+    "exact_text_duplicate_rows": 769,
+    "normalized_text_groups": 158247,
+    "normalized_duplicate_groups": 737,
+    "rows_in_normalized_duplicate_groups": 2061,
+    "normalized_conflicting_label_groups": 93,
+    "rows_in_conflicting_groups": 213,
+    "duplicate_id_rows": 0,
+    "ids_with_differing_text": 0,
+    "derived_toxicity_equals_max_six_labels": false,
+    "derived_toxicity_equals_sum_six_labels": true,
+    "chosen_excluded_empty_text_rows": 7,
+    "chosen_retained_rows": 159564
+  },
+  "unlabeled_challenge_test": {
+    "rows": 153164,
+    "blank_label_cells": {
+      "identity_hate": 153164,
+      "insult": 153164,
+      "obscene": 153164,
+      "severe_toxic": 153164,
+      "threat": 153164,
+      "toxic": 153164
+    },
+    "normalized_empty_text_rows": 79,
+    "normalized_duplicate_groups": 620,
+    "duplicate_id_rows": 0,
+    "evaluation_available": false
+  },
+  "cross_file_overlap": {
+    "shared_nonempty_normalized_groups": 636,
+    "train_rows_in_shared_groups": 1116,
+    "test_rows_in_shared_groups": 1419,
+    "shared_ids": 0
+  },
+  "near_duplicate_search": "not performed; normalized exact-text grouping does not prove independence of paraphrases/users/time",
+  "decision": "Explicitly drop seven whitespace-only training texts; keep conflicting annotations unchanged with duplicate groups in one split. Use text only; toxicity is the sum of targets and must be excluded, as must IDs. Challenge test has no labels and cannot supply performance metrics.",
+  "source_files": [
+    {
+      "name": "train_preprocessed.csv",
+      "bytes": 68927616,
+      "sha256": "bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e"
+    },
+    {
+      "name": "test_preprocessed.csv",
+      "bytes": 57400645,
+      "sha256": "756b53c5a4d35b7d77c6080fdb1b3efd335ccee36c52187c6b356185669b79d8"
+    }
+  ]
+}

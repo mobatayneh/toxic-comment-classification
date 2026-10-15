@@ -1,0 +1,13 @@
+# Python 3.12+. Preserve Colab's CUDA-enabled torch >=2.8; do not replace it.
+# CPU mechanics tested with torch 2.8.0+cpu. CUDA training is not validated here.
+# Standalone copy of the core pins so the notebook needs no other requirements file.
+numpy==2.3.5
+pandas==2.2.3
+scipy==1.17.0
+scikit-learn==1.8.0
+joblib==1.5.3
+transformers==4.57.1
+tokenizers==0.22.2
+safetensors==0.8.0
+huggingface-hub==0.36.2
+matplotlib==3.10.8
