@@ -37,6 +37,8 @@ import numpy as np
 
 from toxic_comments import neural as core
 from toxic_comments.artifacts import (
+    MANIFEST_SCHEMA,
+    TEST_MARKER,
     create_run_directory,
     freeze_run,
     read_json,
@@ -58,6 +60,11 @@ LATEST_CHECKPOINT = "private/latest_checkpoint.pt"
 BEST_CHECKPOINT = "private/best_checkpoint.pt"
 IDENTITY_FILE = "private/run_identity.json"
 TOKENIZER_DIRECTORY = "private/source_tokenizer"
+FREEZE_TRANSACTION = "private/freeze_transaction.json"
+FREEZE_EXTRA_ARTIFACTS = (
+    BEST_CHECKPOINT, IDENTITY_FILE, TOKENIZER_DIRECTORY,
+    "private/validation_predictions.npz", "training_history.json", "validation_metrics.json",
+)
 FULL_SOURCE_SHA256 = "bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e"
 FULL_DATA_EXPECTATION = {
     "input_rows": 159571,
@@ -171,6 +178,81 @@ def _atomic_json(path: Path, value: Any) -> None:
         os.replace(temporary, path)
     finally:
         temporary.unlink(missing_ok=True)
+
+
+def _recover_freeze_checksum(run_dir: Path, identity: dict[str, Any], dependencies: Any) -> None:
+    """Finish only an intact, transaction-marked freeze missing its checksum.
+
+    A present checksum is never replaced. Truncated manifests and changed
+    artifacts remain fail-closed; this is not a general integrity repair tool.
+    """
+    manifest_path = run_dir / "manifest.json"
+    checksum_path = run_dir / "manifest.sha256"
+    transaction_path = run_dir / FREEZE_TRANSACTION
+    if not manifest_path.exists() or checksum_path.exists():
+        return
+    if not transaction_path.is_file() or (run_dir / TEST_MARKER).exists():
+        raise ValueError("Incomplete freeze cannot be recovered without its transaction or after test access")
+    transaction = read_json(transaction_path)
+    expected_transaction = {
+        "schema_version": 1,
+        "identity_sha256": file_sha256(run_dir / IDENTITY_FILE),
+        "latest_checkpoint_sha256": file_sha256(run_dir / LATEST_CHECKPOINT),
+        "best_checkpoint_sha256": file_sha256(run_dir / BEST_CHECKPOINT),
+    }
+    if transaction != expected_transaction:
+        raise ValueError("Incomplete freeze transaction or checkpoint identity changed")
+    checkpoint = dependencies.torch.load(run_dir / LATEST_CHECKPOINT, map_location="cpu", weights_only=True)
+    if (checkpoint.get("schema_version") != CHECKPOINT_SCHEMA
+            or checkpoint.get("identity_sha256") != transaction["identity_sha256"]
+            or checkpoint.get("label_order") != list(LABELS)
+            or checkpoint.get("training_complete") is not True):
+        raise ValueError("Incomplete freeze requires the intact completed training checkpoint")
+    best_metadata = checkpoint["best"]
+    del checkpoint
+    best = dependencies.torch.load(run_dir / BEST_CHECKPOINT, map_location="cpu", weights_only=True)
+    if best.get("label_order") != list(LABELS) or any(best.get(name) != value for name, value in best_metadata.items()):
+        raise ValueError("Incomplete freeze best checkpoint differs from completed training")
+    del best
+    manifest = read_json(manifest_path)
+    if (manifest.get("schema_version") != MANIFEST_SCHEMA
+            or manifest.get("label_order") != list(LABELS)
+            or manifest.get("source_path") != "private/source.csv"
+            or manifest.get("source_sha256") != identity["source_sha256"]
+            or manifest.get("model_path") != "model"):
+        raise ValueError("Incomplete freeze manifest is incompatible with this Colab run")
+    artifacts = ("config.json", "data_summary.json", "metadata.json", "thresholds.json", "private/splits.npz", "model", *FREEZE_EXTRA_ARTIFACTS)
+    observed = {}
+    for relative in artifacts:
+        path = run_dir / relative
+        candidates = sorted(path.rglob("*")) if path.is_dir() else [path]
+        for candidate in candidates:
+            resolved = candidate.resolve()
+            if not resolved.is_relative_to(run_dir) or not resolved.is_file():
+                raise ValueError("Incomplete freeze contains an invalid artifact path")
+            observed[resolved.relative_to(run_dir).as_posix()] = file_sha256(resolved)
+    if manifest.get("artifacts_sha256") != observed:
+        raise ValueError("Incomplete freeze artifact integrity check failed")
+    if not any(name.startswith("model/") for name in observed):
+        raise ValueError("Incomplete freeze model export is empty")
+    recorded_code = read_json(run_dir / "metadata.json")["code_sha256"]
+    expected_code = {name: value for name, value in identity["code_sha256"].items() if name.startswith("src/")}
+    if recorded_code != expected_code:
+        raise ValueError("Incomplete freeze source code differs from the original run identity")
+    descriptor, temporary_name = tempfile.mkstemp(prefix="manifest.sha256.", suffix=".tmp", dir=run_dir)
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="ascii") as stream:
+            stream.write(file_sha256(manifest_path) + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        if checksum_path.exists():
+            raise FileExistsError("A freeze checksum already exists; it cannot be replaced")
+        os.replace(temporary, checksum_path)
+    finally:
+        temporary.unlink(missing_ok=True)
+    verify_frozen_run(run_dir)
+    transaction_path.unlink()
 
 
 def capture_rng_state(torch: Any) -> dict[str, Any]:
@@ -502,6 +584,9 @@ def package_results(run_dir: str | Path, *, verification_private: bool = False) 
     test_evaluated = (destination / "public_test_results.json").exists()
     result_metadata = {
         "stage": "developed_and_frozen", "label_order": list(LABELS),
+        "source_sha256": identity["source_sha256"],
+        "code_sha256": identity["code_sha256"],
+        "tokenizer_revision": identity["tokenizer_revision"],
         "test_evaluation_performed": test_evaluated,
         "validation_is_selection_diagnostic": True,
         "raw_texts_included": False, "per_row_arrays_included": False, "model_weights_included": False,
@@ -577,7 +662,8 @@ def run_colab_training(data_path: str | Path, run_dir: str | Path, *, config: Co
     identity = read_json(identity_path) if existed else None
     if identity is not None:
         _validate_identity(identity, config=config, source_path=source_path, tokenizer_dir=tokenizer_dir, dependencies=dependencies, smoke=_smoke)
-    if (destination / "manifest.json").is_file():
+        _recover_freeze_checksum(destination, identity, dependencies)
+    if (destination / "manifest.json").exists() or (destination / "manifest.sha256").exists():
         verify_frozen_run(destination)
         if evaluate:
             core.evaluate_run(destination, device=config.training.device)
@@ -616,6 +702,7 @@ def run_colab_training(data_path: str | Path, run_dir: str | Path, *, config: Co
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     criterion = dependencies.torch.nn.BCEWithLogitsLoss(pos_weight=dependencies.torch.tensor(positive_weights, dtype=dependencies.torch.float32, device=device))
     state = _train_resumable(model, dataset, splits, tokenizer, criterion, config, dependencies, device, destination, resume=resume, quiet=quiet, stop_after_steps=_stop_after_steps)
+    _validate_identity(identity, config=config, source_path=source_path, tokenizer_dir=tokenizer_dir, dependencies=dependencies, smoke=_smoke)
     if state["interrupted"]:
         return {"run_dir": str(destination), "stage": "interrupted", "checkpoint_path": str(destination / LATEST_CHECKPOINT), "global_optimizer_steps": state["global_optimizer_steps"], "history": state["history"], "best_checkpoint": state["best"], "resumed": state["resumed"]}
     # Recoverable export: only manifest-free derived files are removed. Private
@@ -668,13 +755,24 @@ def run_colab_training(data_path: str | Path, run_dir: str | Path, *, config: Co
         "tested_environment_limitations": "Python 3.12 and torch 2.8.0+cpu: tiny offline mechanics only. Preserve Colab CUDA torch >=2.8; CUDA execution, memory and full-data model quality must be verified in the user's runtime. Exact continuation requires the recorded versions and GPU family/capability.",
     }
     architecture = {name: getattr(model.config, name) for name in core.ORIGINAL_ARCHITECTURE}
+    _validate_identity(identity, config=config, source_path=source_path, tokenizer_dir=tokenizer_dir, dependencies=dependencies, smoke=_smoke)
+    if not state["training_complete"] or (destination / TEST_MARKER).exists():
+        raise ValueError("Freezing requires completed training before any test access")
+    _atomic_json(destination / FREEZE_TRANSACTION, {
+        "schema_version": 1,
+        "identity_sha256": file_sha256(identity_path),
+        "latest_checkpoint_sha256": file_sha256(destination / LATEST_CHECKPOINT),
+        "best_checkpoint_sha256": file_sha256(destination / BEST_CHECKPOINT),
+    })
     freeze_run(
         destination,
         config={"method": "random_initialized_roberta", "training": asdict(config.training), "architecture": architecture, "label_order": list(LABELS), "colab": {"gradient_checkpointing": config.gradient_checkpointing, "checkpoint_every_updates": config.checkpoint_every_updates, "require_full_dataset": config.require_full_dataset}},
         data_summary={**dataset.summary, "splits": split_summary(dataset, splits)},
         source_path=source_path, model_path=destination / "model", thresholds=thresholds, splits=splits, metadata=metadata,
-        extra_artifacts=[destination / BEST_CHECKPOINT, identity_path, destination / TOKENIZER_DIRECTORY, validation_path, destination / "training_history.json", destination / "validation_metrics.json"],
+        extra_artifacts=[destination / relative for relative in FREEZE_EXTRA_ARTIFACTS],
     )
+    verify_frozen_run(destination)
+    (destination / FREEZE_TRANSACTION).unlink()
     if evaluate:
         core.evaluate_run(destination, device=config.training.device)
     return {

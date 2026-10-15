@@ -120,5 +120,7 @@
     "initial_failure": "Missing Jinja2 for pandas Styler notebook displays",
     "repair": "Jinja2==3.1.6 added to requirements-notebooks.txt",
     "full_real_model_training_executed": false
-  }
+  },
+  "record_scope": "Historical 14 October 2026 snapshot; see latest_followup for the current source and tests.",
+  "latest_followup": "reports/review_20261015.json"
 }

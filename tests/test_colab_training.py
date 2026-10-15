@@ -384,7 +384,11 @@ class ColabResumeInvariants(unittest.TestCase):
                         self.assertNotIn("synthetic-colab-id-", content)
                         self.assertNotIn(str(self.parent), content)
                         if name.endswith(".json") and not private:
-                            check_aggregate(json.loads(content))
+                            value = json.loads(content)
+                            if name == "result_metadata.json":
+                                self.assertEqual(value.pop("source_sha256"), file_sha256(self.source))
+                                self.assertEqual(value.pop("code_sha256"), self.colab._source_code_hashes())
+                            check_aggregate(value)
                 if private:
                     self.assertIn("Never publish", archive.read("PRIVATE_README.txt").decode())
                     manifest = json.loads(archive.read("verification_manifest.json"))

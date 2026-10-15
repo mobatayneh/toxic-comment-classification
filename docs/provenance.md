@@ -50,10 +50,16 @@ Current input fingerprints and split details are recorded per new local run. The
 
 ## Confirmed publication scope and remaining gaps
 
-The approved Public [repository](https://github.com/mobatayneh/toxic-comment-classification), [work branch](https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening), and [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) are published and verified. The PR remains open and unmerged. The first public snapshot's 63 path/mode/blob identities and root tree were checked against the local preparation snapshot. Remote commit IDs differ from the preserved local preparation history; no existing remote history was rewritten. Mohammad Albatayneh's individual authorship statement is recorded above; no repository-wide code license has been selected.
+The approved Public [repository](https://github.com/mobatayneh/toxic-comment-classification), [work branch](https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening), and [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) are published and verified. The initial publication was reviewed in that PR; GitHub records its current merge state and tested commits. The first public snapshot's 63 path/mode/blob identities and root tree were checked against the local preparation snapshot. Remote commit IDs differ from the preserved local preparation history; no existing remote history was rewritten. Mohammad Albatayneh's individual authorship statement is recorded above; no repository-wide code license has been selected.
 
 - Select a repository-wide code license separately; publication approval does not select one.
 - Establish terms and preprocessing lineage if the FizzBuzz mirror is used or distributed.
 - Review the new real-data aggregate results separately from historical outputs; confirm supplied mirror provenance and permission.
 - Reserve or collect an independent evaluation cohort before making stronger deployment or generalization claims.
 
+
+## Follow-up source revision — 15 October 2026
+
+The original published Colab notebook has SHA-256 `2f60edc83f6d70a54b194e4e0fd0372782f820675c14584975a488ae245eba55` at commit `b6819a5a2f6e6822b3d58bd0b7e314a623340ace`. A user run already started from that notebook must retain its original embedded files and recorded environment when resuming. Later source revisions are not interchangeable with a saved run identity. No submitted real-data neural training result has yet been verified.
+
+The completed CPU reference was independently rechecked before this revision: saved targets, partitions, thresholds and aggregate metrics matched the private frozen artifacts exactly. Its source hashes belong to the earlier implementation. To inspect that frozen run, use its recorded source version; never rewrite its manifest to match newer code or retrain merely to make an integrity check pass. Commit `b6819a5a2f6e6822b3d58bd0b7e314a623340ace` retains the six core source files matching that evidence.

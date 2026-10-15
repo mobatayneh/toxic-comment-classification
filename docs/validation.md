@@ -1,10 +1,10 @@
 # Verification record
 
-Updated on 14 October 2026. The Public repository, [work branch](https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening), and [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) are published and verified. The pull request is open and unmerged; main retains its initial README. This record distinguishes the complete local CPU suite from the lighter GitHub core workflow and the still-unexecuted full Colab experiment.
+Updated on 15 October 2026. The [follow-up review](review_20261015.md) records the new integrity fixes, full enabled CPU suite and automatic neural CI. [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) is the authoritative record of tested commits and merge state. The dated 13–14 October entries below are retained as historical verification evidence, not current test counts. Full real-data Colab/CUDA results have not yet been reviewed.
 
-## Software checks
+## Software checks recorded on 14 October 2026
 
-The current candidate suite, recorded on 14 October 2026, passed **43 tests, with zero failures, errors or skips**, in **15.492 seconds** on Python 3.12.14 with torch 2.8.0+cpu. It includes 31 always-on core/review checks and 12 explicitly enabled tiny CPU neural checks. The ten added Colab checks comprise two always-on notebook/portable-import checks and eight CPU training/resume/bundle checks.
+The candidate suite recorded on 14 October 2026 passed **43 tests, with zero failures, errors or skips**, in **15.492 seconds** on Python 3.12.14 with torch 2.8.0+cpu. It includes 31 always-on core/review checks and 12 explicitly enabled tiny CPU neural checks. The ten added Colab checks comprise two always-on notebook/portable-import checks and eight CPU training/resume/bundle checks.
 
 | Test module | Passed |
 |---|---:|
@@ -16,7 +16,7 @@ The current candidate suite, recorded on 14 October 2026, passed **43 tests, wit
 | Publication verifier | 6 |
 | **Total** | **43** |
 
-The prior base suite passed 33 tests with zero skips in 7.922 seconds on 13 October 2026. That record is retained as prior evidence; the current suite covers the Colab additions.
+The prior base suite passed 33 tests with zero skips in 7.922 seconds on 13 October 2026. That record is retained as prior evidence; that suite covered the Colab additions.
 
 ```bash
 python -m pip install -r requirements-dev.txt
@@ -30,11 +30,11 @@ python -m compileall -q src scripts
 python scripts/verify_repository.py
 ```
 
-Repository test discovery needs `requirements-dev.txt`, which includes the core and notebook/review dependencies. `requirements-core.txt` alone supports CPU training and its baseline smoke command. Optional neural checks are skipped unless explicitly enabled with their dependencies installed. The tests verify train-only vocabulary and independently calculated TF-IDF weights, held-out-only vocabulary exclusion, duplicate-group isolation, strict CSV policies, validation thresholds, AP definitions, frozen artifacts, one-attempt test evaluation, best-checkpoint export and unequal microbatch sample weighting. CI configuration parses locally. Its core job uses synthetic fixtures and the aggregate-results notebook; a manually enabled neural job installs official CPU PyTorch wheels and uses tiny synthetic data. **The GitHub core workflow has passed; the optional neural job remains local-only evidence.**
+Repository test discovery needs `requirements-dev.txt`, which includes the core and notebook/review dependencies. `requirements-core.txt` alone supports CPU training and its baseline smoke command. Optional neural checks are skipped unless explicitly enabled with their dependencies installed. The tests verify train-only vocabulary and independently calculated TF-IDF weights, held-out-only vocabulary exclusion, duplicate-group isolation, strict CSV policies, validation thresholds, AP definitions, frozen artifacts, one-attempt test evaluation, best-checkpoint export and unequal microbatch sample weighting. CI configuration parses locally. At that date, the core job used synthetic fixtures and the aggregate-results notebook, while the neural job was manually enabled. The 15 October revision removes that job-level gate: CPU neural checks run automatically on push, pull request and manual workflow runs. Missing dependencies and skipped checks fail the neural job.
 
 The added Colab checks execute all eight visible source-writing cells in in-process IPython, verify exact embedded bytes and the manifest, and import the materialized project in a subprocess where all five optional neural modules and their distribution metadata are deliberately inaccessible. The CPU tests independently check interruption/resume model, optimizer, scheduler and RNG state, uneven accumulation math, patience and best-model restoration, identity mismatch rejection, atomic weights-only-safe checkpoints, read-only frozen restart, and aggregate/private ZIP boundaries. The reviewed runner, builder, notebook, requirements, tests, CI file and six core modules remained unchanged during the recorded suite.
 
-The retained console transcript is partial. Counts, duration, failure/skip lists and checked-file hashes come from the complete structured runner result; missing per-test console lines were not reconstructed. The machine-readable repository summary records this evidence limit.
+The 14 October console transcript is partial. Counts, duration, failure/skip lists and checked-file hashes come from the complete structured runner result; missing per-test console lines were not reconstructed. The machine-readable repository summary records this evidence limit.
 
 ## GitHub publication checks
 

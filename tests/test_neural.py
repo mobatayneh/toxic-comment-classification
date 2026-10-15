@@ -197,6 +197,37 @@ class NeuralInvariants(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "label order"):
             neural._check_label_mapping(wrong_model)
 
+    def test_source_code_change_during_training_prevents_freeze(self):
+        from toxic_comments import artifacts
+
+        neural = self.neural
+        original_hashes = artifacts._code_hashes()
+        current_hashes = dict(original_hashes)
+        original_train = neural._train
+
+        def train_then_change_source_identity(*args, **kwargs):
+            result = original_train(*args, **kwargs)
+            # Simulate a disk edit after real training without modifying shared
+            # source files or the already imported implementation.
+            current_hashes["src/toxic_comments/neural.py"] = "changed-source-identity"
+            return result
+
+        config = neural.TrainConfig(epochs=1, patience=1, batch_size=8, accumulation_steps=3,
+                                   learning_rate=1e-3, max_length=16, cpu_threads=1, amp=False,
+                                   local_files_only=True)
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            source = create_synthetic_fixture(parent / "synthetic.csv", rows=60)
+            run = parent / "neural"
+            with patch.object(artifacts, "_code_hashes", side_effect=lambda: dict(current_hashes)), \
+                 patch.object(neural, "_train", side_effect=train_then_change_source_identity):
+                with self.assertRaisesRegex(ValueError, "Source code changed during development"):
+                    neural.run_development(source, run, config=config, quiet=True, _smoke=True)
+            self.assertTrue((run / "private" / "best_checkpoint.pt").is_file())
+            self.assertTrue((run / "model" / "model.safetensors").is_file())
+            self.assertFalse((run / "manifest.json").exists())
+            self.assertFalse((run / TEST_MARKER).exists())
+
 
 if __name__ == "__main__":
     unittest.main()

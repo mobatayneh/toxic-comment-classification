@@ -3,8 +3,8 @@
 ## Goal
 Prepare Mohammad Albatayneh’s toxic-comment multi-label classification project for reviewed GitHub publication. Code and documentation in English. Preserve original academic artifacts and distinguish historical saved outputs from new runs. Never publish or merge without project-specific approval.
 
-## Current status — 2026-10-14
-Public repository and the complete reviewed `work/portfolio-hardening` branch are published; PR #1 is open and unmerged. Local CPU suite: 43 passed, zero skips/failures/errors. GitHub core push/PR workflows passed after the Jinja2 dependency repair: 31 checks passed, 12 optional CPU neural checks were skipped, and all eleven results-review cells executed in a normal Jupyter kernel. The real CPU experiment and original figures were preserved without retraining. Full real-data neural/Colab GPU training remains unexecuted. Main contains the initial README only; do not merge the feature branch without explicit approval.
+## Current status — follow-up review, 2026-10-15
+The user authorized a second review, all neural checks and merge after successful verification. The original 43-test suite passed again with all twelve neural checks enabled. Concrete source-provenance and interrupted-finalization findings are fixed; 50/50 tests pass with zero skips/failures/errors; the latest follow-up section below records completed stages. PR #1 and its checks are the authoritative publication/merge record. The user is training the original Colab notebook separately; do not replace its embedded source while that run is active. Full real-data neural performance remains unverified until the results are returned.
 
 ## Initial snapshot — 2026-10-13
 - Inputs: three notebooks and two byte-identical reports; original files remain unchanged outside the publication tree in ../upload/.
@@ -150,3 +150,19 @@ The privatecheckpoint preserves code/Githistory, originals, aggregateevidence, f
 - Added the verified repository URL only to the private CV's toxic-project header, preserving all bullets/other source bytes and the two-page layout. Career files remain outside GitHub. Original contribution and third-party rights boundaries remain explicit; no license has been invented.
 - Final documentation-only commit/tree will be verified on the remote branch and against its own CI before handoff. Main must still equal `8ac5bb8cc74c53f21df3ab9fc5f0963781bda6d3`; PR #1 must remain open/unmerged. Record final remote/local SHAs and URLs in the private Recovery_State.json and Publication_Review.md.
 - No additional model architecture, interface, API, Docker, paid training or real model rerun was added. Remaining next work is the user's full Colab training with the test switch off, review of returned aggregates, and a separate explicit decision about merging PR #1.
+
+## Follow-up review authorized — 2026-10-15
+- User explicitly requested a second review, execution of all twelve optional CPU neural/resume checks, correction of discovered errors, publication and merge only after verification succeeds. This supersedes the earlier no-merge authorization status.
+- User is currently training the supplied self-contained Colab notebook. Preserve its source/run identities and all completed real baseline results; do not rerun real-data experiments.
+- Starting snapshots: local 80f4580fe8f0a8259d021b13fece966990d7ab3c; remote work branch b6819a5a2f6e6822b3d58bd0b7e314a623340ace; PR #1 open/unmerged; main 8ac5bb8cc74c53f21df3ab9fc5f0963781bda6d3.
+- Phase 1: independent core and Colab reviews, fresh complete CPU suite, required neural CI, focused data/evidence checks. Phase 2: publish review fixes, verify latest-head CI, merge the approved PR and verify main. Save checkpoints between phases.
+- The provided test_preprocessed.csv is the unlabeled challenge set; verify its label-null audit, explain why scored evaluation uses a held-out portion of labeled training data, and never treat missing labels as negatives.
+- Next: collect review findings and full test evidence; no merge until resolved material findings and green full CI.
+
+## Phase 1 complete — 15 October 2026
+- Reviewed core data/metrics/freeze/neural code and Colab execution/resume/export/bundles independently. Verified actual challenge-test SHA and all 153164 rows lack six-label truth.
+- Reran prior43 checks with all12 neural checks enabled: all passed. Fixed standalone/Colab code-identity timing and bounded finalization recovery; added original code/source provenance to aggregate bundles. Seven new regressions bring the full suite to50; all50 passed with zero skips/failures/errors. Public per-test outcomes and checked-file hashes: reports/review_20261015.json; review: docs/review_20261015.md.
+- CI now runs its neural job on push/PR/manual with a zero-skip guard. Core31checks and neural21checks cover50distinct tests (two notebook checks overlap); the19optional core skips must execute in the neural job.
+- Before code changes, independently revalidated frozenCPU source/artifacts/splits/thresholds and recomputed all metrics from saved predictions; exact agreement, no new model inference/training. Keep original baseline metadata and code identity intact.
+- Updated Colab notebook is for new runs. User's active original copy must retain its exact source/runtime for continuation; original commit b6819a5a2f6e6822b3d58bd0b7e314a623340ace and notebook SHA are documented.
+- Next authorized stage: publish this reviewed source, verify both GitHub jobs on the latest commit, resolve any failure, then merge PR1 with an expected-head check and verify main. Do not repeat real experiments. Full neural results await the user's returned Colab bundle.

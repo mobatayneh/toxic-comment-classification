@@ -442,6 +442,7 @@ def run_development(data_path: str | Path, run_dir: str | Path, *, config: Train
     from .artifacts import create_run_directory, freeze_run, runtime_metadata
 
     config = config or TrainConfig()
+    initial_metadata = runtime_metadata(config.seed)
     dependencies = _dependencies()
     device = _set_determinism(dependencies, config)
     destination = create_run_directory(run_dir)
@@ -501,7 +502,7 @@ def run_development(data_path: str | Path, run_dir: str | Path, *, config: Train
     validation_metrics_path.write_text(json.dumps(validation_metrics, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     architecture = {name: getattr(model.config, name) for name in ORIGINAL_ARCHITECTURE}
     metadata = {
-        **runtime_metadata(config.seed),
+        **initial_metadata,
         "model_family": "custom RoBERTa sequence classifier",
         "initialization": "random weights; no pretrained model weights",
         "tokenizer_source": "locally constructed synthetic tokenizer" if _smoke else config.tokenizer_name_or_path,

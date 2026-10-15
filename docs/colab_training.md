@@ -175,3 +175,9 @@ python scripts/colab_train.py smoke --run-dir runs/new-colab-smoke
 Do not rerun the completed full real-data CPU baseline. Future neural
 improvements require a separate clearly recorded experiment and validation-only
 development; do not tune repeatedly against internal-test results.
+
+## Continuing a run started before the follow-up review
+
+A run started from the original published notebook must continue with the same notebook source and recorded environment. The original is preserved at Git commit `b6819a5a2f6e6822b3d58bd0b7e314a623340ace`; its notebook SHA-256 is `2f60edc83f6d70a54b194e4e0fd0372782f820675c14584975a488ae245eba55`. Do not rerun source-writing cells from a newer notebook into an active run. The follow-up changes strengthen source-identity recording and finalization recovery; they do not establish a change in model quality.
+
+The supplied `test_preprocessed.csv` was checked again on 15 October 2026: all six target columns are blank for all 153,164 rows, matching the recorded file hash. It can be used for later unlabeled predictions, but cannot provide F1, AP, ROC-AUC or accuracy without genuine corresponding labels. The internal test in this notebook comes from the labeled training source and is kept separate from training and validation. Leave `START_INTERNAL_TEST=False` until the validation evidence and final settings have been reviewed.

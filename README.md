@@ -18,10 +18,10 @@ The project is a research implementation, not a deployed moderation system. Outp
 
 Use Python 3.12. Commands below run from the repository root.
 
-The complete reviewed source is on [work/portfolio-hardening](https://github.com/mobatayneh/toxic-comment-classification/tree/work/portfolio-hardening). [PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) is open for review; main retains the initial README until the proposed changes are approved and merged.
+[PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) records the initial portfolio review and its checks. The standard checkout below uses `main`; while reviewing an unmerged change, check out its named work branch instead.
 
 ```bash
-git clone --branch work/portfolio-hardening https://github.com/mobatayneh/toxic-comment-classification.git
+git clone https://github.com/mobatayneh/toxic-comment-classification.git
 cd toxic-comment-classification
 ```
 
@@ -161,7 +161,7 @@ python -m pip install -r requirements-report.txt
 python scripts/build_report_pdf.py
 ```
 
-Read [methodology](docs/methodology.md) for the metric protocol, [model card](docs/model_card.md) for intended use and limitations, [validation](docs/validation.md) for the completed local checks, [provenance](docs/provenance.md) for artifact lineage, and [data sources](docs/data_sources.md) for access and third-party terms. [GitHub core CI passed](https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38525910900): 31 checks passed, 12 optional CPU neural checks were explicitly skipped, and the results notebook/publication verifier completed successfully. All 43 checks, including those 12 optional checks, passed in the separate local CPU environment. Full Colab/CUDA training remains unverified.
+Read [methodology](docs/methodology.md) for the metric protocol, [model card](docs/model_card.md) for intended use and limitations, [validation](docs/validation.md) for the completed local checks, [provenance](docs/provenance.md) for artifact lineage, and [data sources](docs/data_sources.md) for access and third-party terms. GitHub Actions runs both the core job and the CPU neural job on every push and pull request. The neural job enables every neural/resume/integrity check and fails if any selected check is skipped; its environment uses official CPU PyTorch wheels and synthetic fixtures. The lightweight core job intentionally does not install neural dependencies; its skipped checks execute in the separate required workflow job. See [the follow-up review](docs/review_20261015.md) for exact executed counts and evidence. Full Colab/CUDA training remains unverified.
 
 ## Authorship and third-party terms
 
