@@ -1,0 +1,75 @@
+{
+  "audit_environment": {
+    "dependencies": {
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.8.0"
+    },
+    "python_version": "3.12.14"
+  },
+  "baseline_same_validation_comparison_verified": true,
+  "challenge_test": {
+    "all_label_fields_are_blank": true,
+    "inspected": true,
+    "rows": 153164,
+    "scored": false,
+    "sha256": "756b53c5a4d35b7d77c6080fdb1b3efd335ccee36c52187c6b356185669b79d8"
+  },
+  "checkpoint": {
+    "epoch": 4,
+    "optimizer_steps": 1748,
+    "validation_loss": 0.36014178103214034
+  },
+  "checks": {
+    "all_metrics_recomputed_independently_and_with_project_code": true,
+    "calibration_configuration_selection_arithmetic": true,
+    "calibration_profile_source_matches_local_code": true,
+    "cross_bundle_json_byte_equality": true,
+    "cross_bundle_source_code_runtime_tokenizer_revision_identity": true,
+    "exact_grouped_splits_and_row_order": true,
+    "finite_bounded_six_label_probabilities": true,
+    "five_epoch_history_and_epoch_four_selection_consistent": true,
+    "full_eligible_cohort_and_summary": true,
+    "original_source_byte_hash": true,
+    "private_manifest_all_artifact_hashes": true,
+    "public_output_contains_aggregate_artifacts_only": true,
+    "safe_whitelisted_zip_entries": true,
+    "thresholds_reselected_independently_and_with_project_code": true,
+    "trained_code_matches_local_files_and_HEAD": true,
+    "training_class_weights_from_training_rows_only": true,
+    "validation_targets_match_original_source_in_label_order": true,
+    "zero_normalized_group_overlap": true
+  },
+  "eligible_rows": 159564,
+  "input_sha256": {
+    "aggregate_bundle": "270317ca85ff3420f3b003768a1b406ccaa9dcf398d2adb27932e6efbd1e089e",
+    "calibration": "084648414396419e8657cd86dd0558c516882a10e1933722feb93438489d4bb7",
+    "private_verification_bundle": "3e89e0251bea293c534db4c4c76fc1262decf1b368208f1d988a7d808c3a5c0c"
+  },
+  "limitations": [
+    "Validation selected the checkpoint and thresholds; scores are selection diagnostics, not an unbiased test estimate.",
+    "No model weights, optimizer checkpoint, tokenizer snapshot, or run identity file were returned; model inference, epoch losses, and tokenizer-file hashes were not independently reproduced.",
+    "Hardware, software, export-success flags, and training completion time are reported metadata reconciled across supplied artifacts; their execution provenance is not independently authenticated.",
+    "The neural internal exploratory test remains unscored in these bundles. The challenge test CSV has no usable labels and was not scored.",
+    "No confidence interval, probability calibration, subgroup fairness, robustness, or end-to-end speedup result is established.",
+    "SHA-256 manifests detect changes and cross-file inconsistencies; they are not signed attestations or tamper-proof evidence."
+  ],
+  "neural_internal_test": {
+    "evaluation_performed_during_this_audit": false,
+    "scored_in_supplied_artifacts": false
+  },
+  "numerical_absolute_tolerance": 1e-12,
+  "partition_rows": {
+    "test": 23955,
+    "train": 111731,
+    "validation": 23878
+  },
+  "schema_version": 1,
+  "scope": "Independent numerical audit of supplied validation probabilities, source rows, grouped splits, thresholds, and aggregates; no model inference.",
+  "status": "verified_returned_validation_artifacts",
+  "training_completed_utc_reported": "2026-10-16T03:52:24.416905+00:00",
+  "validation_probability_shape": [
+    23878,
+    6
+  ]
+}

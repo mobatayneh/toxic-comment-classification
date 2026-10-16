@@ -1,0 +1,27 @@
+{
+  "code_sha256": {
+    "scripts/colab_train.py": "6b251726359b6d454acf45da7f3b1ac8aaab448b6b8e884ddf0460f7253dfa49",
+    "src/toxic_comments/__init__.py": "ed7fe61628007bb1ea08a66c9230e16697bc1cac0b2fe160ee5c4a372f13e5aa",
+    "src/toxic_comments/artifacts.py": "7a95604d6bb4113e664e8a6c443203018396c7a2a9a718be7746e0bc9d278221",
+    "src/toxic_comments/baseline.py": "b95ebdaf7a42aaeb97d13d0a2f1ccf0069407c193a6ad4a5929c4b1634b1facf",
+    "src/toxic_comments/data.py": "86150cc33f638d15017c8cfabac7ce4793c723c39b23b0ad6a953ab3e2126298",
+    "src/toxic_comments/metrics.py": "de4f9d130179c03354414ee5825bf6b52a6a88926f45596cc2070b9224b75b38",
+    "src/toxic_comments/neural.py": "add690480e65a77a660627169d62241da457e20264d461df9f756baff718b0bf"
+  },
+  "label_order": [
+    "identity_hate",
+    "insult",
+    "obscene",
+    "severe_toxic",
+    "threat",
+    "toxic"
+  ],
+  "model_weights_included": false,
+  "per_row_arrays_included": false,
+  "raw_texts_included": false,
+  "source_sha256": "bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e",
+  "stage": "developed_and_frozen",
+  "test_evaluation_performed": false,
+  "tokenizer_revision": "e2da8e2f811d1448a5b465c236feacd80ffbac7b",
+  "validation_is_selection_diagnostic": true
+}

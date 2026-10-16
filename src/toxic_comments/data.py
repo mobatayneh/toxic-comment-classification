@@ -43,7 +43,9 @@ class LoadedDataset:
 
     @property
     def texts(self) -> np.ndarray:
-        return self.frame["comment_text"].to_numpy(dtype=str)
+        # A fixed-width Unicode array allocates every row at the longest
+        # comment's length. Keep references to the validated Python strings.
+        return self.frame["comment_text"].to_numpy(dtype=object, copy=False)
 
     @property
     def targets(self) -> np.ndarray:

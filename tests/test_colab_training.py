@@ -34,8 +34,8 @@ from toxic_comments.data import LABELS, create_synthetic_fixture, file_sha256, l
 from toxic_comments.metrics import select_thresholds
 
 ROOT = Path(__file__).resolve().parents[1]
-COLAB_NOTEBOOK = ROOT / "notebooks/03_colab_full_training.ipynb"
-COLAB_PREFIX = "/content/toxic-comment-classification/"
+COLAB_NOTEBOOK = ROOT / "notebooks/04_colab_efficient_training.ipynb"
+COLAB_PREFIX = "/content/toxic-comment-efficient-v1/"
 EMBEDDED_PATHS = (
     "src/toxic_comments/__init__.py",
     "src/toxic_comments/artifacts.py",
@@ -44,6 +44,7 @@ EMBEDDED_PATHS = (
     "src/toxic_comments/metrics.py",
     "src/toxic_comments/neural.py",
     "scripts/colab_train.py",
+    "scripts/colab_profile.py",
     "requirements-colab.txt",
 )
 
@@ -93,6 +94,25 @@ def _tree_hashes(directory: Path):
 
 
 class ColabNotebookInvariants(unittest.TestCase):
+    def test_retired_03_is_a_generated_notice_without_executable_cells(self):
+        import nbformat
+        from scripts import build_colab_notebook
+
+        path = build_colab_notebook.OUTPUT
+        notebook = nbformat.read(path, as_version=4)
+        nbformat.validate(notebook)
+        self.assertEqual(path.read_text(encoding="utf-8"), nbformat.writes(build_colab_notebook.build_notebook()) + "\n")
+        self.assertTrue(notebook.cells)
+        self.assertTrue(all(cell.cell_type == "markdown" for cell in notebook.cells))
+        self.assertEqual(notebook.metadata.training_workflow.status, "retired")
+        self.assertEqual(notebook.metadata.training_workflow.replacement, COLAB_NOTEBOOK.name)
+        text = "\n".join(cell.source for cell in notebook.cells)
+        self.assertIn(f"]({COLAB_NOTEBOOK.name})", text)
+        self.assertIn("original notebook version", text)
+        self.assertIn("Git history", text)
+        self.assertIn(build_colab_notebook.LEGACY_REVISION, text)
+        self.assertIn("cannot resume", text)
+
     def test_full_notebook_is_valid_clear_and_embeds_exact_repository_sources(self):
         import nbformat
         from IPython.core.inputtransformer2 import TransformerManager
@@ -194,7 +214,7 @@ blocked_imports.clear()
 blocked_metadata.clear()
 import toxic_comments
 import toxic_comments.artifacts, toxic_comments.baseline, toxic_comments.data
-import toxic_comments.metrics, toxic_comments.neural, scripts.colab_train
+import toxic_comments.metrics, toxic_comments.neural, scripts.colab_train, scripts.colab_profile
 assert len(toxic_comments.data.LABELS) == 6
 assert not blocked_imports, blocked_imports
 assert not blocked_metadata, blocked_metadata

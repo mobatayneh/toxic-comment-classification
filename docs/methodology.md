@@ -2,11 +2,12 @@
 
 ## Scope of the evidence
 
-Three types of evidence must remain separate:
+Four types of evidence must remain separate:
 
 1. **Historical outputs:** rounded numbers embedded in three uploaded notebooks. They describe an 80/20 validation experiment, not an independently reproduced benchmark. The initial notebook/report uploads contained no dataset, trained weights, or prediction arrays.
-2. **Real data audit and new experiment:** mirror CSVs were supplied later and inspected. A completed full-cohort CPU reference run uses the new 70/15/15 grouped protocol. Its results are a distinct experiment; supplying current mirror bytes does not prove which bytes produced the historical neural outputs.
-3. **Engineering runs:** synthetic smoke runs exercise the repaired workflow and are never evidence of performance on real comments. Full-data neural training has not been rerun.
+2. **Real data audit and CPU reference:** mirror CSVs were supplied later and inspected. A completed full-cohort CPU reference run uses the new 70/15/15 grouped protocol. Its results are a distinct experiment; supplying current mirror bytes does not prove which bytes produced the historical neural outputs.
+3. **Returned Colab experiment:** a five-epoch efficient-profile run on the full eligible cohort completed on 16 October 2026. Epoch four was selected by validation loss, then validation selected thresholds. Its scores are selection diagnostics; its internal test remains unscored. The [returned-run review](review_20261016.md) and [verification record](../reports/colab_efficient_v1/verification.json) bound what the supplied artifacts establish.
+4. **Engineering runs:** synthetic smoke runs exercise the repaired workflow and are never evidence of performance on real comments. Local CPU mechanics checks and the returned GPU experiment have separate environments and purposes.
 
 The supplied report's two PDF files have identical SHA-256 hashes. Their agreement does not provide a second report or experimental replication.
 
@@ -42,7 +43,11 @@ The CPU reference pipeline fits word unigram/bigram TF–IDF on training text on
 
 The repaired neural path preserves the custom random-initialized architecture and computes loss weights from training labels only. The portable defaults use smaller physical batches with gradient accumulation. A selected checkpoint is reloaded before scoring validation or exporting the model and tokenizer. The run records configuration, source fingerprint, split membership, labels, and validation thresholds. Seeded execution improves repeatability but does not guarantee identical floating-point results across hardware or library versions.
 
+The canonical [notebook 04](../notebooks/04_colab_efficient_training.ipynb) uses cached tokenization and dynamically pads each microbatch to its longest truncated example. Short synthetic full-length GPU probes choose microbatch 8, 16, 32, or 64 with matching accumulation 32, 16, 8, or 4. These execution choices preserve nominal effective batch 256 and the model/cohort protocol, but may change floating-point results and RNG consumption. They define a new numerical experiment and do not establish a historical accuracy gain or end-to-end speedup. The returned run used 64/four, completed all five epochs, and selected epoch four with validation loss 0.36014178103214034. Its returned fresh-export loss has the same value; no weights were supplied for independent forward-pass verification during review.
+
 Per-label decision thresholds maximize validation F1 on the fixed grid 0.05, 0.10, …, 0.95. Ties select the value nearest 0.5, then the higher threshold. A label with only one validation class retains 0.5. Thresholds are fixed before internal test evaluation. Report both threshold-0.5 and validation-tuned results to make the operating-point change visible.
+
+In the returned neural run, the first five labels select 0.95 and `toxic` selects 0.90. Five choices at the grid ceiling indicate a search-boundary limitation; they do not establish unconstrained F1-optimal thresholds. Review preserves these frozen values and does not use the internal test to revise them. Any different threshold grid or calibration method requires a separately documented development decision.
 
 ## Metrics
 
@@ -66,5 +71,9 @@ Training data, comments, split indices, normalized-text digests, scores, checkpo
 
 ## Interpretation limits
 
-The historical FINAL_Report per-label output indicates high recall and low precision at 0.5, especially for `threat` (0.048 precision, 0.853 recall). Weighted-loss sigmoid scores are not established calibrated probabilities. The new CPU internal test reports macro AP 0.6502, macro ROC-AUC 0.9811, macro F1 0.6346, and micro F1 0.7483 at frozen validation-selected thresholds. These concern a different protocol, so they do not establish a controlled gain over the historical neural run. None of the available results establishes fairness, explanations, production latency, compactness relative to a measured comparator, or readiness for automated moderation.
+The historical FINAL_Report per-label output indicates high recall and low precision at 0.5, especially for `threat` (0.048 precision, 0.853 recall). Weighted-loss sigmoid scores are not established calibrated probabilities. The CPU internal test reports macro AP 0.6502, macro ROC-AUC 0.9811, macro F1 0.6346, and micro F1 0.7483 at frozen validation-selected thresholds. These concern a different protocol from the historical neural work and a different partition from the returned neural validation, so they cannot support either direct comparison.
+
+Returned neural validation reports macro AP 0.5259, macro ROC-AUC 0.9761, macro F1 0.5094, and micro F1 0.6520 at selected thresholds. Its `threat` AP is 0.0753 and F1 is 0.1081 with 62 positives. These remain selected-validation diagnostics, without uncertainty estimates or a neural internal-test score. None of the available results establishes fairness, explanations, production latency, compactness relative to a measured comparator, or readiness for automated moderation.
+
+Saved baseline validation predictions permit a separate [same-validation comparison](../reports/colab_efficient_v1/baseline_validation_comparison.json). Review verified identical source bytes, eligible cohort, complete grouped partition indices/order, targets, label order, metric definitions, `>=` comparator, and threshold grid before recomputing both models' metrics. The reference has validation macro AP 0.6549 and selected-threshold macro F1 0.6414, higher than the returned neural run on those same rows. Each model chose its thresholds there, and the neural checkpoint was also selected there. This describes observed validation differences, without statistical significance or an independent generalization estimate. No baseline internal-test result enters that comparison.
 

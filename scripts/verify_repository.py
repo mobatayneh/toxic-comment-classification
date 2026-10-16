@@ -19,6 +19,12 @@ START = "<!-- historical-metrics:start -->"
 END = "<!-- historical-metrics:end -->"
 BASELINE_START = "<!-- baseline-metrics:start -->"
 BASELINE_END = "<!-- baseline-metrics:end -->"
+COLAB_START = "<!-- colab-efficient-metrics:start -->"
+COLAB_END = "<!-- colab-efficient-metrics:end -->"
+COMPARISON_START = "<!-- validation-comparison:start -->"
+COMPARISON_END = "<!-- validation-comparison:end -->"
+COLAB_REPORT_DIR = Path("reports/colab_efficient_v1")
+SUMMARY_METRICS = ("macro_average_precision", "macro_roc_auc", "macro_f1", "micro_f1")
 TEXT_SUFFIXES = {".md", ".py", ".json", ".ipynb", ".toml", ".txt", ".yml", ".yaml", ".cfg", ".ini"}
 PRIVATE_PARTS = {".git", ".venv", "__pycache__", ".ipynb_checkpoints", "runs", "private", "build", "dist"}
 PRIVATE_ARTIFACT_SUFFIXES = {".pt", ".pth", ".joblib", ".pkl", ".safetensors", ".npz", ".npy"}
@@ -123,6 +129,84 @@ def baseline_table(root: Path) -> str:
     return "\n".join(lines)
 
 
+def _validation_summary_rows(payload: dict) -> tuple[dict, dict]:
+    """Validate the threshold policies before presenting validation aggregates."""
+    if payload.get("synthetic") is not False or payload.get("split") != "validation":
+        raise ValueError("Colab evidence must explicitly identify real validation data")
+    fixed, selected = payload["metrics_at_0_5"], payload["metrics_at_validation_thresholds"]
+    for field in ("rows", "macro_average_precision", "macro_roc_auc"):
+        if fixed[field] != selected[field]:
+            raise ValueError(f"Threshold policies must use identical rows and ranking metrics: {field}")
+    for metrics in (fixed, selected):
+        if isinstance(metrics["rows"], bool) or not isinstance(metrics["rows"], int) or metrics["rows"] < 1:
+            raise ValueError("Validation aggregate row counts must be positive integers")
+        for field in SUMMARY_METRICS:
+            value = metrics[field]
+            if value is not None and (isinstance(value, bool) or not isinstance(value, (int, float))
+                                      or not math.isfinite(value) or not 0 <= value <= 1):
+                raise ValueError(f"Invalid validation metric: {field}")
+    return fixed, selected
+
+
+def _metric_cells(metrics: dict) -> str:
+    return " | ".join("undefined" if metrics[field] is None else f"{metrics[field]:.4f}"
+                      for field in SUMMARY_METRICS)
+
+
+def colab_table(root: Path) -> str:
+    """The completed neural run's validation selection diagnostics only."""
+    directory = root / COLAB_REPORT_DIR
+    validation = json.loads((directory / "validation_metrics.json").read_text(encoding="utf-8"))
+    config = json.loads((directory / "config.json").read_text(encoding="utf-8"))
+    metadata = json.loads((directory / "result_metadata.json").read_text(encoding="utf-8"))
+    if config.get("method") != "random_initialized_roberta":
+        raise ValueError("Colab evidence must identify the random-initialized RoBERTa method")
+    if metadata.get("test_evaluation_performed") is not False or metadata.get("validation_is_selection_diagnostic") is not True:
+        raise ValueError("Colab validation must remain selection diagnostics with the internal test unscored")
+    if any(metadata.get(field) is not False for field in
+           ("model_weights_included", "per_row_arrays_included", "raw_texts_included")):
+        raise ValueError("Colab public evidence must exclude private model and row artifacts")
+    rows = _validation_summary_rows(validation)
+    lines = [
+        "| Partition | Threshold policy | Rows | Macro AP | Macro ROC-AUC | Macro F1 | Micro F1 |",
+        "|---|---|---:|---:|---:|---:|---:|",
+    ]
+    for policy, metrics in zip(("Fixed 0.5", "Validation-selected"), rows):
+        lines.append(f"| Validation | {policy} | {metrics['rows']} | {_metric_cells(metrics)} |")
+    return "\n".join(lines)
+
+
+def validation_comparison_table(root: Path) -> str:
+    """Compare the two models on the same verified validation partition."""
+    directory = root / COLAB_REPORT_DIR
+    comparison = json.loads((directory / "baseline_validation_comparison.json").read_text(encoding="utf-8"))
+    if comparison.get("split") != "validation" or comparison.get("same_source_same_split_verified") is not True:
+        raise ValueError("Model comparison must verify the same source and validation partition")
+    inputs = {
+        "baseline": json.loads((root / "reports/baseline_validation_metrics.json").read_text(encoding="utf-8")),
+        "neural": json.loads((directory / "validation_metrics.json").read_text(encoding="utf-8")),
+    }
+    rows = {}
+    for name, payload in inputs.items():
+        expected_method = "tfidf_logistic_regression" if name == "baseline" else "random_initialized_roberta"
+        if comparison["models"][name].get("method") != expected_method:
+            raise ValueError(f"Validation comparison must identify the recorded {name} method")
+        rows[name] = _validation_summary_rows(payload)
+        for key in ("metrics_at_0_5", "metrics_at_validation_thresholds"):
+            if comparison["models"][name][key] != payload[key]:
+                raise ValueError(f"Validation comparison disagrees with saved {name} metrics")
+        if rows[name][0]["rows"] != comparison["rows"]:
+            raise ValueError("Model comparison row counts must match the validation evidence")
+    lines = [
+        "| Model | Threshold policy | Validation rows | Macro AP | Macro ROC-AUC | Macro F1 | Micro F1 |",
+        "|---|---|---:|---:|---:|---:|---:|",
+    ]
+    for name, title in (("baseline", "TF-IDF + logistic regression"), ("neural", "Random RoBERTa")):
+        for policy, metrics in zip(("Fixed 0.5", "Validation-selected"), rows[name]):
+            lines.append(f"| {title} | {policy} | {metrics['rows']} | {_metric_cells(metrics)} |")
+    return "\n".join(lines)
+
+
 def publication_files(root: Path) -> list[Path]:
     """Use Git's publication candidates, including tracked files now ignored."""
     result = subprocess.run(
@@ -164,7 +248,9 @@ def markdown_targets(text: str):
 def verify(root: Path) -> tuple[list[str], dict[str, int]]:
     root = root.resolve()
     errors: list[str] = []
-    counts = {"publication_files": 0, "local_links": 0, "historical_blocks": 0, "baseline_blocks": 0, "archival_notebooks": 0}
+    counts = {"publication_files": 0, "local_links": 0, "historical_blocks": 0, "baseline_blocks": 0,
+              "colab_blocks": 0, "validation_comparison_blocks": 0, "archival_notebooks": 0,
+              "retired_colab_entries": 0}
     try:
         canonical_table = historical_table(root)
     except (OSError, ValueError, KeyError, TypeError) as exc:
@@ -178,6 +264,20 @@ def verify(root: Path) -> tuple[list[str], dict[str, int]]:
             canonical_baseline = baseline_table(root)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             errors.append(f"Baseline evidence: {exc}")
+    colab_expected = (root / COLAB_REPORT_DIR).is_dir()
+    additional_tables = (
+        ("colab_blocks", COLAB_START, COLAB_END, "Colab", colab_table),
+        ("validation_comparison_blocks", COMPARISON_START, COMPARISON_END,
+         "Validation comparison", validation_comparison_table),
+    )
+    additional_canonical = {}
+    readme_additional_blocks = set()
+    if colab_expected:
+        for key, _, _, title, render in additional_tables:
+            try:
+                additional_canonical[key] = render(root)
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                errors.append(f"{title} evidence: {exc}")
     files = publication_files(root)
     counts["publication_files"] = len(files)
     readme_has_block = False
@@ -203,8 +303,27 @@ def verify(root: Path) -> tuple[list[str], dict[str, int]]:
             errors.append(f"Potential contact email in {relative}; inspect privately")
         if ROW_IDENTIFIER.search(text):
             errors.append(f"Potential raw comment identifier in {relative}; file SHA-256 values are allowed")
-        if path.suffix == ".md":
-            for target in markdown_targets(text):
+        notebook = None
+        markdown = text if path.suffix == ".md" else None
+        if path.suffix == ".ipynb":
+            try:
+                notebook = json.loads(text)
+                markdown = "\n".join(
+                    "".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "markdown"
+                )
+            except (ValueError, KeyError, TypeError):
+                errors.append(f"Malformed notebook: {relative}")
+            if relative == Path("notebooks/03_colab_full_training.ipynb") and notebook is not None:
+                counts["retired_colab_entries"] += 1
+                workflow = notebook.get("metadata", {}).get("training_workflow", {})
+                if any(cell.get("cell_type") == "code" for cell in notebook["cells"]):
+                    errors.append("Retired notebook 03 must contain no executable training cells")
+                if workflow.get("status") != "retired" or workflow.get("replacement") != "04_colab_efficient_training.ipynb":
+                    errors.append("Retired notebook 03 must identify notebook 04 as its replacement")
+                if "04_colab_efficient_training.ipynb" not in tuple(markdown_targets(markdown or "")):
+                    errors.append("Retired notebook 03 must link to the canonical notebook 04")
+        if markdown is not None:
+            for target in markdown_targets(markdown):
                 parsed = urlsplit(target)
                 if parsed.scheme or parsed.netloc or target.startswith("#"):
                     if parsed.scheme == "sandbox":
@@ -222,6 +341,7 @@ def verify(root: Path) -> tuple[list[str], dict[str, int]]:
                     continue
                 if not candidate.exists():
                     errors.append(f"Broken local link in {relative}: {target}")
+        if path.suffix == ".md":
             blocks = re.findall(re.escape(START) + r"(.*?)" + re.escape(END), text, re.DOTALL)
             if text.count(START) != text.count(END) or len(blocks) != text.count(START) or any(START in block for block in blocks):
                 errors.append(f"Unbalanced or nested historical table markers in {relative}")
@@ -242,6 +362,18 @@ def verify(root: Path) -> tuple[list[str], dict[str, int]]:
                     errors.append(f"Baseline table has no valid saved aggregate evidence in {relative}")
                 elif block.strip() != canonical_baseline:
                     errors.append(f"Baseline table differs from saved evidence in {relative}")
+            for key, start, end, title, _ in additional_tables:
+                blocks = re.findall(re.escape(start) + r"(.*?)" + re.escape(end), text, re.DOTALL)
+                if text.count(start) != text.count(end) or len(blocks) != text.count(start) or any(start in block for block in blocks):
+                    errors.append(f"Unbalanced or nested {title.lower()} table markers in {relative}")
+                for block in blocks:
+                    counts[key] += 1
+                    if relative == Path("README.md"):
+                        readme_additional_blocks.add(key)
+                    if key not in additional_canonical:
+                        errors.append(f"{title} table has no valid saved aggregate evidence in {relative}")
+                    elif block.strip() != additional_canonical[key]:
+                        errors.append(f"{title} table differs from saved evidence in {relative}")
         if relative.parts[:2] == ("archive", "notebooks") and path.suffix == ".ipynb":
             counts["archival_notebooks"] += 1
             try:
@@ -255,6 +387,12 @@ def verify(root: Path) -> tuple[list[str], dict[str, int]]:
         errors.append("README.md must include the canonical historical table between the agreed markers")
     if baseline_expected and not readme_has_baseline_block:
         errors.append("README.md must include the canonical baseline table between the agreed markers")
+    if colab_expected:
+        for key, _, _, title, _ in additional_tables:
+            if key not in readme_additional_blocks:
+                errors.append(f"README.md must include the canonical {title.lower()} table between the agreed markers")
+    if (root / "notebooks/04_colab_efficient_training.ipynb").is_file() and counts["retired_colab_entries"] != 1:
+        errors.append("The canonical Colab workflow must retain one retired notebook 03 entry for existing links")
     if counts["archival_notebooks"] != 3:
         errors.append("Expected three sanitized historical notebook derivatives in archive/notebooks/")
     try:
@@ -276,12 +414,20 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--print-historical-table", action="store_true")
     parser.add_argument("--print-baseline-table", action="store_true")
+    parser.add_argument("--print-colab-table", action="store_true")
+    parser.add_argument("--print-validation-comparison-table", action="store_true")
     args = parser.parse_args()
     if args.print_historical_table:
         print(historical_table(args.root))
         return 0
     if args.print_baseline_table:
         print(baseline_table(args.root))
+        return 0
+    if args.print_colab_table:
+        print(colab_table(args.root))
+        return 0
+    if args.print_validation_comparison_table:
+        print(validation_comparison_table(args.root))
         return 0
     errors, counts = verify(args.root)
     if errors:

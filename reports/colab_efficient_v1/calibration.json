@@ -1,0 +1,159 @@
+{
+  "accumulation_steps": 4,
+  "batch_size": 64,
+  "cache_tokenization": true,
+  "cpu_threads": 2,
+  "dynamic_padding": true,
+  "effective_batch_size": 256,
+  "gradient_checkpointing": false,
+  "limitations": "A short synthetic resource calibration, not an accuracy experiment or an end-to-end speedup measurement. Actual padding mix, data preparation and checkpoint I/O change throughput.",
+  "memory_fraction_limit": 0.85,
+  "minimum_free_gpu_bytes": 1073741824,
+  "profile": "random-roberta-efficient-v1",
+  "profile_sha256": "b5bb736fd3b9bc466f7c526578f348cfc417601ee13fb315b1d71a46fb737614",
+  "records": [
+    {
+      "accumulation_steps": 32,
+      "batch_size": 8,
+      "free_gpu_bytes_after_probe": 13769703424,
+      "max_length": 256,
+      "measured_group_seconds": [
+        4.882091609000099,
+        3.1435573799999474
+      ],
+      "measured_groups": 2,
+      "peak_reserved_gpu_bytes": 1669332992,
+      "samples_per_second": 63.79546385616255,
+      "skipped_amp_groups": 0,
+      "status": "ok",
+      "total_gpu_bytes": 15637086208,
+      "warmup_groups": 1,
+      "within_memory_budget": true
+    },
+    {
+      "accumulation_steps": 16,
+      "batch_size": 16,
+      "free_gpu_bytes_after_probe": 13167820800,
+      "max_length": 256,
+      "measured_group_seconds": [
+        2.650375617000009,
+        1.502967462000015
+      ],
+      "measured_groups": 2,
+      "peak_reserved_gpu_bytes": 2269118464,
+      "samples_per_second": 123.27418907163124,
+      "skipped_amp_groups": 0,
+      "status": "ok",
+      "total_gpu_bytes": 15637086208,
+      "warmup_groups": 1,
+      "within_memory_budget": true
+    },
+    {
+      "accumulation_steps": 8,
+      "batch_size": 32,
+      "free_gpu_bytes_after_probe": 11863392256,
+      "max_length": 256,
+      "measured_group_seconds": [
+        1.406497881000064,
+        1.4099385949999714
+      ],
+      "measured_groups": 2,
+      "peak_reserved_gpu_bytes": 3573547008,
+      "samples_per_second": 181.790004625687,
+      "skipped_amp_groups": 0,
+      "status": "ok",
+      "total_gpu_bytes": 15637086208,
+      "warmup_groups": 1,
+      "within_memory_budget": true
+    },
+    {
+      "accumulation_steps": 4,
+      "batch_size": 64,
+      "free_gpu_bytes_after_probe": 9273409536,
+      "max_length": 256,
+      "measured_group_seconds": [
+        1.362881614999992,
+        1.3618482969999377
+      ],
+      "measured_groups": 2,
+      "peak_reserved_gpu_bytes": 6163529728,
+      "samples_per_second": 187.9085327852536,
+      "skipped_amp_groups": 0,
+      "status": "ok",
+      "total_gpu_bytes": 15637086208,
+      "warmup_groups": 1,
+      "within_memory_budget": true
+    }
+  ],
+  "requested_config": {
+    "checkpoint_every_seconds": 300.0,
+    "checkpoint_every_updates": 100,
+    "gradient_checkpointing": false,
+    "require_full_dataset": true,
+    "training": {
+      "accumulation_steps": 4,
+      "amp": true,
+      "batch_size": 64,
+      "cache_tokenization": true,
+      "conflict_policy": "keep",
+      "cpu_threads": 2,
+      "device": "cuda",
+      "dynamic_padding": true,
+      "empty_text_policy": "drop",
+      "epochs": 5,
+      "learning_rate": 4e-05,
+      "local_files_only": false,
+      "max_gradient_norm": 1.0,
+      "max_length": 256,
+      "num_workers": 0,
+      "patience": 3,
+      "seed": 42,
+      "tokenizer_name_or_path": "roberta-base",
+      "tokenizer_revision": null,
+      "warmup_fraction": 0.1,
+      "weight_decay": 0.01
+    }
+  },
+  "runner_code_sha256": {
+    "scripts/colab_train.py": "6b251726359b6d454acf45da7f3b1ac8aaab448b6b8e884ddf0460f7253dfa49",
+    "src/toxic_comments/__init__.py": "ed7fe61628007bb1ea08a66c9230e16697bc1cac0b2fe160ee5c4a372f13e5aa",
+    "src/toxic_comments/artifacts.py": "7a95604d6bb4113e664e8a6c443203018396c7a2a9a718be7746e0bc9d278221",
+    "src/toxic_comments/baseline.py": "b95ebdaf7a42aaeb97d13d0a2f1ccf0069407c193a6ad4a5929c4b1634b1facf",
+    "src/toxic_comments/data.py": "86150cc33f638d15017c8cfabac7ce4793c723c39b23b0ad6a953ab3e2126298",
+    "src/toxic_comments/metrics.py": "de4f9d130179c03354414ee5825bf6b52a6a88926f45596cc2070b9224b75b38",
+    "src/toxic_comments/neural.py": "add690480e65a77a660627169d62241da457e20264d461df9f756baff718b0bf"
+  },
+  "runtime": {
+    "dependencies": {
+      "huggingface-hub": "0.36.2",
+      "joblib": "1.5.3",
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "safetensors": "0.8.0",
+      "scikit-learn": "1.8.0",
+      "scipy": "1.17.0",
+      "tokenizers": "0.22.2",
+      "torch": "2.11.0+cu130",
+      "transformers": "4.57.1"
+    },
+    "hardware": {
+      "cpu_machine": "x86_64",
+      "cuda_available": true,
+      "cuda_runtime": "13.0",
+      "cudnn_version": 92700,
+      "gpu_count": 1,
+      "gpus": [
+        {
+          "capability": [
+            7,
+            5
+          ],
+          "name": "Tesla T4",
+          "total_memory_bytes": 15637086208
+        }
+      ]
+    },
+    "python_version": "3.13.15"
+  },
+  "selection": "Highest measured synthetic full-length throughput within memory budget; ties prefer smaller batch"
+}

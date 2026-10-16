@@ -29,6 +29,9 @@ LIGHT_GREY = colors.HexColor("#EEF2F5")
 MARGIN = 46
 PORTRAIT_WIDTH = A4[0] - 2 * MARGIN
 FIGURES = (
+    ("../colab_efficient_v1/plots/training_losses.png", "Completed Colab training and validation losses", "Returned full-cohort random RoBERTa run: five epochs, with checkpoint selection by minimum validation loss at epoch 4. These validation observations informed selection; they are not internal-test measurements."),
+    ("../colab_efficient_v1/plots/validation_per_label.png", "Colab validation selection diagnostics", "Average precision uses continuous scores; F1 is shown at 0.5 and at the six frozen validation-selected thresholds. Weak rare-label performance remains visible; these are selection diagnostics, not calibrated probabilities or production-readiness evidence."),
+    ("../colab_efficient_v1/plots/validation_baseline_comparison.png", "Models on the same validation rows", "The saved CPU reference has higher aggregate AP and F1 than the returned random RoBERTa on the same 23,878 validation examples. Both used validation for selection; no independent neural test or statistical-significance claim is made."),
     ("historical_training_losses.png", "Historical loss trajectories", "Recorded notebook outputs, with the selected minimum-loss epochs marked. These are validation histories, not rerun measurements."),
     ("historical_per_label_report.png", "Historical precision, recall and F1", "FINAL_Report's retained final-epoch per-label output. The selected checkpoint and these prediction arrays were not synchronized in the original workflow."),
     ("real_source_label_prevalence.png", "Later supplied source cohort", "Positive counts refer to the supplied training-source rows before the seven normalized-empty comments are excluded. The six labels overlap."),
@@ -167,6 +170,9 @@ def markdown_story(source: str, styles: dict[str, ParagraphStyle], mono_font: st
 def build_pdf(source: Path, output: Path, figures: Path, include_figures: bool) -> None:
     font, bold_font, mono_font = register_fonts()
     styles = styles_for(font, bold_font)
+    source_text = source.read_text(encoding="utf-8")
+    review_date = re.search(r"\*\*Review date:\*\*\s*([^\.\n]+)", source_text)
+    footer = "Evidence review" + (" | " + review_date.group(1).strip() if review_date else "")
 
     def decorate(canvas, document):
         width, height = canvas._pagesize
@@ -177,7 +183,7 @@ def build_pdf(source: Path, output: Path, figures: Path, include_figures: bool) 
         canvas.setStrokeColor(colors.HexColor("#D5DDE3"))
         canvas.setLineWidth(0.5)
         canvas.line(MARGIN, 34, width - MARGIN, 34)
-        canvas.drawString(MARGIN, 21, "Evidence review | 13 October 2026")
+        canvas.drawString(MARGIN, 21, footer)
         canvas.drawRightString(width - MARGIN, 21, str(document.page))
         canvas.restoreState()
 
@@ -191,12 +197,12 @@ def build_pdf(source: Path, output: Path, figures: Path, include_figures: bool) 
         PageTemplate(id="Portrait", frames=[Frame(MARGIN, MARGIN, PORTRAIT_WIDTH, A4[1] - 2 * MARGIN, leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0)], onPage=decorate, pagesize=A4),
         PageTemplate(id="Landscape", frames=[Frame(MARGIN, MARGIN, landscape(A4)[0] - 2 * MARGIN, landscape(A4)[1] - 2 * MARGIN, leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0)], onPage=decorate, pagesize=landscape(A4)),
     ])
-    story = markdown_story(source.read_text(encoding="utf-8"), styles, mono_font)
+    story = markdown_story(source_text, styles, mono_font)
     if include_figures:
         for index, (filename, title, caption) in enumerate(FIGURES, start=1):
             path = figures / filename
             if not path.is_file():
-                continue
+                raise FileNotFoundError(f"Required report figure is missing: {path}")
             story.extend([NextPageTemplate("Landscape"), PageBreak()])
             story.append(Paragraph(f"Figure {index}. {title}", styles["h2"]))
             chart = Image(str(path))

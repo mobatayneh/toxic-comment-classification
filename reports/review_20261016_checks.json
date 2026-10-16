@@ -1,0 +1,474 @@
+{
+  "checked_source_sha256": {
+    ".github/workflows/ci.yml": "2b62aec89c044683a35e3007fee0f5581be7add34cea0487a2e79e49314badb5",
+    "pyproject.toml": "09ee91435c6bcbea3c8bb670fb0b9e577da2a3f8c7f2a8d2eddd8315f13e3da4",
+    "requirements-colab.txt": "211eceaed3373276e9a06c281d7288d1926ec567d528e82ae57f08e90cf1fcd2",
+    "requirements-core.txt": "9392d146f2d50709bd4ea3b79e55a416dd4a23c4cddd9c79d150eb212dac6ff8",
+    "requirements-dev.txt": "a1188d2ab5146427dc41c879ebcb098d016f90b1d679e1d7a8f267e45c7702ee",
+    "requirements-neural.txt": "d885d273de159d3fbcfc62d26210c512232b89de0e51de936a71b0536bce6d76",
+    "requirements-notebooks.txt": "7fb25874d3e4006765a6e9f15081b03b560db19664b85100c7b471ea58a8443e",
+    "requirements-report.txt": "1bfd860155d46312877ab0f8cc353f8e968f81b255d7f35e30c43d4cce3e7a2e",
+    "scripts/build_colab_notebook.py": "3d1791cff67ece896d451be41914d090186727df047861c8355ea0cdb37b8e6b",
+    "scripts/build_efficient_colab_notebook.py": "aeba3588e5f1d391e6e7569b51df7daaeb1d3392d4c3a955a605b88e15637bdd",
+    "scripts/build_report_pdf.py": "8821a98b761ee7fd45d70ab5362bcc836ffb4b9e9de993c8fc186ae67289d0ad",
+    "scripts/check_neural_environment.py": "b917c00c11cb5ec250bd97767f31690c83b30314d87c8de512f683f873fc17a3",
+    "scripts/colab_profile.py": "b5bb736fd3b9bc466f7c526578f348cfc417601ee13fb315b1d71a46fb737614",
+    "scripts/colab_train.py": "6b251726359b6d454acf45da7f3b1ac8aaab448b6b8e884ddf0460f7253dfa49",
+    "scripts/render_historical_results.py": "8ae8d14ab23387bb0606cd0c92e66a85bad57a9e3151e5ca424ec0ecf08ff996",
+    "scripts/render_real_results.py": "f7f4b109595a2528e96eb5dcdfc757ee29a5dd3b78c59acf8cebe7d8629835ca",
+    "scripts/run_results_notebook.py": "0d5081af6fdd025848e58809eebfae982e9fb1f1aa9d1b27d2639dd8309e5097",
+    "scripts/verify_colab_results.py": "f9fb755e867d0890284912f9b8dc84d59a12b7eca9d6914d36d6b1353124dbbd",
+    "scripts/verify_repository.py": "47595fc8903ddb2f2011389d5019eb6435c154c0d8f60abd6e6ebe0c8b612741",
+    "src/toxic_comments/__init__.py": "ed7fe61628007bb1ea08a66c9230e16697bc1cac0b2fe160ee5c4a372f13e5aa",
+    "src/toxic_comments/artifacts.py": "7a95604d6bb4113e664e8a6c443203018396c7a2a9a718be7746e0bc9d278221",
+    "src/toxic_comments/baseline.py": "b95ebdaf7a42aaeb97d13d0a2f1ccf0069407c193a6ad4a5929c4b1634b1facf",
+    "src/toxic_comments/data.py": "86150cc33f638d15017c8cfabac7ce4793c723c39b23b0ad6a953ab3e2126298",
+    "src/toxic_comments/metrics.py": "de4f9d130179c03354414ee5825bf6b52a6a88926f45596cc2070b9224b75b38",
+    "src/toxic_comments/neural.py": "add690480e65a77a660627169d62241da457e20264d461df9f756baff718b0bf",
+    "tests/__init__.py": "e0ec47eff5ed120c966938f58d9d963fd4c148647541265de6be195f1414eded",
+    "tests/test_baseline_cli.py": "e10ff41d38e4656e1af76cbadf5c245a7bf6c42f95a365e657922c238ca2d453",
+    "tests/test_colab_efficiency.py": "a0e0351f13b16f18f7b633e9a3744e0cf88970f3a0de988376e97c4bcd13f5f9",
+    "tests/test_colab_integrity.py": "6c406f0aa33e8a95e38401ae772de185ad909dea7b7ce2bafb554d135b0c5329",
+    "tests/test_colab_profile.py": "ac217f65df0fe8078e1cc57c29c647f6bb686530cf4232a5e8de1aedadfffda8",
+    "tests/test_colab_results.py": "02336cb33ffdd1e874a259ac722e3b4d530ad3dabd4deee94a2041919503bfe4",
+    "tests/test_colab_training.py": "c441e48fcb3f157ceb232d99d93978eec1908052d3ad18b4067f6d78eb330b9c",
+    "tests/test_data_metrics.py": "229368aea715cd0efbd8d27cc055673103631c07e97a32d6f3102f992ef7d153",
+    "tests/test_efficient_notebook.py": "10edeb5d69ba96880e6c0a00133360fc9cf05bc8c50992c7eb3ec4aca59508b9",
+    "tests/test_frozen_artifacts.py": "4c474d34c2b7ec606a0d6d5fa5a4238b6b09fa58b476df982754eb6a57b37b1d",
+    "tests/test_neural.py": "1b05d8ed67e1fd124d1624017e3cfb506bc73bf2a443e5eb03a37a9ee7ceaaf4",
+    "tests/test_repository_verifier.py": "d3f2f26d31661aeae2429e7ec42db93b7986a29376fc1a9b8edb1fcbfca1f77d"
+  },
+  "dependencies": {
+    "matplotlib": "3.10.8",
+    "nbformat": "5.11.1",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.8.0",
+    "torch": "2.8.0+cpu",
+    "transformers": "4.57.1"
+  },
+  "elapsed_seconds": 19.695716129000004,
+  "errors": 0,
+  "failures": 0,
+  "finished_utc": "2026-10-16T11:11:42.280961+00:00",
+  "github_publication_checkpoint": {
+    "automatic_code_review_findings": 0,
+    "both_workflow_conclusions": "success",
+    "core_deferred": 24,
+    "core_passed": 72,
+    "distinct_passing_tests": 96,
+    "head_sha": "946299d43e400af92016da1c8a4f65be553e7291",
+    "neural_passed": 31,
+    "neural_skipped": 0,
+    "normal_jupyter_kernel_cells_executed": 18,
+    "private_data_published": false,
+    "pull_request_run_id": 38893249752,
+    "pull_request_url": "https://github.com/mobatayneh/toxic-comment-classification/pull/2",
+    "push_run_id": 38893185310,
+    "remote_files_matched": 94,
+    "test_identity_coverage_checked_from_job_logs": true,
+    "tree_sha": "aae19e87ba0d632f5d278bb238d65e460ad28741",
+    "uncovered_deferred_test_ids": []
+  },
+  "outcomes": [
+    {
+      "outcome": "passed",
+      "test": "test_baseline_cli.BaselineInvariants.test_develop_and_evaluate_in_separate_processes_preserve_frozen_boundary"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_baseline_cli.BaselineInvariants.test_unlearnable_training_labels_require_explicit_coverage"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.CompactTokenCache.test_bounded_cache_matches_original_inputs_and_bytes_and_is_not_retokenized"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.CompactTokenCache.test_dynamic_padding_only_crops_right_padding_and_keeps_labels_and_logits"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.CompactTokenCache.test_nonfinite_group_loss_stops_before_optimizer_or_scheduler_updates"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.EfficientColabResume.test_cached_training_reuses_partitions_and_exactly_resumes_with_dynamic_padding"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.EfficientColabResume.test_wall_time_checkpoint_saves_only_completed_groups_and_reports_after_durable_save"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.EfficientConfigurationAndStorage.test_checkpoint_serializes_locally_and_retains_previous_bytes_on_copy_or_flush_failure"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.EfficientConfigurationAndStorage.test_loaded_texts_retain_python_strings_without_longest_row_allocation"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.EfficientConfigurationAndStorage.test_new_efficiency_settings_validate_strictly_and_keep_legacy_defaults"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_efficiency.EfficientConfigurationAndStorage.test_token_id_bounds_are_checked_before_any_device_transfer"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_integrity.ColabCompletionIntegrity.test_changed_artifact_missing_transaction_and_test_boundary_fail_without_mutation"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_integrity.ColabCompletionIntegrity.test_changed_or_incomplete_checkpoint_cannot_complete_freeze"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_integrity.ColabCompletionIntegrity.test_missing_checksum_with_transaction_recovers_without_training_or_inference"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_integrity.ColabCompletionIntegrity.test_present_corrupt_checksum_is_never_repaired"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_integrity.ColabCompletionIntegrity.test_source_change_after_fresh_validation_stops_before_freeze"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_integrity.ColabCompletionIntegrity.test_source_change_after_training_stops_before_export"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_every_candidate_preserves_effective_batch_and_protocol"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_existing_unidentified_directory_is_never_overwritten"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_reject_missing_safe_candidate"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_resume_uses_saved_config_without_reading_calibration_or_evaluating_test"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_saved_config_requires_complete_fixed_profile"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_select_fastest_safe_candidate_not_largest"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_status_missing_run_does_not_import_ml_dependencies"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_profile.ColabProfileTests.test_unfinished_packaging_does_not_create_run_or_call_freeze_verifier"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.ArchiveChecks.test_npz_object_arrays_and_duplicate_json_fields_are_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.ArchiveChecks.test_per_row_fields_cannot_be_published_as_aggregates"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.ArchiveChecks.test_rejects_duplicate_traversal_symlink_and_unexpected_entries"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.PublicEvidenceChecks.test_checksums_arithmetic_and_plot_data_detect_changed_public_artifacts"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.PublicEvidenceChecks.test_public_check_has_no_neural_dependency"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.PublicEvidenceChecks.test_published_report_passes_portable_aggregate_and_plot_series_checks"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.ReturnedArrayChecks.test_changed_ranking_metric_is_detected_against_saved_probabilities"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.ReturnedArrayChecks.test_float32_boundary_and_threshold_tie_policy"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.ReturnedArrayChecks.test_independent_metrics_cover_every_field_and_missing_classes"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_results.ReturnedArrayChecks.test_rejects_changed_row_order_targets_and_probabilities"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabNotebookInvariants.test_full_notebook_is_valid_clear_and_embeds_exact_repository_sources"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabNotebookInvariants.test_retired_03_is_a_generated_notice_without_executable_cells"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabNotebookInvariants.test_visible_writefile_cells_materialize_importable_files_without_colab_services"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_accumulation_uses_actual_sample_mean_for_unequal_batches_and_partial_group"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_atomic_latest_checkpoint_preserves_previous_bytes_on_failed_write_or_replace"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_changed_source_config_and_training_code_are_rejected_before_continuation"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_development_uses_train_only_data_and_result_bundles_exclude_private_rows"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_frozen_rerun_is_read_only_and_explicit_restart_refuses_existing_run"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_python_numpy_torch_rng_roundtrip_is_weights_only_safe"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_resumed_patience_restores_nonfinal_best_before_fresh_validation_and_thresholds"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_colab_training.ColabResumeInvariants.test_two_update_mid_epoch_resume_matches_continuous_model_optimizer_scheduler_and_predictions"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_alias_and_mirror_filter_exclude_unlabeled_rows_before_validation"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_conflicting_duplicate_labels_require_explicit_policy"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_disagreeing_alias_columns_and_missing_mirror_train_are_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_duplicate_headers_and_missing_text_column_are_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_explicit_empty_text_drop_preserves_row_accounting"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_identifier_audit_rejects_different_text_even_with_keep_policy"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_missing_text_or_required_column_is_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_nonbinary_labels_are_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.DatasetInvariants.test_normalized_duplicate_groups_never_cross_partitions"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.MetricInvariants.test_average_precision_matches_hand_calculation_and_not_accuracy"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.MetricInvariants.test_empty_positive_coverage_stays_undefined"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.MetricInvariants.test_nonfinite_scores_and_invalid_shapes_are_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.MetricInvariants.test_single_class_labels_do_not_fabricate_full_macro_ranking"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_data_metrics.MetricInvariants.test_validation_thresholds_follow_known_f1_optima_and_degenerate_default"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_changed_source_snapshot_refuses_resume_before_child_execution"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_child_failure_keeps_actual_tail_and_persistent_log_without_retry"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_drive_root_inside_original_run_is_rejected_before_writes"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_manual_input_and_saved_run_snapshot_are_supported"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_new_run_calibrates_once_then_resume_uses_saved_configuration"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_old_or_unidentified_run_cannot_be_overwritten"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_original_source_is_read_only_fallback_and_remembered_input_wins"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_results_before_launch_or_without_complete_freeze_are_friendly"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_results_package_only_after_freeze_guard_and_download_aggregate_zip"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_upload_is_hashed_and_released_before_child_launch"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookLifecycle.test_wrong_upload_name_or_hash_stops_before_any_ml_child"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookSources.test_dependency_setup_preserves_distribution_pin_and_checks_a_child"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookSources.test_notebook_is_current_clear_valid_and_compiles_every_cell"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookSources.test_operational_kernel_imports_and_commands_keep_ml_in_children"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_efficient_notebook.EfficientNotebookSources.test_visible_writefiles_recreate_exact_bytes_without_colab_services"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_frozen_artifacts.FrozenArtifactInvariants.test_completion_rechecks_integrity_after_inference_and_preserves_failed_claim"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_frozen_artifacts.FrozenArtifactInvariants.test_failed_attempt_cannot_be_repeated_and_inference_order_is_frozen"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_frozen_artifacts.FrozenArtifactInvariants.test_frozen_artifacts_and_source_override_detect_byte_changes"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_frozen_artifacts.FrozenArtifactInvariants.test_model_directory_rejects_added_or_missing_files"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_frozen_artifacts.FrozenArtifactInvariants.test_new_run_and_frozen_files_cannot_be_overwritten"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_frozen_artifacts.FrozenArtifactInvariants.test_public_results_reject_row_fields_and_success_is_single_use"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_frozen_artifacts.FrozenArtifactInvariants.test_source_code_identity_invalidates_evaluation_before_claim"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_neural.NeuralInvariants.test_nonfinal_best_checkpoint_is_restored_before_export_and_reload"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_neural.NeuralInvariants.test_source_code_change_during_training_prevents_freeze"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_neural.NeuralInvariants.test_tiny_development_export_thresholds_and_single_test_are_consistent"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_neural.NeuralInvariants.test_train_positive_weights_and_label_mapping_are_explicit"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_neural.NeuralInvariants.test_unequal_microbatches_and_final_partial_group_match_sample_mean_gradients"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_canonical_real_baseline_and_threshold_independent_ranking_are_checked"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_canonical_table_uses_validation_selection_and_last_epoch_separately"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_decimal_metric_precision_is_not_mistaken_for_a_row_identifier"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_ignored_local_inputs_stay_private_but_force_tracked_files_are_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_malformed_evidence_and_out_of_order_markers_are_rejected"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_neural_threshold_policies_cannot_change_ranking_metrics"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_neural_validation_and_same_split_comparison_tables_are_canonical"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_retired_notebook_cannot_reintroduce_training_and_its_links_are_checked"
+    },
+    {
+      "outcome": "passed",
+      "test": "test_repository_verifier.RepositoryVerifierInvariants.test_stale_table_broken_link_and_archive_outputs_are_detected"
+    }
+  ],
+  "passed": 96,
+  "post_suite_pdf_verification": {
+    "builder_sha256": "260959136fd1c2cc09ccc7424aeab6cecda57908c67d4b42840951b87b701430",
+    "key_current_metric_values_checked": true,
+    "pages": 17,
+    "pdf_sha256": "a0528ca773a4c8a483343c745157429e3cf4703ae6e0e9730673a12557fed9be",
+    "reason": "Presentation-only correction after the CPU suite: derive footer date from Markdown and describe the AP/F1 figure accurately.",
+    "rendered_pages_inspected": 17,
+    "review_date_checked_on_every_page": true
+  },
+  "python_version": "3.12.14",
+  "scope": "Complete CPU test suite with every optional neural check enabled; synthetic training mechanics, no real model training or inference",
+  "skipped": 0,
+  "started_utc": "2026-10-16T11:11:22.585246+00:00",
+  "tests_run": 96
+}

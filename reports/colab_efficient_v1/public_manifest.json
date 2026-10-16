@@ -1,0 +1,21 @@
+{
+  "artifacts_sha256": {
+    "baseline_validation_comparison.json": "3eed365a018020f4e1fb2f7709788393129c2dbc1f40ea861236ae8ae13e1bfd",
+    "calibration.json": "084648414396419e8657cd86dd0558c516882a10e1933722feb93438489d4bb7",
+    "config.json": "1d51ed6556726133a02ba15608bef386cac847f03ff4b104a125654b2a95b43f",
+    "data_summary.json": "9dc44fdfc13056d21d013563afd4ca149633a22e8c53c4b45531c683d6c239c9",
+    "plot_data.json": "8fc0b1f2675eaf25bfd7883416a18df8c5da7f74102e3e69f1808daa43c73efb",
+    "plots/training_losses.png": "248a6871de4ff01b8e8caa338643cfe27f676e06f13ff34c9f269eff99437b65",
+    "plots/validation_baseline_comparison.png": "fd42605ad831286c08f3be45276729cfd19b0fb11d1b1d9f63ec7f8a1c20421b",
+    "plots/validation_per_label.png": "175e5dc5fbadbddedf45698b002fac9c860cdea30395c9a4f30fa7a9b54b0d1f",
+    "result_metadata.json": "fdb634c92f89c617574ce18e2d0e8c3f5f4f64b2abe6e89a10573a7c3a702485",
+    "run_metadata.json": "2c1a95f524080f70fe637010ad79377477c1dca132401fb071f40fc604c759ba",
+    "thresholds.json": "f476285577a7b104eaa423b3e45707110adc4c9e29f607da30c3ded5d5d30230",
+    "training_history.json": "6686b4981ffc0ffc7e7b1ca86974a1a87ef6f683775a249d43e142bdfd4b86d4",
+    "validation_metrics.json": "94449a8e7cd44aac0fa909daa96ab762c9c0ff9859b27b5a07fa328b52ab7fb5",
+    "verification.json": "49ab1b633f9cbec0962c73ae86073e1e616cae156623b0afc9e87c87faeb2489",
+    "versions_hardware.json": "284704c929fa8554852c262378d84f93624060b84cd3337750a6e6edaef55096"
+  },
+  "purpose": "Aggregate publication integrity; private audit is not repeatable from these files alone",
+  "schema_version": 1
+}

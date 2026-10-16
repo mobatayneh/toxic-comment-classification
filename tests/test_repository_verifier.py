@@ -6,8 +6,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.verify_repository import (BASELINE_END, BASELINE_START, END, HISTORICAL_NOTEBOOKS,
-                                       ROW_IDENTIFIER, START, baseline_table, historical_table, verify)
+from scripts.verify_repository import (BASELINE_END, BASELINE_START, COLAB_END, COLAB_START,
+                                       COMPARISON_END, COMPARISON_START, END, HISTORICAL_NOTEBOOKS,
+                                       ROW_IDENTIFIER, START, baseline_table, colab_table,
+                                       historical_table, validation_comparison_table, verify)
 
 
 class RepositoryVerifierInvariants(unittest.TestCase):
@@ -122,6 +124,84 @@ class RepositoryVerifierInvariants(unittest.TestCase):
         self.assertIsNone(ROW_IDENTIFIER.search('{"metric": 0.1234567890123456}'))
         self.assertIsNotNone(ROW_IDENTIFIER.search('"' + "abcdef" * 2 + "1234" + '"'))
         self.assertIsNotNone(ROW_IDENTIFIER.search('"' + "12" * 8 + '"'))
+
+    def _add_colab_reports(self):
+        fixed = {"rows": 100, "macro_average_precision": 0.6, "macro_roc_auc": 0.8,
+                 "macro_f1": 0.4, "micro_f1": 0.5}
+        selected = {**fixed, "macro_f1": 0.5, "micro_f1": 0.6}
+        baseline = {"method": "tfidf_logistic_regression", "split": "validation", "synthetic": False,
+                    "metrics_at_0_5": fixed, "metrics_at_validation_thresholds": selected}
+        (self.root / "reports/baseline_validation_metrics.json").write_text(json.dumps(baseline), encoding="utf-8")
+        internal = {"method": "tfidf_logistic_regression", "split": "internal exploratory test", "synthetic": False,
+                    "metrics_at_0_5": fixed, "metrics_at_frozen_validation_thresholds": selected}
+        (self.root / "reports/baseline_internal_test_metrics.json").write_text(json.dumps(internal), encoding="utf-8")
+        self.colab = self.root / "reports/colab_efficient_v1"
+        self.colab.mkdir()
+        neural = {"split": "validation", "synthetic": False,
+                  "metrics_at_0_5": {**fixed, "macro_average_precision": 0.55},
+                  "metrics_at_validation_thresholds": {**selected, "macro_average_precision": 0.55}}
+        metadata = {"test_evaluation_performed": False, "validation_is_selection_diagnostic": True,
+                    "model_weights_included": False, "per_row_arrays_included": False, "raw_texts_included": False}
+        comparison = {"split": "validation", "rows": 100, "same_source_same_split_verified": True,
+                      "models": {"baseline": baseline, "neural": {"method": "random_initialized_roberta", **neural}}}
+        for filename, payload in (("config.json", {"method": "random_initialized_roberta"}),
+                                  ("validation_metrics.json", neural), ("result_metadata.json", metadata),
+                                  ("baseline_validation_comparison.json", comparison)):
+            (self.colab / filename).write_text(json.dumps(payload), encoding="utf-8")
+        self.readme.write_text(self.readme.read_text(encoding="utf-8")
+                               + BASELINE_START + "\n" + baseline_table(self.root) + "\n" + BASELINE_END
+                               + COLAB_START + "\n" + colab_table(self.root) + "\n" + COLAB_END
+                               + COMPARISON_START + "\n" + validation_comparison_table(self.root) + "\n" + COMPARISON_END,
+                               encoding="utf-8")
+        return neural, metadata, comparison
+
+    def test_neural_validation_and_same_split_comparison_tables_are_canonical(self):
+        _, metadata, comparison = self._add_colab_reports()
+        errors, counts = verify(self.root)
+        self.assertEqual(errors, [])
+        self.assertEqual(counts["colab_blocks"], 1)
+        self.assertEqual(counts["validation_comparison_blocks"], 1)
+        self.assertIn("| Validation | Validation-selected | 100 | 0.5500 |", colab_table(self.root))
+        self.assertIn("| Random RoBERTa | Validation-selected | 100 | 0.5500 |", validation_comparison_table(self.root))
+        self.readme.write_text(self.readme.read_text(encoding="utf-8").replace("| Random RoBERTa | Validation-selected | 100 | 0.5500",
+                                                                             "| Random RoBERTa | Validation-selected | 100 | 0.9900"), encoding="utf-8")
+        self.assertTrue(any("Validation comparison table differs" in error for error in verify(self.root)[0]))
+        metadata["test_evaluation_performed"] = True
+        (self.colab / "result_metadata.json").write_text(json.dumps(metadata), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "internal test unscored"):
+            colab_table(self.root)
+        comparison["models"]["neural"]["metrics_at_validation_thresholds"]["macro_f1"] = 0.9
+        (self.colab / "baseline_validation_comparison.json").write_text(json.dumps(comparison), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "disagrees with saved neural metrics"):
+            validation_comparison_table(self.root)
+
+    def test_neural_threshold_policies_cannot_change_ranking_metrics(self):
+        neural, _, _ = self._add_colab_reports()
+        neural["metrics_at_validation_thresholds"]["macro_average_precision"] = 0.8
+        (self.colab / "validation_metrics.json").write_text(json.dumps(neural), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "identical rows and ranking metrics"):
+            colab_table(self.root)
+
+    def test_retired_notebook_cannot_reintroduce_training_and_its_links_are_checked(self):
+        notebook_dir = self.root / "notebooks"
+        notebook_dir.mkdir()
+        (notebook_dir / "04_colab_efficient_training.ipynb").write_text(
+            json.dumps({"cells": [], "metadata": {}, "nbformat": 4, "nbformat_minor": 5}), encoding="utf-8")
+        self.assertTrue(any("retain one retired notebook 03" in error for error in verify(self.root)[0]))
+        retired = {"cells": [{"cell_type": "markdown", "source": ["[New training](04_colab_efficient_training.ipynb)"]}],
+                   "metadata": {"training_workflow": {"status": "retired", "replacement": "04_colab_efficient_training.ipynb"}},
+                   "nbformat": 4, "nbformat_minor": 5}
+        path = notebook_dir / "03_colab_full_training.ipynb"
+        path.write_text(json.dumps(retired), encoding="utf-8")
+        errors, counts = verify(self.root)
+        self.assertEqual(errors, [])
+        self.assertEqual(counts["retired_colab_entries"], 1)
+        retired["cells"].append({"cell_type": "code", "source": ["print('training')"], "outputs": [], "execution_count": None})
+        retired["cells"][0]["source"].append("\n[Missing](missing.md)")
+        path.write_text(json.dumps(retired), encoding="utf-8")
+        errors, _ = verify(self.root)
+        self.assertTrue(any("no executable training cells" in error for error in errors))
+        self.assertTrue(any("Broken local link" in error for error in errors))
 
 
 if __name__ == "__main__":

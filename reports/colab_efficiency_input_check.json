@@ -1,0 +1,17 @@
+{
+  "check": "full-source input representation and unchanged split; no training or inference",
+  "input_rows": 159571,
+  "eligible_rows": 159564,
+  "split_rows": {
+    "train": 111731,
+    "validation": 23878,
+    "test": 23955
+  },
+  "source_sha256": "bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e",
+  "text_array_dtype": "object",
+  "text_reference_array_bytes": 1276512,
+  "maximum_comment_characters": 6251,
+  "previous_fixed_width_array_bytes_calculated": 3989738256,
+  "peak_process_rss_kib": 643460,
+  "note": "Reference-array bytes exclude Python strings/frame. Previous allocation is calculated from Unicode width, not allocated or benchmarked here."
+}
