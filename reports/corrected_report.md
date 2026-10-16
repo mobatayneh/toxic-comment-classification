@@ -2,11 +2,11 @@
 
 **Original author:** Mohammad Albatayneh wrote the original code for this individual project, with AI-assisted corrections. New portfolio additions are AI-assisted.
 
-**Review date:** 13 October 2026. **Evidence status:** historical notebook outputs, a later real-data source audit, a completed full-cohort CPU reference experiment, and verified engineering repairs. The new CPU scores use a grouped exploratory internal protocol. Historical neural performance has not been independently reproduced; full-data neural training remains unexecuted.
+**Review date:** 16 October 2026. **Evidence status:** preserved historical notebook outputs, a later real-data source audit, a completed CPU reference experiment, a returned five-epoch Colab neural experiment, and separately recorded engineering checks. The new experiments use grouped partitions. Neural validation selected the checkpoint and thresholds; its internal test remains unscored. Historical neural performance has not been independently reproduced.
 
 ## Abstract
 
-Online comments may contain several forms of abusive language simultaneously, making toxicity detection a multi-label classification task. This project examines an eight-layer RoBERTa architecture for six toxicity categories using an upstream preprocessed version of the Jigsaw Toxic Comment dataset. The encoder was randomly initialized, while tokenization used the pretrained `roberta-base` tokenizer. The original notebooks randomly partitioned the labeled data into 80% training and 20% validation sets. At the final epoch, the retained five-epoch output reported macro ROC-AUC 0.9792 and macro F1 0.4391 at a 0.5 score threshold; minimum validation loss selected a different checkpoint at epoch three. Rare-label recall was high, but low precision limited F1. Later supplied CSVs support a new CPU TF-IDF/logistic-regression experiment on 159,564 eligible rows with grouped 70/15/15 partitions. Its 23,955-row exploratory internal test reports macro AP 0.6502, macro ROC-AUC 0.9811, and macro F1 0.6346 at frozen validation-selected thresholds. The changed protocol prevents a controlled performance comparison with the historical neural output. The repository revision repairs checkpoint consistency, input validation, duplicate-aware partitioning, threshold selection, and frozen evaluation. Full-data neural training has not been rerun, and no deployment, interpretability, or superiority claim is made.
+Online comments can receive several toxicity labels simultaneously. This project examines an eight-layer RoBERTa architecture for six labels using a preprocessed Jigsaw Toxic Comment dataset mirror. Encoder weights are randomly initialized; only the `roberta-base` tokenizer is pretrained. The historical 80/20 row-split notebooks retain final-epoch validation macro ROC-AUC 0.9792 and macro F1 0.4391, while minimum loss selected a different checkpoint. Later supplied data support a CPU TF-IDF/logistic-regression reference and a returned full-cohort Colab neural experiment on 159,564 eligible rows with grouped 70/15/15 partitions. The CPU exploratory internal test reports macro AP 0.6502 and macro F1 0.6346. The five-epoch neural run selects epoch four and reports validation macro AP 0.5259, macro ROC-AUC 0.9761, macro F1 0.5094 and micro F1 0.6520 at validation-selected thresholds. These neural scores are selection diagnostics, and its internal test remains unscored. A verified same-validation comparison records higher aggregate CPU reference scores (macro AP 0.6549; selected-threshold macro F1 0.6414), without an independent generalization estimate. The changed split prevents a controlled historical comparison. Weak threat-label performance and five thresholds at the search-grid ceiling remain limitations. The revision repairs checkpoint consistency, input validation, duplicate-aware partitioning, threshold selection and frozen evaluation; no deployment, interpretability, historical improvement or end-to-end speedup claim is established.
 
 ## 1. Task and motivation
 
@@ -119,7 +119,7 @@ The notebooks' ten hand-selected comments are qualitative demonstrations. Some b
 
 ## 5. Revised repository methods
 
-**Status: integration and bounded engineering checks completed.** This section describes the repaired implementation and evaluation protocol. The real CPU experiment is reported separately in Section 6; full-data neural training has not been executed. A tiny offline neural smoke run verifies mechanics with a synthetic tokenizer and reduced architecture, not the historical model's predictive performance.
+This section describes the repaired implementation and evaluation protocol. The real CPU experiment is reported in Section 6 and the returned real-data Colab experiment in Section 7. A tiny offline neural smoke run verifies mechanics with a synthetic tokenizer and reduced architecture; its scores are not real-comment performance.
 
 ### Data validation and partitions
 
@@ -131,9 +131,9 @@ This new split differs from the historical 80/20 row split. Its metrics must be 
 
 ### Reference model and repaired neural model
 
-The reference pipeline uses word unigram/bigram TF-IDF fitted only on training text and six one-vs-rest, class-balanced logistic regressions. Its fixed settings include up to 50,000 TF-IDF features, the liblinear solver, `C=4`, and seed 42. The completed run provides a reproducible reference for a future same-split neural comparison.
+The reference pipeline uses word unigram/bigram TF-IDF fitted only on training text and six one-vs-rest, class-balanced logistic regressions. Its fixed settings include up to 50,000 TF-IDF features, the liblinear solver, `C=4`, and seed 42. The original frozen validation and internal-test metrics remain preserved, with comparisons limited to verified matching evaluation partitions.
 
-The repaired neural path retains the original randomly initialized eight-layer, 512-dimensional RoBERTa architecture and pretrained tokenizer. It uses smaller microbatches with gradient accumulation to target an effective batch size of 256, workers zero by default, CUDA-only mixed precision, finite-value checks, and gradient clipping. Loss weights are computed from training labels only. Checkpoint selection remains based on validation loss, but the selected weights are reloaded before export and fresh validation predictions. Reload checks are intended to verify that the saved model reproduces the in-memory prediction path.
+The repaired neural path retains the original randomly initialized eight-layer, 512-dimensional RoBERTa architecture and pretrained tokenizer. It uses smaller microbatches with gradient accumulation to target an effective batch size of 256, workers zero by default, CUDA-only mixed precision, finite-value checks, and gradient clipping. Loss weights are computed from training labels only. Checkpoint selection remains based on validation loss, but the selected weights are reloaded before export and fresh validation predictions. The canonical notebook 04 adds cached tokenization, dynamic padding, timed checkpoints, and a synthetic GPU resource calibration. Dynamic padding and microbatch changes can alter numerical results and RNG consumption, so this profile is a separate experiment. Notebook 03 is retired; its existing runs require their original source from Git history.
 
 ### Thresholds and final evaluation
 
@@ -191,23 +191,85 @@ The observed CPU development wall time was 47.10 seconds and its peak RSS was ab
 
 The executed results-review notebook reads committed aggregates and renders historical and new-run evidence in separate sections. Local Jupyter sockets were unavailable in this sandbox, so every cell was executed top-to-bottom in a fresh IPython process with native rich-output capture. The notebook records that mode; the ordinary Jupyter-kernel protocol itself was not verified here.
 
-## 7. Limitations and next experiments
+## 7. Returned full-cohort Colab experiment
+
+The user returned `results_for_review.zip`, `calibration.json`, and a private numerical-verification ZIP after training completed on 16 October 2026. Returned aggregate values and regenerated evidence plots are stored under [`colab_efficient_v1`](colab_efficient_v1/validation_metrics.json). Private predictions and partition indices remain outside publication. The recorded source SHA-256 is `bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e`; source, label order, and result metadata remain attached to this new experiment without rewriting historical or CPU artifacts.
+
+The run retains the full 159,564-row eligible cohort, grouped partitions, 256-token cap, random eight-layer architecture, and training-only weighted BCE. Calibration selected microbatch 64 and accumulation four, with nominal effective batch 256. Tokenization is cached and right padding is trimmed per microbatch. The recorded runtime is Python 3.13.15, torch 2.11.0+cu130, CUDA 13.0, cuDNN 92700, and one Tesla T4. The [complete runtime record](colab_efficient_v1/versions_hardware.json) is distinct from local Python 3.12 / torch 2.8.0+cpu mechanics checks.
+
+### Training and selected checkpoint
+
+All five planned epochs completed, with 2,185 recorded optimizer updates and zero recorded AMP skips. Epoch four has minimum validation loss 0.36014178103214034 at update 1,748. Epoch-five validation loss rises to 0.39361866990598726, so final-epoch weights are not the selected model. The returned history records fresh-export validation loss equal to the epoch-four value. That equality and export-consistency flags are internally consistent metadata; no weights were returned for a second forward-pass/export check during review.
+
+| Epoch | Training loss | Validation loss | Optimizer updates |
+|---:|---:|---:|---:|
+| 1 | 0.870275 | 0.496729 | 437 |
+| 2 | 0.405115 | 0.428719 | 874 |
+| 3 | 0.317620 | 0.455556 | 1311 |
+| 4 | 0.271470 | 0.360142 | 1748 |
+| 5 | 0.249473 | 0.393619 | 2185 |
+
+### Validation selection diagnostics
+
+Validation selected the checkpoint and six F1 thresholds. The following scores therefore describe selected validation, rather than a held-out neural test. All labels have positive and negative support, giving coverage 6/6. Decisions use `score >= threshold`.
+
+<!-- colab-efficient-metrics:start -->
+| Partition | Threshold policy | Rows | Macro AP | Macro ROC-AUC | Macro F1 | Micro F1 |
+|---|---|---:|---:|---:|---:|---:|
+| Validation | Fixed 0.5 | 23878 | 0.5259 | 0.9761 | 0.3928 | 0.4943 |
+| Validation | Validation-selected | 23878 | 0.5259 | 0.9761 | 0.5094 | 0.6520 |
+<!-- colab-efficient-metrics:end -->
+
+| Label | Validation positives | Threshold | AP | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| identity_hate | 209 | 0.95 | 0.1830 | 0.1513 | 0.6603 | 0.2462 |
+| insult | 1179 | 0.95 | 0.7162 | 0.6380 | 0.7625 | 0.6947 |
+| obscene | 1273 | 0.95 | 0.8573 | 0.7325 | 0.8303 | 0.7784 |
+| severe_toxic | 237 | 0.95 | 0.4688 | 0.3126 | 0.8481 | 0.4568 |
+| threat | 62 | 0.95 | 0.0753 | 0.0590 | 0.6452 | 0.1081 |
+| toxic | 2315 | 0.90 | 0.8549 | 0.7489 | 0.7974 | 0.7724 |
+
+Five thresholds reach the fixed search-grid ceiling of 0.95. Review preserved them; the recorded search does not establish unrestricted optimal thresholds. The change from fixed-threshold to selected-threshold F1 reflects operating-point selection on validation, rather than a new model or a held-out gain. Weighted-loss sigmoid scores remain uncalibrated. Threat performance is weak despite ROC-AUC 0.9589: AP is 0.0753 and precision is 0.0590, with 638 false positives and 40 true positives at its saved threshold. High ROC-AUC alone is insufficient for this rare label.
+
+### Verification boundary
+
+The [numerical verification](colab_efficient_v1/verification.json) records recomputation from the returned private validation arrays, source/partition/target checks, threshold selection, and consistency across aggregate metadata. Review did not retrain, rerun GPU inference, retune thresholds, or score the internal test. Model weights, tokenizer files, and full private run identity were not supplied, so independent export/reload, fresh forward-pass loss, tokenizer-file hashes, checkpoint contents, and interruption/resume cannot be established from these files alone. Recorded completion and export flags are retained as metadata. No end-to-end training duration, comparative GPU benchmark, or production-latency study was supplied; short synthetic resource probes do not establish speedup.
+
+Independent scikit-learn calculations and the project implementation reproduce every returned validation metric and threshold within absolute tolerance 1e-12. Review verified the original source byte hash, complete eligible cohort, exact grouped partitions and row order, validation targets, training-only class weights, and zero normalized-group overlap. Runtime, tokenizer revision, and export flags are reported metadata reconciled across artifacts; hashes detect file changes and inconsistencies rather than authenticating the original execution.
+
+### Same-validation reference comparison
+
+Saved CPU validation probabilities and partition indices were available. Review verified matching source, complete cohort, indices/order, targets, label order, decision comparator, threshold grid, and metric definitions before comparing them. The CPU model was not deserialized or run again. Its original internal-test result in Section 6 remains a different evaluation partition.
+
+<!-- validation-comparison:start -->
+| Model | Threshold policy | Validation rows | Macro AP | Macro ROC-AUC | Macro F1 | Micro F1 |
+|---|---|---:|---:|---:|---:|---:|
+| TF-IDF + logistic regression | Fixed 0.5 | 23878 | 0.6549 | 0.9823 | 0.6087 | 0.7257 |
+| TF-IDF + logistic regression | Validation-selected | 23878 | 0.6549 | 0.9823 | 0.6414 | 0.7546 |
+| Random RoBERTa | Fixed 0.5 | 23878 | 0.5259 | 0.9761 | 0.3928 | 0.4943 |
+| Random RoBERTa | Validation-selected | 23878 | 0.5259 | 0.9761 | 0.5094 | 0.6520 |
+<!-- validation-comparison:end -->
+
+The CPU reference has higher aggregate AP, ROC-AUC, macro F1, and micro F1 on these rows at both reported policies. The neural-minus-reference difference is -0.12899529782749053 macro AP and -0.13200556529714746 selected-threshold macro F1. Each model selected its thresholds on this validation set, and the neural checkpoint was also selected on it. This descriptive comparison has no uncertainty interval or independent generalization estimate and does not establish statistical significance. [The comparison record](colab_efficient_v1/baseline_validation_comparison.json) preserves exact values and scope.
+
+## 8. Limitations and next experiments
 
 The initial notebook/report uploads contained no source CSV or trained weights, and historical dependencies were not pinned. Later CSVs establish current source counts but do not identify the absent historical checkpoints or exact original input bytes. The audit can establish what the saved artifacts say, but it cannot independently reproduce the historical scores. One recorded split and a small number of experiments do not establish sensitivity to seed, generalization to new domains, or uncertainty bounds.
 
 The supplied experiments contain no measured parameter comparison with BERT, timing benchmark, or LIME explanation. A smaller configured model and mixed precision do not themselves demonstrate faster inference or real-time suitability. The original literature entries were incomplete and unverified, so their numerical results are not reused as evidence of state-of-the-art performance.
 
-The next substantive model comparison should train the repaired neural model on the same frozen source and grouped partitions as the CPU reference, with its selected saved model evaluated under the same metric definitions. The historical cohort has already been inspected, so a stronger generalization assessment additionally requires an independently reserved or newly collected labeled cohort. The supplied challenge-test mirror cannot supply that evaluation because its labels are blank and it shares normalized texts with training. Repeated seeds, independently reviewed errors, and an external domain assessment would help bound uncertainty. Explanations, augmentation, alternative losses, and latency measurement can be added as separately evaluated extensions. Synthetic fixtures validate software mechanics only.
+Further model changes require a separate recorded experiment, validation-only development, and preservation of the returned run's frozen thresholds and identities. The neural internal test remains unscored. If a later explicit evaluation is performed, use the selected export and frozen decisions; its result will still be exploratory because the cohort was historically examined. A stronger generalization assessment requires an independently reserved or newly collected labeled cohort. The supplied challenge-test mirror cannot supply that evaluation because its labels are blank and it shares normalized texts with training. Repeated seeds, independently reviewed errors, and an external domain assessment would help bound uncertainty. Explanations, augmentation, alternative losses, and latency measurement can be added as separately evaluated extensions. Synthetic fixtures validate software mechanics only.
 
-## 8. Conclusion
+## 9. Conclusion
 
-The historical artifacts demonstrate a six-label training pipeline and strong validation score ranking, with moderate macro F1 and low rare-label precision at threshold 0.5. Correct reporting separates the final epoch from the checkpoint selected by minimum validation loss. The repository revision adds validated inputs, duplicate-aware partitions, validation-only decisions, consistent model export, and frozen evaluation. A completed real-data CPU reference reports macro AP 0.6502 and macro F1 0.6346 on an exploratory internal test under this new protocol. Full-data neural reproduction and a same-protocol comparison remain outstanding; no controlled gain or deployment readiness is established.
+The historical artifacts demonstrate a six-label pipeline whose selected checkpoint and final-epoch report must be distinguished. The repaired repository adds validated inputs, duplicate-aware partitions, validation-only decisions, consistent model export, and frozen evaluation. The CPU reference reports exploratory internal-test macro AP 0.6502 and macro F1 0.6346. The returned full-cohort neural experiment reports selected-validation macro AP 0.5259 and macro F1 0.5094, with weak threat performance and an unscored internal test. These different evaluation partitions cannot be compared directly. On the verified shared validation partition, the CPU reference records higher aggregate scores under both threshold policies; this remains descriptive selection evidence. Historical performance reproduction, independent generalization, speedup, and deployment readiness remain unestablished.
 
 ## Evidence and methodological resources
 
 - [Historical metrics and provenance](historical_metrics.json): exact retained values, cell/output references, and evidence limitations.
 - [Later supplied data audit](data_audit.json): aggregate source counts, duplicate findings, blank challenge-test targets, and supplied-file identities.
 - [New CPU validation](baseline_validation_metrics.json), [internal test](baseline_internal_test_metrics.json), [partition supports](baseline_data_summary.json), and [run verification](baseline_verification.json): distinct new-protocol aggregate evidence.
+- [Returned neural validation](colab_efficient_v1/validation_metrics.json), [training history](colab_efficient_v1/training_history.json), [runtime](colab_efficient_v1/versions_hardware.json), [numerical verification](colab_efficient_v1/verification.json), and [16 October review](../docs/review_20261016.md): completed Colab evidence, selected-validation limits, and the unscored neural internal test.
 - [Report correction ledger](../docs/report_corrections.md): page-by-page corrections to the supplied report.
 - [Notebook audit](../docs/notebook_audit.md) and [source manifest](../docs/source_manifest.json): implementation review and input identities.
 - [Original Jigsaw challenge data](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data) and [FizzBuzz cleaned derivative](https://www.kaggle.com/datasets/fizzbuzz/cleaned-toxic-comments): original/derivative provenance; redistribution rights require separate source review.

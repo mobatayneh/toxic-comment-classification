@@ -38,7 +38,7 @@ The later real-data CPU experiment is recorded in [baseline_validation_metrics.j
 
 Local Jupyter socket creation is unavailable in this sandbox. The committed review notebook executes every code cell top-to-bottom in a fresh in-process IPython session using the project interpreter and saves captured native figures/tables. Notebook metadata records this mode. A normal Jupyter-kernel protocol execution remains available through the default runner in an environment that permits local sockets.
 
-The [self-contained Colab notebook](../notebooks/03_colab_full_training.ipynb), [guide](colab_training.md), [runner](../scripts/colab_train.py) and [dependencies](../requirements-colab.txt) are new AI-assisted portfolio additions derived from the revised neural workflow. Visible source-writing cells reproduce the reviewed core and runner files; [the notebook builder](../scripts/build_colab_notebook.py) checks source synchronization. The runner checks the exact supplied mirror and preserves restart state in private checkpoints. After selected-checkpoint export and fresh validation scoring, `results_for_review.zip` contains aggregate metrics, configuration, training history and native plots. An optional `verification_private.zip` contains per-row labels, scores and split indices for private recomputation; it is excluded from publication. Preparing or smoke-checking this workflow does not produce a new real-data neural result.
+The original self-contained Colab workflow was an AI-assisted portfolio addition derived from the revised neural pipeline. Its source and [earlier guide](colab_training.md) remain recoverable through Git history; the current notebook 03 is a retirement notice. The canonical [notebook 04](../notebooks/04_colab_efficient_training.ipynb), [guide](colab_efficient_training.md), [runner](../scripts/colab_train.py) and [dependencies](../requirements-colab.txt) retain visible source-writing cells and source-hash checks. Its [builder](../scripts/build_efficient_colab_notebook.py) checks source synchronization. The efficient profile adds cached tokenization, dynamic padding, GPU resource calibration, and timed checkpoints as a distinct numerical experiment. Preparing or smoke-checking either workflow is engineering evidence; the returned completed run below provides separate real-data neural validation evidence.
 
 ## Dataset and tokenizer lineage
 
@@ -60,6 +60,47 @@ The approved Public [repository](https://github.com/mobatayneh/toxic-comment-cla
 
 ## Follow-up source revision — 15 October 2026
 
+This dated entry records the status before the completed efficient-profile run
+was returned. See the 16 October entry below for the subsequent evidence; earlier
+source identities and result artifacts remain unchanged.
+
 The original published Colab notebook has SHA-256 `2f60edc83f6d70a54b194e4e0fd0372782f820675c14584975a488ae245eba55` at commit `b6819a5a2f6e6822b3d58bd0b7e314a623340ace`. A user run already started from that notebook must retain its original embedded files and recorded environment when resuming. Later source revisions are not interchangeable with a saved run identity. No submitted real-data neural training result has yet been verified.
 
 The completed CPU reference was independently rechecked before this revision: saved targets, partitions, thresholds and aggregate metrics matched the private frozen artifacts exactly. Its source hashes belong to the earlier implementation. To inspect that frozen run, use its recorded source version; never rewrite its manifest to match newer code or retrain merely to make an integrity check pass. Commit `b6819a5a2f6e6822b3d58bd0b7e314a623340ace` retains the six core source files matching that evidence.
+
+## Returned efficient-profile evidence — 16 October 2026
+
+The user returned three artifacts: aggregate `results_for_review.zip`, separate
+`calibration.json`, and `verification_private.zip`. The original files are kept
+outside the publication tree. Returned aggregate values and regenerated evidence plots are
+stored under [`reports/colab_efficient_v1`](../reports/colab_efficient_v1/validation_metrics.json),
+alongside the derived [verification](../reports/colab_efficient_v1/verification.json),
+comparison, and public file manifest. The original aggregate ZIP SHA-256 is
+`270317ca85ff3420f3b003768a1b406ccaa9dcf398d2adb27932e6efbd1e089e`;
+the separate calibration SHA-256 is
+`084648414396419e8657cd86dd0558c516882a10e1933722feb93438489d4bb7`. Private targets, probabilities, and split
+indices were used only for numerical review and are not published. No raw comments,
+original row IDs, normalized-text fingerprints, checkpoints, or weights are added.
+
+The bundle records source SHA-256
+`bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e`,
+the original runner/core source hashes, fixed label order, and tokenizer revision
+`e2da8e2f811d1448a5b465c236feacd80ffbac7b`. These result identities are retained;
+review does not rewrite them to match a newer notebook or code revision. The
+recorded runtime was Python 3.13.15, torch 2.11.0+cu130, CUDA 13.0, cuDNN 92700,
+and one Tesla T4. Its [complete runtime record](../reports/colab_efficient_v1/versions_hardware.json)
+is distinct from locally recorded CPU test environments.
+
+All five epochs completed. Validation loss selected epoch four at
+0.36014178103214034; the returned history reports the same fresh-export loss.
+Validation macro AP is 0.5259 and macro F1 is 0.5094 at validation-selected
+thresholds. Both model and thresholds used validation, so these are selection
+diagnostics. The internal test remains unscored. The [review](review_20261016.md)
+states the numerical checks and limits, including the absence of returned weights,
+tokenizer files, and full run identity needed to independently reproduce model
+export, inference, or resume. No GPU rerun was performed during this review.
+
+This run does not establish which bytes or weights produced the historical
+80/20 outputs. Historical evidence, the CPU reference's original frozen metrics,
+and dated verification/CI records remain preserved with their own provenance.
+No end-to-end GPU speedup, calibrated probability, or deployment claim is added.

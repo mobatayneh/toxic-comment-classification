@@ -69,6 +69,8 @@ class TrainConfig:
     local_files_only: bool = False
     conflict_policy: str = "error"
     empty_text_policy: str = "error"
+    cache_tokenization: bool = False
+    dynamic_padding: bool = False
 
     def __post_init__(self) -> None:
         for name in ("epochs", "patience", "batch_size", "accumulation_steps", "cpu_threads"):
@@ -94,6 +96,9 @@ class TrainConfig:
             raise ValueError("conflict_policy must be 'error' or 'keep'")
         if self.empty_text_policy not in {"error", "drop"}:
             raise ValueError("empty_text_policy must be 'error' or 'drop'")
+        for name in ("cache_tokenization", "dynamic_padding"):
+            if not isinstance(getattr(self, name), bool):
+                raise ValueError(f"{name} must be boolean")
 
 
 def _dependencies() -> SimpleNamespace:
@@ -183,11 +188,92 @@ class _TextDataset:
         return item
 
 
+TOKENIZATION_BATCH_SIZE = 256
+
+
+class _CachedTextDataset:
+    """Tokenize once in bounded batches, retaining five bytes per token slot.
+
+    The cache is private, in memory, and contains only the requested partition.
+    Token IDs and padding match the original per-row tokenizer calls exactly.
+    """
+
+    def __init__(self, texts: np.ndarray, targets: np.ndarray, tokenizer: Any, max_length: int):
+        self.texts = texts
+        self.targets = targets
+        self.input_ids = np.empty((len(texts), max_length), dtype=np.int32)
+        self.attention_mask = np.empty((len(texts), max_length), dtype=np.uint8)
+        for start in range(0, len(texts), TOKENIZATION_BATCH_SIZE):
+            end = min(start + TOKENIZATION_BATCH_SIZE, len(texts))
+            encoded = tokenizer(
+                [str(text) for text in texts[start:end]],
+                truncation=True, padding="max_length", max_length=max_length,
+                return_tensors="np",
+            )
+            ids = np.asarray(encoded["input_ids"])
+            mask = np.asarray(encoded["attention_mask"])
+            expected_shape = (end - start, max_length)
+            if ids.shape != expected_shape or mask.shape != expected_shape:
+                raise ValueError("Tokenizer cache requires fixed-length input IDs and attention masks")
+            if not np.issubdtype(ids.dtype, np.integer) or (ids < 0).any() or (ids > np.iinfo(np.int32).max).any():
+                raise ValueError("Tokenizer input IDs cannot be stored safely as int32")
+            if not np.isin(mask, [0, 1]).all():
+                raise ValueError("Tokenizer attention mask must contain only 0/1 values")
+            self.input_ids[start:end] = ids
+            self.attention_mask[start:end] = mask
+
+    def __len__(self) -> int:
+        return len(self.texts)
+
+    def __getitem__(self, index: int) -> dict[str, Any]:
+        import torch
+
+        return {
+            "input_ids": torch.from_numpy(self.input_ids[index]),
+            "attention_mask": torch.from_numpy(self.attention_mask[index]),
+            "labels": torch.tensor(self.targets[index], dtype=torch.float32),
+        }
+
+
+class _TokenBatchCollator:
+    """Restore model dtypes and optionally remove a batch's right padding."""
+
+    def __init__(self, max_length: int, *, dynamic_padding: bool):
+        self.max_length = max_length
+        self.dynamic_padding = dynamic_padding
+
+    def __call__(self, items: list[dict[str, Any]]) -> dict[str, Any]:
+        from torch.utils.data import default_collate
+
+        batch = default_collate(items)
+        batch["input_ids"] = batch["input_ids"].long()
+        batch["attention_mask"] = batch["attention_mask"].long()
+        if self.dynamic_padding:
+            longest = int(batch["attention_mask"].sum(dim=1).max().item())
+            length = min(self.max_length, max(8, math.ceil(longest / 8) * 8))
+            for name in ("input_ids", "attention_mask"):
+                batch[name] = batch[name][:, :length].contiguous()
+        return batch
+
+
+def _text_dataset(dataset: Any, indices: np.ndarray, tokenizer: Any, config: TrainConfig) -> Any:
+    if config.dynamic_padding and tokenizer.padding_side != "right":
+        raise ValueError("Dynamic padding requires a right-padding tokenizer")
+    dataset_type = _CachedTextDataset if config.cache_tokenization else _TextDataset
+    return dataset_type(dataset.texts[indices], dataset.targets[indices], tokenizer, config.max_length)
+
+
+def _collate_fn(config: TrainConfig) -> Any:
+    if config.cache_tokenization or config.dynamic_padding:
+        return _TokenBatchCollator(config.max_length, dynamic_padding=config.dynamic_padding)
+    return None
+
+
 def _loader(dataset: Any, indices: np.ndarray, tokenizer: Any, config: TrainConfig, dependencies: Any, *, shuffle: bool) -> Any:
     torch = dependencies.torch
     generator = torch.Generator().manual_seed(config.seed)
     return torch.utils.data.DataLoader(
-        _TextDataset(dataset.texts[indices], dataset.targets[indices], tokenizer, config.max_length),
+        _text_dataset(dataset, indices, tokenizer, config),
         batch_size=config.batch_size,
         shuffle=shuffle,
         num_workers=config.num_workers,
@@ -195,6 +281,7 @@ def _loader(dataset: Any, indices: np.ndarray, tokenizer: Any, config: TrainConf
         worker_init_fn=_seed_worker,
         generator=generator,
         drop_last=False,
+        collate_fn=_collate_fn(config),
     )
 
 
@@ -280,11 +367,12 @@ def _autocast(torch: Any, *, enabled: bool) -> Any:
 
 
 def _device_batch(batch: dict[str, Any], device: Any, model: Any) -> dict[str, Any]:
-    values = {name: tensor.to(device, non_blocking=device.type == "cuda") for name, tensor in batch.items()}
-    input_ids = values["input_ids"]
+    # DataLoader tensors are still on CPU here. Checking after transfer forces
+    # two GPU synchronizations for every microbatch.
+    input_ids = batch["input_ids"]
     if input_ids.min().item() < 0 or input_ids.max().item() >= model.config.vocab_size:
         raise ValueError("Tokenizer produced an input ID outside the model vocabulary")
-    return values
+    return {name: tensor.to(device, non_blocking=device.type == "cuda") for name, tensor in batch.items()}
 
 
 def _predict(model: Any, loader: Any, dependencies: Any, device: Any, *, criterion: Any = None, amp_enabled: bool = False) -> tuple[float | None, np.ndarray, np.ndarray]:

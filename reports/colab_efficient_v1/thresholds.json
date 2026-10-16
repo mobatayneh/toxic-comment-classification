@@ -1,0 +1,18 @@
+{
+  "label_order": [
+    "identity_hate",
+    "insult",
+    "obscene",
+    "severe_toxic",
+    "threat",
+    "toxic"
+  ],
+  "thresholds": [
+    0.95,
+    0.95,
+    0.95,
+    0.95,
+    0.95,
+    0.9
+  ]
+}

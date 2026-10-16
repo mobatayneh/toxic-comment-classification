@@ -60,10 +60,11 @@ LATEST_CHECKPOINT = "private/latest_checkpoint.pt"
 BEST_CHECKPOINT = "private/best_checkpoint.pt"
 IDENTITY_FILE = "private/run_identity.json"
 TOKENIZER_DIRECTORY = "private/source_tokenizer"
+TRAINING_PROGRESS = "private/training_progress.json"
 FREEZE_TRANSACTION = "private/freeze_transaction.json"
 FREEZE_EXTRA_ARTIFACTS = (
     BEST_CHECKPOINT, IDENTITY_FILE, TOKENIZER_DIRECTORY,
-    "private/validation_predictions.npz", "training_history.json", "validation_metrics.json",
+    TRAINING_PROGRESS, "private/validation_predictions.npz", "training_history.json", "validation_metrics.json",
 )
 FULL_SOURCE_SHA256 = "bb7a9e1af5282c4c05bf09bf3be3373c4160fe3272a4b26016034ff4bcea5f1e"
 FULL_DATA_EXPECTATION = {
@@ -81,6 +82,7 @@ class ColabConfig:
         device="cuda", conflict_policy="keep", empty_text_policy="drop",
     ))
     checkpoint_every_updates: int = 100
+    checkpoint_every_seconds: float = 0.0
     gradient_checkpointing: bool = False
     require_full_dataset: bool = True
 
@@ -89,6 +91,8 @@ class ColabConfig:
             raise ValueError("training must be a TrainConfig")
         if isinstance(self.checkpoint_every_updates, bool) or not isinstance(self.checkpoint_every_updates, int) or self.checkpoint_every_updates < 1:
             raise ValueError("checkpoint_every_updates must be a positive integer")
+        if isinstance(self.checkpoint_every_seconds, bool) or not isinstance(self.checkpoint_every_seconds, (int, float)) or not math.isfinite(self.checkpoint_every_seconds) or self.checkpoint_every_seconds < 0:
+            raise ValueError("checkpoint_every_seconds must be finite and nonnegative")
         for name in ("gradient_checkpointing", "require_full_dataset"):
             if not isinstance(getattr(self, name), bool):
                 raise ValueError(f"{name} must be boolean")
@@ -147,24 +151,28 @@ def _assert_environment(dependencies: Any, *, smoke: bool, config: ColabConfig) 
 
 
 def atomic_torch_save(torch: Any, payload: dict[str, Any], path: Path) -> None:
-    """Replace a checkpoint only after a complete sibling file is flushed.
+    """Serialize locally, then sequentially copy and replace a checkpoint.
 
     Filesystem durability still depends on the storage provider. A previous
-    checkpoint survives a serialization/replace error; incomplete temps are
-    removed. Use this only for trusted checkpoints produced by this runner.
+    checkpoint survives serialization, copy, flush or replace errors. Staging
+    keeps torch's many serialization writes off the mounted Drive filesystem.
+    Use this only for trusted checkpoints produced by this runner.
     """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary_name = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
-    temporary = Path(temporary_name)
-    try:
-        with os.fdopen(descriptor, "wb") as stream:
-            torch.save(payload, stream)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temporary, path)
-    finally:
-        temporary.unlink(missing_ok=True)
+    with tempfile.TemporaryDirectory(prefix="toxic-checkpoint-") as local_directory:
+        local_path = Path(local_directory) / "checkpoint.pt"
+        torch.save(payload, local_path)
+        descriptor, temporary_name = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
+        temporary = Path(temporary_name)
+        try:
+            with os.fdopen(descriptor, "wb") as stream, local_path.open("rb") as source:
+                shutil.copyfileobj(source, stream, length=8 * 1024 * 1024)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(temporary, path)
+        finally:
+            temporary.unlink(missing_ok=True)
 
 
 def _atomic_json(path: Path, value: Any) -> None:
@@ -277,14 +285,15 @@ def restore_rng_state(torch: Any, state: dict[str, Any]) -> None:
         torch.cuda.set_rng_state_all([value.cpu() for value in state["torch_cuda"]])
 
 
-def _epoch_loader(dataset: Any, indices: np.ndarray, tokenizer: Any, config: core.TrainConfig, dependencies: Any, epoch: int) -> Any:
+def _epoch_loader(dataset: Any, indices: np.ndarray, tokenizer: Any, config: core.TrainConfig, dependencies: Any, epoch: int, *, prepared_dataset: Any = None) -> Any:
     """Every epoch has an independent deterministic shuffle and loader RNG."""
     generator = dependencies.torch.Generator().manual_seed(config.seed + epoch)
     return dependencies.torch.utils.data.DataLoader(
-        core._TextDataset(dataset.texts[indices], dataset.targets[indices], tokenizer, config.max_length),
+        prepared_dataset if prepared_dataset is not None else core._text_dataset(dataset, indices, tokenizer, config),
         batch_size=config.batch_size, shuffle=True, num_workers=0,
         pin_memory=config.device == "cuda", generator=generator,
         worker_init_fn=core._seed_worker, drop_last=False,
+        collate_fn=core._collate_fn(config),
     )
 
 
@@ -296,17 +305,20 @@ def _optimizer_group(model: Any, micro_batches: list[Any], criterion: Any, optim
         raise ValueError("An optimizer group must have at least one sample")
     amp_enabled = config.amp and device.type == "cuda"
     optimizer.zero_grad(set_to_none=True)
-    numerator = 0.0
+    detached_losses = []
     for batch in micro_batches:
         values = core._device_batch(batch, device, model)
         with core._autocast(torch, enabled=amp_enabled):
             logits = model(input_ids=values["input_ids"], attention_mask=values["attention_mask"]).logits
             loss = criterion(logits, values["labels"])
-        if not torch.isfinite(loss).item():
-            raise FloatingPointError("Nonfinite training loss; this run cannot be frozen")
         rows = len(values["labels"])
+        detached_losses.append(loss.detach().to(dtype=torch.float64) * rows)
         scaler.scale(loss * (rows / group_rows)).backward()
-        numerator += float(loss.item()) * rows
+    # One scalar transfer per accumulation group avoids synchronizing the GPU
+    # for every microbatch. Reject nonfinite loss before any optimizer update.
+    numerator = float(torch.stack(detached_losses).sum().item())
+    if not math.isfinite(numerator):
+        raise FloatingPointError("Nonfinite training loss; this run cannot be frozen")
     scaler.unscale_(optimizer)
     gradients = [parameter.grad for parameter in model.parameters() if parameter.grad is not None]
     if not gradients:
@@ -388,7 +400,7 @@ def _checkpoint_payload(model: Any, optimizer: Any, scheduler: Any, scaler: Any,
     }
 
 
-def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, criterion: Any, config: ColabConfig, dependencies: Any, device: Any, run_dir: Path, *, resume: bool, quiet: bool, stop_after_steps: int | None = None) -> dict[str, Any]:
+def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, criterion: Any, config: ColabConfig, dependencies: Any, device: Any, run_dir: Path, *, resume: bool, quiet: bool, stop_after_steps: int | None = None, training_dataset: Any = None, validation_loader: Any = None) -> dict[str, Any]:
     torch = dependencies.torch
     training = config.training
     checkpoint_path = run_dir / LATEST_CHECKPOINT
@@ -424,6 +436,10 @@ def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, crit
         del checkpoint
     if state["training_complete"]:
         return {**state, "resumed": resumed, "interrupted": False}
+    if training_dataset is None:
+        training_dataset = core._text_dataset(dataset, splits.train, tokenizer, training)
+    if validation_loader is None:
+        validation_loader = core._loader(dataset, splits.validation, tokenizer, training, dependencies, shuffle=False)
     step_counter = {"value": state["global_optimizer_steps"]}
 
     def record_update(*_: Any) -> None:
@@ -431,9 +447,28 @@ def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, crit
 
     step_hook = optimizer.register_step_post_hook(record_update)
 
+    last_checkpoint = time.monotonic()
+
     def save_latest() -> None:
+        nonlocal last_checkpoint
         state["global_optimizer_steps"] = step_counter["value"]
         atomic_torch_save(torch, _checkpoint_payload(model, optimizer, scheduler, scaler, dependencies, state, identity_hash), checkpoint_path)
+        # This small status file describes only a successfully saved boundary.
+        # It contains aggregates, never comments, IDs, labels or per-row arrays.
+        _atomic_json(run_dir / TRAINING_PROGRESS, {
+            "schema_version": 1,
+            "checkpoint_saved_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "epoch": state["epoch"], "epochs_planned": training.epochs,
+            "completed_epochs": len(state["history"]),
+            "microbatch_offset": state["microbatch_offset"], "microbatches_per_epoch": microbatches,
+            "samples_in_epoch": state["training_sample_count"], "training_rows": len(splits.train),
+            "global_optimizer_steps": step_counter["value"], "planned_optimizer_steps": planned_updates,
+            "training_loss": state["training_loss_numerator"] / state["training_sample_count"] if state["training_sample_count"] else None,
+            "last_completed_epoch": state["history"][-1] if state["history"] else None,
+            "best_checkpoint": state["best"] if state["best"]["epoch"] else None,
+            "training_complete": state["training_complete"], "test_evaluated": False,
+        })
+        last_checkpoint = time.monotonic()
 
     if not resumed:
         # Even a preemption before the first update can restart from exact state.
@@ -442,7 +477,7 @@ def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, crit
     try:
         while state["epoch"] <= training.epochs:
             epoch = state["epoch"]
-            loader = _epoch_loader(dataset, splits.train, tokenizer, training, dependencies, epoch)
+            loader = _epoch_loader(dataset, splits.train, tokenizer, training, dependencies, epoch, prepared_dataset=training_dataset)
             offset = state["microbatch_offset"]
             if not 0 <= offset <= len(loader) or (offset != len(loader) and offset % training.accumulation_steps != 0):
                 raise ValueError("Checkpoint microbatch offset is not an accumulation boundary")
@@ -468,17 +503,18 @@ def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, crit
                 state["global_optimizer_steps"] = step_counter["value"]
                 actual_update = step_counter["value"] > previous_updates
                 interval_due = actual_update and step_counter["value"] % config.checkpoint_every_updates == 0
+                time_due = config.checkpoint_every_seconds > 0 and time.monotonic() - last_checkpoint >= config.checkpoint_every_seconds
                 stop_due = stop_after_steps is not None and step_counter["value"] >= stop_after_steps
-                if interval_due or stop_due:
+                checkpoint_due = interval_due or time_due or stop_due
+                if checkpoint_due:
                     save_latest()
-                if not quiet and (interval_due or time.monotonic() - last_progress >= 30):
-                    print(f"epoch={epoch}/{training.epochs} samples={state['training_sample_count']}/{len(splits.train)} optimizer_updates={step_counter['value']} loss={state['training_loss_numerator']/state['training_sample_count']:.6f} checkpoint_saved={interval_due or stop_due}", flush=True)
+                if not quiet and (checkpoint_due or time.monotonic() - last_progress >= 30):
+                    print(f"epoch={epoch}/{training.epochs} samples={state['training_sample_count']}/{len(splits.train)} optimizer_updates={step_counter['value']} loss={state['training_loss_numerator']/state['training_sample_count']:.6f} checkpoint_saved={checkpoint_due}", flush=True)
                     last_progress = time.monotonic()
                 if stop_due:
                     return {**state, "resumed": resumed, "interrupted": True}
             if step_counter["value"] == state["epoch_start_optimizer_steps"]:
                 raise FloatingPointError("An epoch completed without any optimizer updates")
-            validation_loader = core._loader(dataset, splits.validation, tokenizer, training, dependencies, shuffle=False)
             validation_loss, _, _ = core._predict(model, validation_loader, dependencies, device, criterion=criterion, amp_enabled=amp_enabled)
             record = {
                 "epoch": epoch,
@@ -495,8 +531,6 @@ def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, crit
                 state["epochs_without_improvement"] = 0
             else:
                 state["epochs_without_improvement"] += 1
-            if not quiet:
-                print(f"epoch={epoch} train_loss={record['training_loss']:.6f} validation_loss={validation_loss:.6f} best_epoch={state['best']['epoch']} optimizer_updates={step_counter['value']}", flush=True)
             state.update({
                 "epoch": epoch + 1, "microbatch_offset": 0,
                 "training_loss_numerator": 0.0, "training_sample_count": 0,
@@ -504,6 +538,8 @@ def _train_resumable(model: Any, dataset: Any, splits: Any, tokenizer: Any, crit
                 "training_complete": epoch >= training.epochs or state["epochs_without_improvement"] >= training.patience,
             })
             save_latest()
+            if not quiet:
+                print(f"epoch={epoch} train_loss={record['training_loss']:.6f} validation_loss={validation_loss:.6f} best_epoch={state['best']['epoch']} optimizer_updates={step_counter['value']} checkpoint_saved=True", flush=True)
             if state["training_complete"]:
                 break
     finally:
@@ -579,7 +615,7 @@ def package_results(run_dir: str | Path, *, verification_private: bool = False) 
     metadata = read_json(destination / "metadata.json")
     identity = read_json(destination / IDENTITY_FILE)
     whitelist = (
-        "model_family", "initialization", "tokenizer_source", "tokenizer_revision", "synthetic", "engineering_smoke", "checkpoint_selection", "best_checkpoint", "train_positive_weights", "threshold_selection", "threshold_grid", "deterministic_algorithms", "cudnn_benchmark", "attention_implementation", "cublas_workspace_config", "amp_enabled", "effective_batch_size", "effective_batch_size_note", "parameter_count", "test_status", "protocol_note", "export_matches_best_checkpoint", "fresh_export_validation_loss_matches_best", "gradient_checkpointing", "checkpoint_every_updates", "resume_protocol", "training_completed_utc", "tested_environment_limitations",
+        "model_family", "initialization", "tokenizer_source", "tokenizer_revision", "synthetic", "engineering_smoke", "checkpoint_selection", "best_checkpoint", "train_positive_weights", "threshold_selection", "threshold_grid", "deterministic_algorithms", "cudnn_benchmark", "attention_implementation", "cublas_workspace_config", "amp_enabled", "effective_batch_size", "effective_batch_size_note", "parameter_count", "test_status", "protocol_note", "export_matches_best_checkpoint", "fresh_export_validation_loss_matches_best", "gradient_checkpointing", "checkpoint_every_updates", "checkpoint_every_seconds", "cache_tokenization", "dynamic_padding", "checkpoint_write_protocol", "resume_protocol", "training_completed_utc", "tested_environment_limitations",
     )
     test_evaluated = (destination / "public_test_results.json").exists()
     result_metadata = {
@@ -701,7 +737,8 @@ def run_colab_training(data_path: str | Path, run_dir: str | Path, *, config: Co
     if config.gradient_checkpointing:
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     criterion = dependencies.torch.nn.BCEWithLogitsLoss(pos_weight=dependencies.torch.tensor(positive_weights, dtype=dependencies.torch.float32, device=device))
-    state = _train_resumable(model, dataset, splits, tokenizer, criterion, config, dependencies, device, destination, resume=resume, quiet=quiet, stop_after_steps=_stop_after_steps)
+    validation_loader = core._loader(dataset, splits.validation, tokenizer, config.training, dependencies, shuffle=False)
+    state = _train_resumable(model, dataset, splits, tokenizer, criterion, config, dependencies, device, destination, resume=resume, quiet=quiet, stop_after_steps=_stop_after_steps, validation_loader=validation_loader)
     _validate_identity(identity, config=config, source_path=source_path, tokenizer_dir=tokenizer_dir, dependencies=dependencies, smoke=_smoke)
     if state["interrupted"]:
         return {"run_dir": str(destination), "stage": "interrupted", "checkpoint_path": str(destination / LATEST_CHECKPOINT), "global_optimizer_steps": state["global_optimizer_steps"], "history": state["history"], "best_checkpoint": state["best"], "resumed": state["resumed"]}
@@ -712,7 +749,6 @@ def run_colab_training(data_path: str | Path, run_dir: str | Path, *, config: Co
     for name in ("config.json", "data_summary.json", "metadata.json", "thresholds.json", "training_history.json", "validation_metrics.json", "private/splits.npz", "private/validation_predictions.npz"):
         (destination / name).unlink(missing_ok=True)
     model, tokenizer, best = core._export_best(model, tokenizer, destination / BEST_CHECKPOINT, destination / "model", dependencies, device)
-    validation_loader = core._loader(dataset, splits.validation, tokenizer, config.training, dependencies, shuffle=False)
     fresh_loss, targets, probabilities = core._predict(model, validation_loader, dependencies, device, criterion=criterion, amp_enabled=config.training.amp and device.type == "cuda")
     if not np.array_equal(targets, dataset.targets[splits.validation]):
         raise RuntimeError("Fresh exported validation inference changed row/label order")
@@ -749,6 +785,9 @@ def run_colab_training(data_path: str | Path, run_dir: str | Path, *, config: Co
         "protocol_note": "New internal exploratory holdout; the historical cohort was previously examined, so this is not a pristine external test.",
         "export_matches_best_checkpoint": True, "fresh_export_validation_loss_matches_best": True,
         "gradient_checkpointing": config.gradient_checkpointing, "checkpoint_every_updates": config.checkpoint_every_updates,
+        "checkpoint_every_seconds": config.checkpoint_every_seconds,
+        "cache_tokenization": config.training.cache_tokenization, "dynamic_padding": config.training.dynamic_padding,
+        "checkpoint_write_protocol": "Serialize on local temporary storage, sequentially copy to a sibling destination temporary file, flush/fsync, then replace.",
         "resume_protocol": "Exact code/config/source/tokenizer/software/hardware fingerprints; accumulation boundaries; global RNG and deterministic per-epoch loader restored.",
         "runner_code_sha256": identity["code_sha256"]["scripts/colab_train.py"],
         "training_completed_utc": runtime_metadata(config.training.seed)["created_utc"],
@@ -766,7 +805,7 @@ def run_colab_training(data_path: str | Path, run_dir: str | Path, *, config: Co
     })
     freeze_run(
         destination,
-        config={"method": "random_initialized_roberta", "training": asdict(config.training), "architecture": architecture, "label_order": list(LABELS), "colab": {"gradient_checkpointing": config.gradient_checkpointing, "checkpoint_every_updates": config.checkpoint_every_updates, "require_full_dataset": config.require_full_dataset}},
+        config={"method": "random_initialized_roberta", "training": asdict(config.training), "architecture": architecture, "label_order": list(LABELS), "colab": {"gradient_checkpointing": config.gradient_checkpointing, "checkpoint_every_updates": config.checkpoint_every_updates, "checkpoint_every_seconds": config.checkpoint_every_seconds, "require_full_dataset": config.require_full_dataset}},
         data_summary={**dataset.summary, "splits": split_summary(dataset, splits)},
         source_path=source_path, model_path=destination / "model", thresholds=thresholds, splits=splits, metadata=metadata,
         extra_artifacts=[destination / relative for relative in FREEZE_EXTRA_ARTIFACTS],

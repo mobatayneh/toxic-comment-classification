@@ -13,6 +13,8 @@ private/
 *.joblib
 *.pkl
 *.safetensors
+verification_private*.zip
+results_for_review*.zip
 *.egg-info/
 dist/
 build/

@@ -2,6 +2,13 @@
 
 Audit method: read the uploaded notebook JSON, source cells, and stored textual outputs. No training, dataset download, model download, or notebook execution was performed. Original files were read only. Cell numbers below are **zero-based notebook cell indexes**. Machine-readable extraction, including output indexes and file SHA-256 values, is in `historical_metrics.json`.
 
+This audit preserves the original three-notebook evidence and the recommendations
+made before real-data reruns. The subsequent [16 October review](review_20261016.md)
+records a completed, separately identified Colab experiment; it does not change
+these historical outputs or resolve the identity of their absent checkpoints.
+Use [notebook 04](../notebooks/04_colab_efficient_training.ipynb) and its
+[guide](colab_efficient_training.md) for the current training workflow.
+
 ## Recommendation and comparison
 
 Use `model_FINAL_Report.ipynb` as the main implementation reference because it includes the complete common training pipeline, the only per-label reporting code, and architecture-diagram code. Preserve the original files separately. Treat `Untitled10.ipynb` as a historical hyperparameter variant, and `modelXXXX(1).ipynb` as a near-duplicate 5-epoch version. None is a clean, independently reproducible benchmark in its current form.

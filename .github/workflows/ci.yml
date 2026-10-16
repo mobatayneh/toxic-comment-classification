@@ -54,8 +54,10 @@ jobs:
           nbformat.write(notebook, destination)
           print('Historical evidence review notebook executed successfully; no training was performed.')
           PY
-      - name: Verify publication files and historical tables
-        run: python scripts/verify_repository.py
+      - name: Verify publication files and evidence tables
+        run: |
+          python scripts/verify_repository.py
+          python scripts/verify_colab_results.py verify-public --report-dir reports/colab_efficient_v1
       - name: Retain the executed historical evidence review
         uses: actions/upload-artifact@v4
         with:
@@ -72,6 +74,8 @@ jobs:
       MKL_NUM_THREADS: '1'
       OPENBLAS_NUM_THREADS: '1'
       TOKENIZERS_PARALLELISM: 'false'
+      USE_TF: '0'
+      USE_FLAX: '0'
       HF_HUB_OFFLINE: '1'
       TRANSFORMERS_OFFLINE: '1'
       HF_DATASETS_OFFLINE: '1'
@@ -107,6 +111,7 @@ jobs:
           suite = unittest.defaultTestLoader.loadTestsFromNames([
               'tests.test_neural', 'tests.test_colab_training',
               'tests.test_colab_integrity',
+              'tests.test_colab_efficiency',
           ])
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           if result.skipped:

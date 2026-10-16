@@ -36,13 +36,32 @@ High ROC-AUC indicates favorable ranking of positive and negative examples acros
 
 The two five-epoch notebooks retain exactly the same rounded metric sequence. They are not independent replication evidence. UNTITLED changes learning rate, warmup, and planned epoch count, so its higher recorded F1 cannot be attributed to a single change. All historical validation partitions were repeatedly observed during model selection.
 
-The repaired pipeline introduces a different internal split and evaluation protocol. The completed real-data CPU experiment reports new aggregate scores under that protocol; they are not a controlled before/after comparison with the original 80/20 split. Full-data neural training remains unexecuted. The recorded local CPU run times do not establish per-comment latency or production readiness.
+The repaired pipeline introduces a different internal split and evaluation protocol. The completed real-data CPU reference and returned efficient-profile neural run report new aggregate scores under that protocol; they are not a controlled before/after comparison with the original 80/20 split. The neural evidence concerns selected validation only, while the CPU reference additionally has a separately identified exploratory internal-test result. The recorded local CPU run times and synthetic GPU calibration do not establish per-comment latency, end-to-end speedup, or production readiness.
 
 ## Review status for revised methods
 
-The new data, reference-model, and neural methods have passed integration and bounded engineering checks. The real-data CPU run is complete, its public metrics were independently recomputed from saved private predictions, and normalized-group partition overlap is zero. The corrected report keeps this experiment separate from historical neural performance. A passing synthetic neural fixture checks engineering behavior and never establishes the original model's toxicity-detection performance. No full-data neural rerun is claimed.
+The real-data CPU run is complete, its public metrics were independently recomputed from saved private predictions, and normalized-group partition overlap is zero. The corrected report preserves this evidence and the original historical neural tables. Synthetic neural fixtures remain engineering checks.
 
-The [Colab notebook](../notebooks/03_colab_full_training.ipynb) and [guide](colab_training.md) prepare a later full-data GPU experiment with persistent restart checkpoints and an aggregate review ZIP. The corrected report's historical and CPU metrics remain unchanged. New neural results may be added only after a completed returned run is reviewed, with its source, partitions, checkpoint, threshold policy and evaluation status identified. Validation-selected scores remain selection diagnostics; an explicitly evaluated internal test remains exploratory rather than an untouched external benchmark.
+The user returned a completed five-epoch efficient-profile run on 16 October 2026.
+The canonical [notebook 04](../notebooks/04_colab_efficient_training.ipynb) and
+[guide](colab_efficient_training.md) identify its workflow; notebook 03 is retired.
+The [returned-run review](review_20261016.md) and
+[verification record](../reports/colab_efficient_v1/verification.json) identify
+the source, split, epoch-four checkpoint selection, threshold policy, recorded GPU
+runtime, numerical checks, and limits. Validation macro AP 0.5259 and macro F1
+0.5094 at selected thresholds are selection diagnostics. Its internal test was
+not scored, and review neither reran GPU inference nor independently reloaded
+weights. Five thresholds at the 0.95 grid ceiling and weak `threat` scores remain
+explicit limitations. No historical result, frozen CPU artifact, or source hash
+was rewritten to incorporate this new evidence.
+
+Saved baseline validation predictions support a verified comparison on the same
+source, grouped validation indices/order, targets, label order, and metric rules.
+The CPU reference records validation macro AP 0.6549 and selected-threshold macro
+F1 0.6414, above the returned neural values on these rows. This is a descriptive
+selection comparison, not a held-out superiority or statistical significance
+claim. Its [comparison record](../reports/colab_efficient_v1/baseline_validation_comparison.json)
+does not use the CPU internal-test metrics as a validation comparator.
 
 ## Primary implementation reference
 
