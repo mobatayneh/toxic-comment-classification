@@ -4,7 +4,16 @@
 Prepare Mohammad Albatayneh’s toxic-comment multi-label classification project for reviewed GitHub publication. Code and documentation in English. Preserve original academic artifacts and distinguish historical saved outputs from new runs. Never publish or merge without project-specific approval.
 
 ## Current status — returned Colab run, 2026-10-16
-The user returned the aggregate review ZIP, calibration JSON and private verification ZIP and authorized publication of reviewed results and replacement of the old training entry point. Work resumes from local `01b148a` on `work/colab-efficient-training`. GitHub main is `46c8f7896456e35ae4fd33d7330a741e7aa401d6`, with PR #1 already merged; its 66-file tree is the prior published baseline. The efficient training changes are currently local only.
+The user returned the aggregate review ZIP, calibration JSON and private verification ZIP and authorized publication of reviewed results and replacement of the old training entry point. The numerical audit and local verification are complete. The 94-file reviewed tree is published on `work/colab-efficient-training` at remote commit `946299d43e400af92016da1c8a4f65be553e7291`, matching local commit `6b2ecbd5933fbc40c39ded931e8eb80d946a3da4` exactly by tree identity. PR #2 is open; both remote workflows passed and automatic code review finished with no findings. This checkpoint adds publication records only. See the linked PR for authoritative subsequent merge state. The dated sections below preserve earlier stage records rather than describing unfinished current work.
+
+### Published branch verified — 16 October 2026
+- Branch: https://github.com/mobatayneh/toxic-comment-classification/tree/work/colab-efficient-training
+- PR: https://github.com/mobatayneh/toxic-comment-classification/pull/2
+- Reviewed remote tree: `aae19e87ba0d632f5d278bb238d65e460ad28741`; all 94 paths/modes/blob identities match local. No raw data, per-row arrays, private ZIPs, weights or CV published.
+- Push CI https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38893185310 and PR CI https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38893249752 passed. Core: 72 passed, 24 deferred; neural: 31 passed, zero skipped. Matching identities confirms 96 distinct passing tests and no uncovered deferred checks. All 18 review-notebook cells also executed through a normal Jupyter kernel in CI.
+- Review main/base `46c8f7896456e35ae4fd33d7330a741e7aa401d6`; preserve existing Git history and branches. Publication used Git data API, so local and remote commit IDs differ while their file trees match.
+- Changed at this checkpoint: README, PROGRESS, current review/validation documentation and machine-readable verification record. Only publication evidence changed; no source, notebook code, result, model or experiment changed.
+- Next authorized operation: publish this documentation checkpoint, verify latest-head CI, merge PR #2 using an expected-head guard under the user's prior project-specific authorization, then check main's tree and post-merge CI. Do not repeat completed training or the private numerical audit. The live PR and checks provide final merge status without a self-referential status commit.
 
 ### Returned-results review in progress
 - Preserve the returned files unchanged outside the repository. The private ZIP contains per-row labels, probabilities and split indices and must never be committed.

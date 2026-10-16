@@ -54,8 +54,9 @@ The expanded [results-review notebook](../notebooks/01_results_review.ipynb)
 executed all 18 code cells in a fresh in-process IPython session and saved seven
 native figures, including the new neural and same-validation comparison plots.
 Its metadata records that execution mode and `kernel_protocol=false`. Normal
-Jupyter kernel startup remains blocked locally by socket permissions. Earlier
-normal-kernel CI below exercised the previous eleven-cell review version.
+Jupyter kernel startup remains blocked locally by socket permissions. The current
+18-cell notebook also executed through a normal Jupyter kernel in the successful
+GitHub Actions run recorded below.
 
 ## Current software and publication checks — 16 October 2026
 
@@ -76,9 +77,16 @@ current evidence tables, archive privacy, and the retired entry point. All three
 new figures passed exact pixel comparison with the same renderer; their numerical
 series and public file hashes are checked by the portable verifier in CI.
 
-GitHub Actions runs the core and CPU neural jobs for this revision. The neural job
-requires zero skips; the expanded evidence notebook runs through a normal Jupyter
-kernel in CI. The [live workflow runs](https://github.com/mobatayneh/toxic-comment-classification/actions)
+The [push workflow](https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38893185310) and
+[PR workflow](https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38893249752)
+both passed for published commit `946299d43e400af92016da1c8a4f65be553e7291`.
+The core job passed 72 tests and deferred 24 neural checks. The neural job passed
+31 tests with zero skips, including every deferred check; seven checks overlap
+the jobs, giving 96 distinct passing tests. Test identities were reconciled from
+the job logs. The expanded 18-cell evidence notebook executed through a normal
+Jupyter kernel, and the repository and public aggregate checks passed. The
+[publication PR](https://github.com/mobatayneh/toxic-comment-classification/pull/2) records this update.
+The neural job requires zero skips. The [live workflow runs](https://github.com/mobatayneh/toxic-comment-classification/actions)
 and pull-request checks determine remote success for each exact commit; earlier
 passing revisions are not substitutes.
 

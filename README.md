@@ -18,7 +18,7 @@ The project is a research implementation, not a deployed moderation system. Outp
 
 Use Python 3.12. Commands below run from the repository root.
 
-[PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) records the initial portfolio review and its checks. The standard checkout below uses `main`; while reviewing an unmerged change, check out its named work branch instead.
+[PR #1](https://github.com/mobatayneh/toxic-comment-classification/pull/1) records the initial portfolio review; [PR #2](https://github.com/mobatayneh/toxic-comment-classification/pull/2) records the verified Colab results and efficient workflow update. The standard checkout below uses `main`; while reviewing an unmerged change, check out its named work branch instead.
 
 ```bash
 git clone https://github.com/mobatayneh/toxic-comment-classification.git
@@ -186,7 +186,7 @@ python scripts/render_real_results.py
 python scripts/run_results_notebook.py
 ```
 
-In this sandbox, local Jupyter kernel sockets are blocked. The updated review notebook's 18 code cells executed top-to-bottom with `python scripts/run_results_notebook.py --engine inprocess`, which captures rich outputs in a fresh IPython process; seven native figures were saved. Its metadata records this mode. An earlier eleven-cell version also executed through a normal Jupyter kernel in the recorded GitHub Actions run. That earlier CI record does not establish kernel execution of the expanded review; see [validation](docs/validation.md).
+In this sandbox, local Jupyter kernel sockets are blocked. The updated review notebook's 18 code cells executed top-to-bottom with `python scripts/run_results_notebook.py --engine inprocess`, which captures rich outputs in a fresh IPython process; seven native figures were saved. Its metadata records this mode. The expanded 18-cell review also executed successfully through a normal Jupyter kernel in [GitHub Actions](https://github.com/mobatayneh/toxic-comment-classification/actions/runs/38893185310) at published commit `946299d`. See [validation](docs/validation.md) for the exact revision and job coverage.
 
 Build the report PDF from its reviewed Markdown source:
 

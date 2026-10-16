@@ -51,6 +51,25 @@
   "errors": 0,
   "failures": 0,
   "finished_utc": "2026-10-16T11:11:42.280961+00:00",
+  "github_publication_checkpoint": {
+    "automatic_code_review_findings": 0,
+    "both_workflow_conclusions": "success",
+    "core_deferred": 24,
+    "core_passed": 72,
+    "distinct_passing_tests": 96,
+    "head_sha": "946299d43e400af92016da1c8a4f65be553e7291",
+    "neural_passed": 31,
+    "neural_skipped": 0,
+    "normal_jupyter_kernel_cells_executed": 18,
+    "private_data_published": false,
+    "pull_request_run_id": 38893249752,
+    "pull_request_url": "https://github.com/mobatayneh/toxic-comment-classification/pull/2",
+    "push_run_id": 38893185310,
+    "remote_files_matched": 94,
+    "test_identity_coverage_checked_from_job_logs": true,
+    "tree_sha": "aae19e87ba0d632f5d278bb238d65e460ad28741",
+    "uncovered_deferred_test_ids": []
+  },
   "outcomes": [
     {
       "outcome": "passed",
