@@ -67,5 +67,5 @@ The repository does not distribute trained weights or the returned private verif
 
 ## Ownership and maintenance
 
-Mohammad Albatayneh confirmed that the original academic project was his individual work and that he wrote its code, using AI assistance to correct errors. The portfolio revision adds AI-assisted engineering and documentation work; the completed CPU experiment, returned Colab experiment, and synthetic checks remain separate from the historical neural results. No repository-wide license has been selected, and third-party data/tokenizer terms remain applicable. New results should identify their input version, frozen run, evaluation partition, thresholds, metric definitions, and whether the data are synthetic or real.
+Mohammad Albatayneh confirmed that the original academic project was his individual work and that he wrote its original code. The portfolio revision adds engineering and documentation work; the completed CPU experiment, returned Colab experiment, and synthetic checks remain separate from the historical neural results. No repository-wide license has been selected, and third-party data/tokenizer terms remain applicable. New results should identify their input version, frozen run, evaluation partition, thresholds, metric definitions, and whether the data are synthetic or real.
 

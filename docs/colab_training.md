@@ -50,4 +50,4 @@ Publish aggregate evidence only. Private verification bundles may include per-ro
 targets, probabilities, and partition indices even when they contain no comment
 text or original IDs. Keep them, source files, local manifests, and model weights
 outside the publication tree. Mohammad Albatayneh's original individual authorship
-and AI-assisted corrections remain recorded in [provenance](provenance.md).
+and the portfolio revisions remain recorded in [provenance](provenance.md).
