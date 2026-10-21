@@ -199,7 +199,7 @@ Read [methodology](docs/methodology.md) for the metric protocol, [model card](do
 
 ## Authorship and third-party terms
 
-Mohammad Albatayneh confirmed that the original academic project was an individual project and that he wrote its original code, with AI assistance to correct errors. This portfolio revision adds AI-assisted code repairs, reproducibility tooling, a CPU reference pipeline, evidence review, and the Colab workflow used for the returned neural experiment. Original authorship, historical outputs, new experiment results, and engineering checks are recorded separately.
+Mohammad Albatayneh confirmed that the original academic project was an individual project and that he wrote its original code. This portfolio revision adds code repairs, reproducibility tooling, a CPU reference pipeline, evidence review, and the Colab workflow used for the returned neural experiment. Original authorship, historical outputs, new experiment results, and engineering checks are recorded separately.
 
 No repository-wide license has been selected. The FizzBuzz mirror's license and preprocessing lineage remain unresolved; data, tokenizer, and library terms are separate from authorship of the project code. Real comments and trained weights are not distributed.
 

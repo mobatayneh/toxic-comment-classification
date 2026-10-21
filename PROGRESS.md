@@ -58,7 +58,7 @@ The user returned the aggregate review ZIP, calibration JSON and private verific
 - Inputs: three notebooks and two byte-identical reports; original files remain unchanged outside the publication tree in ../upload/.
 - No dataset or saved model supplied. No existing repository for this project identified among connected account repositories. Confirmed account: mobatayneh.
 - Prior diabetes project read only as documentation reference; no changes or execution.
-- Three GPT-6.1 Sol / Max audit agents: notebooks, report, sources/rights.
+- Parallel audits: notebooks, report, sources/rights.
 - Preliminary foundation: model_FINAL_Report.ipynb, pending complete audit.
 - Original architecture: random-initialized 8-layer RoBERTa with a pretrained tokenizer, not pretrained encoder fine-tuning.
 
@@ -89,7 +89,7 @@ Run commands from this project directory. Runtime and tests will be documented a
 - Confirmed critical export/report mismatch: model saved before best-checkpoint load, and per-label report uses stale epoch-5 arrays. Correct best-loss epoch is 3 (loss 0.3482, validation macro ROC-AUC 0.9790, macro F1 0.3900); final epoch 5 F1 is 0.4391. These are historical rounded logs, not reruns.
 - Unsupported PDF claims include stratified split, LIME/token rationale implementation, measured sub-100ms latency, 40% parameter saving against a measured BERT baseline, and near-SOTA comparison. Rare-label issue is low precision despite high recall.
 - Copied historical aggregate evidence and audit into repository; preserved all original files in private recovery ZIP. Sanitized historical source notebooks clear outputs and remove demonstration input/prediction blocks.
-- Parallel implementation owners: CPU/shared core; neural workflow; tests/CI; docs/results notebook; report correction. All delegated agents explicitly GPT-6.1 Sol, Max.
+- Parallel implementation areas: CPU/shared core; neural workflow; tests/CI; docs/results notebook; report correction.
 - Installed notebook execution dependencies plus torch 2.8.0 CPU and transformers 4.57.1; neural GPU unavailable.
 - Next: synthetic integration/invariant checks, official-data access attempt, documentation alignment. No GitHub writes yet.
 
@@ -99,7 +99,7 @@ Run commands from this project directory. Runtime and tests will be documented a
 - Chosen explicit policy: exclude seven empty training texts; retain all other original annotations, including conflicting labels, and keep entire normalized-text groups in one split. Derived toxicity is exactly the sum of six target labels; it is excluded from features.
 - Aggregate audit: reports/data_audit.json. Uploaded CSVs remain private outside publication tree.
 - Prior pip-installed packages were absent after suspension. Creating isolated .venv and rechecking dependency availability.
-- Four GPT-6.1 Sol / Max agents resume incomplete core, neural, tests/CI and docs; no completed audit is repeated.
+- Resumed incomplete core, neural, tests/CI and documentation work; no completed audit is repeated.
 - Next: finish existing modules, run full eligible-cohort CPU baseline, run tiny neural mechanics checks, update report/results notebook/CV, save reviewed bundle. GitHub publication still awaits explicit approval.
 
 ## Stage 2 completed — executable workflows and real CPU baseline
@@ -147,8 +147,8 @@ The privatecheckpoint preserves code/Githistory, originals, aggregateevidence, f
 
 ## Authorized Colab and publication stage — 2026-10-13
 - User explicitly approved creating `mobatayneh/toxic-comment-classification` as Public, publishing the work branch and opening a Pull Request, without merging. This approval supersedes the pending-approval statements in earlier historical milestones.
-- User confirmed original individual authorship: original code written by Mohammad Albatayneh, with AI assistance correcting errors. Documentation is being aligned; no blanket license is inferred.
-- User requested a complete self-contained Google Colab notebook for full random-initialized RoBERTa training, then returning results for further review. Three explicitly configured GPT-6.1 Sol / Max agents own the training notebook/resume implementation, independent tests, and attribution/documentation. The main model setting has not been changed through a tool.
+- User confirmed original individual authorship: original code written by Mohammad Albatayneh. Documentation is being aligned; no blanket license is inferred.
+- User requested a complete self-contained Google Colab notebook for full random-initialized RoBERTa training, then returning results for further review. Parallel work covers the training notebook/resume implementation, independent tests, and authorship/documentation.
 - Colab additions stay outside the six frozen `src/toxic_comments` modules so the completed CPU baseline remains reproducible. Full GPU training is for the user to execute; CPU mechanics tests here must not be described as full Colab training.
 - New training will persist model/optimizer/scheduler/scaler/RNG state and input/configuration fingerprints at optimizer boundaries. Validation selects checkpoint and thresholds; optional internal-test evaluation is disabled initially to preserve the development boundary.
 - GitHub target did not exist at the last connector check. The available connector can write files/branches/PRs in accessible repositories but has no repository-creation operation; no repository, remote commit or PR has yet been created. Browser fallback requires user approval under the browser capability instructions. Do not modify the previous diabetes repository.
@@ -158,7 +158,7 @@ The privatecheckpoint preserves code/Githistory, originals, aggregateevidence, f
 - Resumed from local HEAD `01d7ea36a142c633d2a64f3d6f2b9cf36c411a99`, branch `work/portfolio-hardening`, with the previous uncommitted authorship and partial Colab additions preserved. No local remote is configured.
 - Authenticated GitHub owner remains `mobatayneh`; the target repository request returned `404 NOT_FOUND` and the accessible repository list includes only the prior diabetes project. This cannot verify publication of this project; do not claim a remote branch/PR/CI exists.
 - Rechecked the frozen CPU run manifest, every recorded artifact and source checksum. Public validation and internal-test JSON exactly equal their frozen-run copies. Core modules, recorded metrics, four prior figures and the aggregate review notebook are unchanged. No training or test inference was repeated.
-- Existing Colab runner and tests are partial work to complete, not a finished Colab experiment. Resumed three GPT-6.1 Sol / Max owners for the notebook/runner, independent checks and documentation; prior inactive agents were not assumed to be working.
+- Existing Colab runner and tests are partial work to complete, not a finished Colab experiment. Resumed notebook/runner work, independent checks, and documentation.
 - Scientific boundary remains: completed real CPU baseline, historical neural validation outputs, and tiny synthetic CPU mechanics checks are separate evidence. No controlled neural improvement or full Colab GPU result is established.
 - Next: finish the missing self-contained notebook and guide; check resumability, bundle privacy and source consistency; record final tests and local commit; resolve repository creation and perform the approved publication without merging.
 

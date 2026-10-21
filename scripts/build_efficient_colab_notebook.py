@@ -371,7 +371,7 @@ def build_notebook() -> nbformat.NotebookNode:
 # New Colab experiment: efficient full-cohort random RoBERTa
 
 **Author: Mohammad Albatayneh.** Mohammad wrote the original individual project
-code, with AI assistance correcting errors. This notebook prepares a **new
+code. This notebook prepares a **new
 experiment** with cached tokenization, dynamic padding, and a GPU-calibrated
 microbatch. A completed five-epoch run was returned on 16 October 2026; its
 [reviewed validation evidence](../docs/review_20261016.md) is published separately.

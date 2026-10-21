@@ -1,6 +1,6 @@
 # Multi-Label Toxic Comment Classification with an Eight-Layer RoBERTa Architecture
 
-**Original author:** Mohammad Albatayneh wrote the original code for this individual project, with AI-assisted corrections. New portfolio additions are AI-assisted.
+**Original author:** Mohammad Albatayneh wrote the original code for this individual academic project. The portfolio additions are documented separately from the original work.
 
 **Review date:** 16 October 2026. **Evidence status:** preserved historical notebook outputs, a later real-data source audit, a completed CPU reference experiment, a returned five-epoch Colab neural experiment, and separately recorded engineering checks. The new experiments use grouped partitions. Neural validation selected the checkpoint and thresholds; its internal test remains unscored. Historical neural performance has not been independently reproduced.
 

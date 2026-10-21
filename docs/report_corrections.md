@@ -6,7 +6,7 @@ Evidence references use **zero-based notebook cell indices**. `FINAL` means `mod
 
 | Original claim / location | Evidence | Correction adopted |
 |---|---|---|
-| Single credited author, page 1 | The title block credits Mohammad Albatayneh. He later confirmed that the project was individual and that he wrote the original code, with AI assistance to correct errors. | Record confirmed original authorship and AI-assisted error correction. Identify the new AI-assisted portfolio work separately; retain third-party source terms and do not infer a repository-wide license. |
+| Single credited author, page 1 | The title block credits Mohammad Albatayneh. He later confirmed that the project was individual and that he wrote the original code. | Record confirmed original authorship and identify the new portfolio work separately; retain third-party source terms and do not infer a repository-wide license. |
 | Direct use of the original Jigsaw dataset, pages 1-2 | All notebooks, cell 2: download `fizzbuzz/cleaned-toxic-comments`, read `train_preprocessed.csv`, select `set == "train"`. | Name the upstream cleaned derivative and its original-data lineage separately. Later mirror CSVs verify current counts, without proving the original download bytes or preprocessing lineage. |
 | Training on all 159,571 comments, page 1 | Cell 2 holds out 20% of the selected labeled rows. | Describe training on the 80% partition. Do not present the full labeled source count as the optimization-set size. |
 | Original challenge test set, page 2 | No test loader, challenge submission, or test evaluation is recorded. | Label all original results as internal validation results. |

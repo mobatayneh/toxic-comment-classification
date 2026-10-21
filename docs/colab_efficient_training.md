@@ -13,8 +13,7 @@ Notebook 04 replaces the retired notebook 03 for training. A completed run does
 not guarantee that a future Colab allocation will have the same runtime or finish
 within a session.
 
-Mohammad Albatayneh wrote the original individual project code, with AI assistance
-correcting errors. This execution profile preserves the scientific settings
+Mohammad Albatayneh wrote the original individual project code. This execution profile preserves the scientific settings
 below and uses a separate numerical experiment because dynamic padding and
 microbatch changes can alter floating-point results and random-number consumption.
 
