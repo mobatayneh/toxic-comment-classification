@@ -189,7 +189,6 @@ The privatecheckpoint preserves code/Githistory, originals, aggregateevidence, f
 - Opened PR #1, `https://github.com/mobatayneh/toxic-comment-classification/pull/1`, targeting main. It is open/unmerged; main remains the initial README commit. No reviewers, teams, comments or bot review were requested manually.
 - First GitHub push/PR runs executed 31 core checks successfully and explicitly skipped 12 optional CPU neural checks. The native Jupyter results-review step exposed an undeclared Jinja2 dependency used by pandas Styler, so the complete workflows failed. Added the already locally tested `Jinja2==3.1.6` pin to the notebook requirements; the repair does not change model code, metrics, plots or Colab embedded files.
 - Initial failing run IDs: push 38525366826, PR 38525422341. Rerun by publishing this dependency repair; no real model training or test inference is repeated.
-- An automatic `chatgpt-codex-connector[bot]` comment appeared when the PR opened. This was repository/app automation, not a manual ping or review request. No comments or automation settings were deleted/changed.
 
 ## Publication verification completed — 2026-10-14
 - Dependency repair published at remote commit `1391907f6945069b25831cf7f77b1a38116b4895`, matching local root tree `06e4c458ae5072189a949650529227064c96c099`. Push run 38525905392 and PR run 38525910900 concluded success.
